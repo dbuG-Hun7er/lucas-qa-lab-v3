@@ -43,3 +43,11 @@ Removido o bloco de observação/curadoria da página de livros para deixar a se
 ## v9
 
 Páginas QA e Cyber reescritas com mais profundidade e blocos clicáveis/expansíveis usando `<details>` e `<summary>`.
+
+## v10
+
+Páginas QA e Cyber refeitas com cards grandes clicáveis, explicações detalhadas e melhor apresentação visual.
+
+## v11
+
+Removido o bloco 'Arquitetura do site' da home e página Aion 2 complementada com cards clicáveis mais completos.

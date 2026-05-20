@@ -188,3 +188,151 @@ p { color: var(--muted); }
   border-bottom: 1px solid var(--line);
   margin-bottom: 18px;
 }
+
+
+/* v10 — QA e Cyber premium clicáveis */
+.qa-intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr);
+  gap: 28px;
+  align-items: stretch;
+}
+
+.deep-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.deep-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform .2s ease, border-color .2s ease;
+}
+
+.deep-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(3,216,231,.35);
+}
+
+.deep-card[open] {
+  border-color: rgba(248,178,50,.34);
+  background:
+    radial-gradient(circle at top left, rgba(3,216,231,.10), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
+}
+
+.deep-card summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 22px;
+  min-height: 190px;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.deep-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.deep-number {
+  width: 46px;
+  height: 46px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  color: #070707;
+  font-weight: 950;
+  background: linear-gradient(135deg, var(--cyan), var(--gold), var(--orange));
+}
+
+.deep-card summary strong {
+  display: block;
+  font-size: 1.22rem;
+  line-height: 1.12;
+  color: var(--text);
+}
+
+.deep-card summary em {
+  display: block;
+  font-style: normal;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.deep-body {
+  padding: 0 22px 24px;
+  border-top: 1px solid var(--line);
+}
+
+.deep-body p {
+  color: var(--muted);
+  margin: 18px 0 14px;
+}
+
+.deep-body ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.deep-body li {
+  margin: 7px 0;
+}
+
+.deep-card[open] .deep-number {
+  box-shadow: 0 0 28px rgba(248,178,50,.24);
+}
+
+@media (max-width: 1120px) {
+  .deep-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .qa-intro-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .deep-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .deep-card summary {
+    min-height: auto;
+  }
+}
+
+
+/* v11 — Aion complementado e home limpa */
+.aion-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr);
+  gap: 28px;
+  align-items: stretch;
+}
+
+.aion-hero {
+  background:
+    radial-gradient(circle at 80% 18%, rgba(255,106,20,.14), transparent 32%),
+    radial-gradient(circle at 15% 20%, rgba(3,216,231,.10), transparent 28%);
+}
+
+.aion-deep-grid .deep-card summary {
+  min-height: 210px;
+}
+
+@media (max-width: 980px) {
+  .aion-overview {
+    grid-template-columns: 1fr;
+  }
+}
