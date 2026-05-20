@@ -34,7 +34,9 @@ Settings > Pages > Deploy from a branch > main > /root
 
 ## Privacidade do manuscrito
 
-O manuscrito do livro **não** é incluído como download público nesta versão. Ele foi usado apenas como referência de conteúdo para a página do livro.
+O manuscrito do livro **não** fica dentro de `assets/` nem é incluído como download público. Caso seja necessário manter uma cópia local, use `private-docs/`, que está no `.gitignore`.
+
+Antes de publicar, confirme que `assets/docs/` contém apenas currículo, storytelling e HTMLs de leitura.
 
 ## v8
 
@@ -51,3 +53,7 @@ Páginas QA e Cyber refeitas com cards grandes clicáveis, explicações detalha
 ## v11
 
 Removido o bloco 'Arquitetura do site' da home e página Aion 2 complementada com cards clicáveis mais completos.
+
+## v12
+
+Auditoria técnica aplicada: SEO/OG/canonical, `robots.txt`, `sitemap.xml`, acessibilidade de navegação, foco visível, imagens otimizadas e reforço de privacidade do manuscrito.

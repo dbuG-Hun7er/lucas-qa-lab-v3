@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /private-docs/
+Disallow: /private-assets/
+Disallow: /assets/docs/*manuscrito*
+
+Sitemap: https://dbug-hun7er.github.io/lucas-qa-lab-v3/sitemap.xml
