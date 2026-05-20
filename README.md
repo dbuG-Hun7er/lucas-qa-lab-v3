@@ -30,5 +30,8 @@ Settings > Pages > Deploy from a branch > main > /root
 ## Observações
 
 - A página de livros usa imagens remotas da Amazon CDN. Se alguma capa não carregar, o placeholder local aparece.
-- O manuscrito do livro está incluso em `assets/docs/QA_Lendario_manuscrito.docx`; remova se não quiser disponibilizá-lo publicamente.
 - Os HTMLs de leitura estão em `assets/docs/leituras-html/`.
+
+## Privacidade do manuscrito
+
+O manuscrito do livro **não** é incluído como download público nesta versão. Ele foi usado apenas como referência de conteúdo para a página do livro.
