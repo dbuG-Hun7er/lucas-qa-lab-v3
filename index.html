@@ -3,58 +3,802 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Lucas F. de Lima | dbuG-Hun7er</title>
-  <meta name="description" content="Portfólio de Lucas F. de Lima: QA, automação, API testing, cybersecurity, soldagem, QA Lendário, Taverna QA e guia Aion 2." />
+  <meta name="description" content="Portfólio de Lucas F. de Lima: QA, automação, API testing, cybersecurity, soldagem, QA Lendário, Taverna QA, Games e guia Aion 2." />
+
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
+
 <body>
   <header class="site-header">
     <nav class="navbar container">
-      <a href="#inicio" class="brand">
+      <a href="#inicio" class="brand" aria-label="Lucas F. de Lima - dbuG-Hun7er">
         <img src="assets/img/logo.png" alt="Logo BugHun77er" class="brand-logo" />
-        <span><strong>dbuG-Hun7er</strong><small>Lucas F. de Lima</small></span>
+        <span>
+          <strong>dbuG-Hun7er</strong>
+          <small>Lucas F. de Lima</small>
+        </span>
       </a>
-      <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+
+      <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
       <div class="nav-links">
-        <a href="#sobre">Sobre</a><a href="#soldagem">Soldagem</a><a href="#qa">QA</a><a href="#cyber">Cyber</a><a href="#projetos">Projetos</a><a href="#taverna">Taverna</a><a href="#aion">Aion 2</a><a href="#contato" class="nav-cta">Contato</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#qa">QA</a>
+        <a href="#cyber">Cyber</a>
+        <a href="#projetos">Projetos</a>
+        <a href="#taverna">Taverna</a>
+        <a href="#games">Games</a>
+        <a href="#aion">Aion 2</a>
+        <a href="#contato" class="nav-cta">Contato</a>
       </div>
     </nav>
   </header>
+
   <main>
     <section id="inicio" class="hero section">
       <div class="container hero-grid">
-        <div class="hero-content">
+        <div class="hero-content reveal">
           <p class="eyebrow">QA • Automação • Cybersecurity • Soldagem • MMORPG</p>
           <h1>BugHun77er: da solda ao software, caçando falhas com propósito.</h1>
-          <p class="hero-text">Sou <strong>Lucas F. de Lima</strong>, conhecido como <strong>dbuG-Hun7er</strong>. Venho da soldagem, prototipagem e manutenção industrial, onde aprendi que falha não é teoria: falha gera risco, retrabalho, parada e prejuízo. Hoje levo essa visão para <strong>Quality Assurance</strong>, automação, API testing, cybersecurity e análise de sistemas digitais.</p>
-          <div class="hero-actions"><a href="#projetos" class="btn btn-primary">Ver projetos</a><a href="assets/docs/Lucas_F_de_Lima_CV.pdf" class="btn btn-secondary" target="_blank">Baixar currículo</a></div>
-          <div class="hero-tags"><span>Cypress</span><span>JavaScript</span><span>API Testing</span><span>Appium</span><span>k6</span><span>JMeter</span><span>Cucumber</span><span>SQL</span></div>
+
+          <p class="hero-text">
+            Sou <strong>Lucas F. de Lima</strong>, conhecido como <strong>dbuG-Hun7er</strong>.
+            Venho da soldagem, prototipagem e manutenção industrial, onde aprendi que falha não é teoria:
+            falha gera risco, retrabalho, parada e prejuízo. Hoje levo essa visão para <strong>Quality Assurance</strong>,
+            automação, API testing, cybersecurity e análise de sistemas digitais.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#projetos" class="btn btn-primary">Ver projetos</a>
+            <a href="#aion" class="btn btn-secondary">Guia Aion 2</a>
+            <a href="assets/docs/Lucas_F_de_Lima_CV.pdf" class="btn btn-ghost" target="_blank" rel="noopener">Baixar currículo</a>
+          </div>
+
+          <div class="hero-tags">
+            <span>Cypress</span>
+            <span>JavaScript</span>
+            <span>API Testing</span>
+            <span>Appium</span>
+            <span>k6</span>
+            <span>JMeter</span>
+            <span>Cucumber</span>
+            <span>SQL</span>
+          </div>
         </div>
-        <aside class="hero-portrait-card"><img src="assets/img/bughunt77-taverna.png" alt="Lucas como BugHun77er em estilo taverna medieval" class="hero-portrait" /><div class="portrait-caption"><strong>QA Lendário</strong><span>qualidade, risco, bugs, sistemas e evolução.</span></div></aside>
+
+        <aside class="hero-portrait-card reveal">
+          <img src="assets/img/bughunt77-taverna.png" alt="Imagem de Lucas como BugHun77er em estilo taverna medieval" class="hero-portrait" />
+          <div class="portrait-caption">
+            <strong>QA Lendário</strong>
+            <span>qualidade, risco, bugs, sistemas e evolução.</span>
+          </div>
+        </aside>
       </div>
     </section>
-    <section class="section manifesto"><div class="container"><div class="quote-card"><p class="quote">“Frameworks morrem. Linguagens envelhecem. Ferramentas são trocadas. Mas quem entende qualidade, risco e negócio continua relevante.”</p><p>Essa é a essência do QA Lendário: não depender de moda. Ferramenta ajuda, mas não substitui raciocínio, investigação, evidência, visão crítica e coragem para questionar o que pode quebrar.</p></div></div></section>
-    <section id="sobre" class="section"><div class="container two-columns"><div><p class="eyebrow">Sobre mim</p><h2>Minha história não começou no código.</h2><p>Minha trajetória começou na área metalúrgica, atuando como mecânico soldador e soldador de protótipos. Antes de falar sobre testes automatizados, eu já lidava com qualidade no mundo físico: montagem, manutenção, melhoria contínua, análise de falhas, segurança, prototipagem e validação de produtos.</p><p>Hoje estou em transição para a área de <strong>Quality Assurance</strong>, com formação em Análise e Desenvolvimento de Sistemas e Engenharia de Qualidade de Software. Meu foco é evoluir como QA Júnior, unindo testes manuais, testes funcionais, testes de API, automação, evidências, SQL, Git/GitHub, metodologias ágeis e visão de cybersecurity.</p><p>Eu não quero parecer um profissional que nasceu pronto. Quero mostrar minha jornada real: estudar, construir, errar, corrigir, documentar, publicar projetos e evoluir todos os dias.</p></div><div class="info-panel"><h3>Identidade profissional</h3><ul class="check-list"><li>Analista de QA Júnior em construção</li><li>Automação com Cypress e JavaScript</li><li>Testes de API, performance e mobile</li><li>Base prática em qualidade industrial</li><li>Cybersecurity como extensão de QA</li><li>Criador do universo QA Lendário</li></ul></div></div></section>
-    <section id="soldagem" class="section section-alt"><div class="container"><p class="eyebrow">Soldagem & Qualidade Industrial</p><h2>Antes de testar software, eu já aprendia a respeitar falhas no mundo real.</h2><p class="section-lead">Na indústria, falha não é só “bug”. Falha pode virar acidente, ruído, rachadura, retrabalho, parada de máquina, perda de material e risco para pessoas. Essa base me ensinou algo que carrego para QA: qualidade precisa ser pensada antes do problema acontecer.</p><div class="card-grid three"><article class="card"><h3>Manutenção e melhoria</h3><p>Atuação em manutenção, inovação e melhoria contínua de processos, buscando segurança e eficiência operacional.</p></article><article class="card"><h3>Prototipagem</h3><p>Experiência na soldagem e montagem de protótipos, contribuindo para validação e aperfeiçoamento de produtos.</p></article><article class="card"><h3>Transferência para QA</h3><p>Atenção a detalhes, análise de causa, documentação, evidência, pensamento crítico e prevenção de falhas.</p></article></div></div></section>
-    <section id="jornada" class="section"><div class="container"><p class="eyebrow">Início da Jornada QA</p><h2>Como eu enxergo o começo em QA.</h2><p class="section-lead">Essa área existe para mostrar minha evolução e também ajudar quem está começando. O caminho não começa com framework. Começa com mentalidade de qualidade.</p><div class="timeline"><div class="timeline-item"><span>01</span><div><h3>Entender qualidade</h3><p>Qualidade não é só ausência de bug. É confiança, clareza, segurança, valor e experiência.</p></div></div><div class="timeline-item"><span>02</span><div><h3>Testes manuais de verdade</h3><p>Cenários, casos de teste, evidências, bugs bem descritos, massa de dados e comunicação.</p></div></div><div class="timeline-item"><span>03</span><div><h3>Olhar além da tela</h3><p>API, banco de dados, logs, contrato, status code, payload, regra de negócio e comportamento real.</p></div></div><div class="timeline-item"><span>04</span><div><h3>Automatizar com propósito</h3><p>Automação não é enfeite. Ela precisa proteger fluxo importante e dar confiança.</p></div></div><div class="timeline-item"><span>05</span><div><h3>Unir qualidade e segurança</h3><p>Um QA mais completo também pensa em abuso, autenticação, autorização, dados e risco.</p></div></div></div></div></section>
-    <section id="qa" class="section section-alt"><div class="container two-columns"><div><p class="eyebrow">QA Lendário</p><h2>O bug não respeita currículo bonito. Ele respeita investigação.</h2><p>O <strong>QA Lendário</strong> é meu projeto autoral sobre mentalidade de qualidade, teste de software e evolução profissional. Não é um culto à ferramenta. É uma visão sobre como pensar, investigar, proteger negócio e entregar software com mais confiança.</p><p>Um QA forte não entra só no final para “validar tela”. Ele entra na conversa, no requisito, na dúvida, no risco, no fluxo, na API, na evidência e na decisão que pode quebrar o produto depois.</p></div><div class="quote-stack"><blockquote>“Frameworks morrem. Linguagens envelhecem. Ferramentas são trocadas. Mas quem entende qualidade, risco e negócio continua relevante.”</blockquote><blockquote>“QA lendário não entra tarde no processo: entra no requisito, na conversa, na dúvida, no ‘acho que é assim’.”</blockquote><blockquote>“Ele não corre atrás do bug; ele aprende a pensar onde o bug nasce.”</blockquote><blockquote>“O mais importante é dormir tranquilo depois do deploy.”</blockquote></div></div></section>
-    <section id="cyber" class="section cyber-section"><div class="container two-columns"><div><p class="eyebrow">Cybersecurity</p><h2>Segurança é qualidade quando a falha deixa de ser apenas um bug e passa a ser uma porta aberta.</h2><p>Essa frase mostra a ponte entre QA e cibersegurança. Nem todo bug é apenas um erro visual ou uma regra quebrada. Algumas falhas podem expor dados, permitir acesso indevido, quebrar autenticação, gerar abuso de sistema ou comprometer a confiança do usuário.</p><p>Minha jornada em cybersecurity ainda está em construção, e esse é exatamente o ponto: não quero vender uma senioridade falsa. Quero construir uma base real para ser um QA mais completo, capaz de pensar em funcionalidade, risco, proteção, validação e uso malicioso do sistema.</p></div><div class="keyboard-card"><div class="keyboard-title">Cyber mindset</div><div class="keys"><span>Risco</span><span>API</span><span>Auth</span><span>OWASP</span><span>Dados</span><span>Logs</span><span>Abuso</span><span>Validação</span><span>Proteção</span></div></div></div></section>
-    <section id="projetos" class="section"><div class="container"><p class="eyebrow">Projetos QA</p><h2>Projetos para mostrar prática, não promessa.</h2><p class="section-lead">Estes projetos representam minha evolução prática em automação, API, mobile, performance, banco de dados, BDD e qualidade de software.</p><div class="card-grid projects">
-      <article class="project-card"><h3>Teste App iOS SauceLabs</h3><p>Projeto de testes mobile com foco em fluxo de app, organização de páginas e validações.</p><div class="techs"><span>Mobile</span><span>iOS</span><span>QA</span></div><a href="https://github.com/dbuG-Hun7er/teste-app-ios-sauceLabs" target="_blank">Ver no GitHub</a></article>
-      <article class="project-card"><h3>EBAC Cypress Profissional</h3><p>Automação E2E com Cypress em e-commerce, usando Page Objects, Actions, fixtures, comandos customizados e cy.intercept().</p><div class="techs"><span>Cypress</span><span>JavaScript</span><span>E2E</span></div><a href="https://github.com/dbuG-Hun7er/ebac-cypress-profissional" target="_blank">Ver no GitHub</a></article>
-      <article class="project-card"><h3>EBAC M24 Pactum Tests</h3><p>Testes de API com PactumJS, validação de endpoints, payloads, respostas e comportamento da aplicação.</p><div class="techs"><span>API</span><span>PactumJS</span><span>JS</span></div><a href="https://github.com/dbuG-Hun7er/ebac-m24-pactum-tests" target="_blank">Ver no GitHub</a></article>
-      <article class="project-card"><h3>Projeto Final QA</h3><p>Projeto final reunindo práticas de qualidade, cenários, execução, evidências e organização técnica.</p><div class="techs"><span>QA</span><span>Testes</span><span>Evidências</span></div><a href="https://github.com/dbuG-Hun7er/projeto-final-qa" target="_blank">Ver no GitHub</a></article>
-      <article class="project-card"><h3>EBAC M28 k6 Tests</h3><p>Testes de performance com k6, focando em carga, métricas, comportamento e análise de resultados.</p><div class="techs"><span>k6</span><span>Performance</span><span>Load</span></div><a href="https://github.com/dbuG-Hun7er/ebac-m28-k6-tests" target="_blank">Ver no GitHub</a></article>
-      <article class="project-card"><h3>Módulo 32 Banco de Dados</h3><p>Estudos de banco de dados aplicados à trilha de QA, com foco em consulta, validação e apoio aos testes.</p><div class="techs"><span>SQL</span><span>DB</span><span>QA</span></div><a href="https://github.com/dbuG-Hun7er/modulo-32-banco-dados" target="_blank">Ver no GitHub</a></article>
-      <article class="project-card"><h3>Teste Performance</h3><p>Projeto com JMeter para carga, ramp-up, duração, massa de dados e evidências de comportamento.</p><div class="techs"><span>JMeter</span><span>Performance</span><span>CSV</span></div><a href="https://github.com/dbuG-Hun7er/teste-performance" target="_blank">Ver no GitHub</a></article>
-      <article class="project-card"><h3>CucumberJS Calc Teste</h3><p>Projeto com CucumberJS para praticar BDD, cenários em linguagem natural e validação de regras.</p><div class="techs"><span>Cucumber</span><span>BDD</span><span>JavaScript</span></div><a href="https://github.com/dbuG-Hun7er/cucumberJs_calc_Teste" target="_blank">Ver no GitHub</a></article>
-    </div></div></section>
-    <section id="taverna" class="section section-alt"><div class="container"><p class="eyebrow">Taverna QA</p><h2>Uma comunidade social tech com alma de RPG.</h2><p class="section-lead">A Taverna QA é uma ideia de comunidade digital onde pessoas da área de tecnologia podem conversar, estudar, compartilhar vagas, criar perfis e participar de salas temáticas em um ambiente visual inspirado em jogos 2D, Habbo e Tibia.</p><div class="card-grid three"><article class="card tavern-card"><h3>Biblioteca da Taverna</h3><p>Textos, guias, fragmentos do QA Lendário, fundamentos de QA, cyber, automação e qualidade aplicada a jogos.</p></article><article class="card tavern-card"><h3>Mural de Vagas</h3><p>Espaço futuro para oportunidades, networking, indicação e evolução de carreira para QA e tecnologia.</p></article><article class="card tavern-card"><h3>Arena de Desafios</h3><p>Desafios de teste, bugs simulados, análise de requisitos, API, automação, BDD e estudos guiados.</p></article></div></div></section>
-    <section id="aion" class="section"><div class="container two-columns"><div><p class="eyebrow">Aion 2</p><h2>Guia Gladiator Solo Asmodian.</h2><p>Esta seção será dedicada ao meu guia pessoal de <strong>Aion 2</strong>, com foco em Gladiator solo Asmodian. A ideia não é copiar setup de top player como receita universal, mas estudar sistemas, progressão, builds, PvP, PvE, economia, FPS, macro, delay e tomada de decisão.</p><p>Minha filosofia é simples: <strong>jogar como pobre inteligente</strong>. Evitar desperdício, entender função do item, separar build inicial de build endgame e tomar decisões com base na realidade de jogador solo.</p></div><div class="guide-panel"><h3>Temas do guia</h3><div class="pill-list"><span>Gladiator</span><span>Asmodian</span><span>Build inicial</span><span>Endgame</span><span>Skills</span><span>Arcana</span><span>PvP</span><span>PvE</span><span>Economia</span><span>FPS</span><span>Macro</span><span>Solo player</span></div></div></div></section>
-    <section id="blog" class="section section-alt"><div class="container"><p class="eyebrow">Blog / Diário de Bordo</p><h2>Conteúdos futuros para publicar no site e no LinkedIn.</h2><div class="article-list"><article><span>01</span><h3>Como estou migrando da solda para QA</h3></article><article><span>02</span><h3>O que a soldagem me ensinou sobre qualidade de software</h3></article><article><span>03</span><h3>Segurança é qualidade quando a falha vira porta aberta</h3></article><article><span>04</span><h3>Aion 2: jogar como pobre inteligente</h3></article><article><span>05</span><h3>Taverna QA: uma comunidade tech com alma de RPG</h3></article></div></div></section>
-    <section id="contato" class="section contact-section"><div class="container contact-card"><p class="eyebrow">Contato</p><h2>Quer ver meus projetos ou falar comigo?</h2><p>Este site é meu hub pessoal de QA, projetos, estudos e ideias. Acompanhe minha evolução pelo GitHub e LinkedIn, ou baixe meu currículo em PDF.</p><div class="contact-actions"><a href="https://github.com/dbuG-Hun7er" target="_blank" class="btn btn-primary">GitHub</a><a href="https://linkedin.com/in/dbughun7er" target="_blank" class="btn btn-secondary">LinkedIn</a><a href="assets/docs/Lucas_F_de_Lima_CV.pdf" target="_blank" class="btn btn-secondary">Currículo PDF</a><a href="mailto:Lucasfdelima42@gmail.com" class="btn btn-secondary">E-mail</a></div></div></section>
+
+    <section class="section manifesto">
+      <div class="container">
+        <div class="quote-card reveal">
+          <p class="quote">
+            “Frameworks morrem. Linguagens envelhecem. Ferramentas são trocadas. Mas quem entende qualidade, risco e negócio continua relevante.”
+          </p>
+          <p>
+            Essa é a essência do QA Lendário: não depender de moda. Ferramenta ajuda, mas não substitui
+            raciocínio, investigação, evidência, visão crítica e coragem para questionar o que pode quebrar.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="sobre" class="section">
+      <div class="container two-columns">
+        <div class="reveal">
+          <p class="eyebrow">Sobre mim</p>
+          <h2>Minha história não começou no código.</h2>
+
+          <p>
+            Minha trajetória começou na área metalúrgica, atuando como mecânico soldador e soldador de protótipos.
+            Antes de falar sobre testes automatizados, eu já lidava com qualidade no mundo físico: montagem,
+            manutenção, melhoria contínua, análise de falhas, segurança, prototipagem e validação de produtos.
+          </p>
+
+          <p>
+            Hoje estou em transição para a área de <strong>Quality Assurance</strong>, com formação em
+            Análise e Desenvolvimento de Sistemas e Engenharia de Qualidade de Software. Meu foco é evoluir como
+            QA Júnior, unindo testes manuais, testes funcionais, testes de API, automação, evidências, SQL,
+            Git/GitHub, metodologias ágeis e visão de cybersecurity.
+          </p>
+        </div>
+
+        <div class="info-panel reveal">
+          <h3>Identidade profissional</h3>
+          <ul class="check-list">
+            <li>Analista de QA Júnior em construção</li>
+            <li>Automação com Cypress e JavaScript</li>
+            <li>Testes de API, performance e mobile</li>
+            <li>Base prática em qualidade industrial</li>
+            <li>Cybersecurity como extensão de QA</li>
+            <li>Criador do universo QA Lendário</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="soldagem" class="section section-alt">
+      <div class="container">
+        <p class="eyebrow reveal">Soldagem & Qualidade Industrial</p>
+        <h2 class="reveal">Antes de testar software, eu já aprendia a respeitar falhas no mundo real.</h2>
+        <p class="section-lead reveal">
+          Na indústria, falha não é só “bug”. Falha pode virar acidente, ruído, rachadura, retrabalho,
+          parada de máquina, perda de material e risco para pessoas. Essa base me ensinou algo que carrego
+          para QA: qualidade precisa ser pensada antes do problema acontecer.
+        </p>
+
+        <div class="card-grid three">
+          <article class="card clickable-card reveal" data-open="soldagem-manutencao">
+            <span class="card-icon">⚙</span>
+            <h3>Manutenção e melhoria</h3>
+            <p>Atuação em manutenção, inovação e melhoria contínua de processos.</p>
+            <small>Clique para ler</small>
+          </article>
+
+          <article class="card clickable-card reveal" data-open="soldagem-prototipo">
+            <span class="card-icon">🧩</span>
+            <h3>Prototipagem</h3>
+            <p>Soldagem, montagem, validação e aperfeiçoamento de produtos.</p>
+            <small>Clique para ler</small>
+          </article>
+
+          <article class="card clickable-card reveal" data-open="soldagem-qa">
+            <span class="card-icon">🧪</span>
+            <h3>Transferência para QA</h3>
+            <p>Atenção a detalhes, evidência, causa raiz e prevenção.</p>
+            <small>Clique para ler</small>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="qa" class="section section-alt qa-deep-section">
+      <div class="container">
+        <p class="eyebrow reveal">QA Lendário</p>
+        <h2 class="reveal">O bug não respeita currículo bonito. Ele respeita investigação.</h2>
+        <p class="section-lead reveal">
+          QA não é só executar caso de teste. É entender risco, questionar requisito, validar regra,
+          documentar evidência, conversar com o time e proteger o negócio antes que a falha chegue no usuário.
+        </p>
+
+        <div class="qa-layout reveal">
+          <aside class="qa-menu" aria-label="Menu de QA">
+            <button class="qa-button active" data-qa="qa-visao">Visão de QA</button>
+            <button class="qa-button" data-qa="qa-manual">Testes manuais</button>
+            <button class="qa-button" data-qa="qa-api">API Testing</button>
+            <button class="qa-button" data-qa="qa-automacao">Automação</button>
+            <button class="qa-button" data-qa="qa-bdd">BDD / Cucumber</button>
+            <button class="qa-button" data-qa="qa-performance">Performance</button>
+            <button class="qa-button" data-qa="qa-mobile">Mobile</button>
+            <button class="qa-button" data-qa="qa-evidencia">Evidências</button>
+            <button class="qa-button" data-qa="qa-carreira">Jornada QA Jr</button>
+          </aside>
+
+          <div class="qa-content">
+            <article class="qa-panel active" id="qa-visao">
+              <h3>Minha visão de QA</h3>
+              <p>
+                Para mim, QA é a pessoa que entra para reduzir risco. O QA olha requisito, fluxo, exceção,
+                comportamento inesperado, regra de negócio, dados, API, usabilidade, segurança e impacto.
+              </p>
+              <div class="build-cards">
+                <button data-open="qa-visao-risco"><strong>Risco primeiro</strong><span>Antes de testar, entender o que pode quebrar e qual impacto isso gera.</span></button>
+                <button data-open="qa-visao-negocio"><strong>Negócio</strong><span>Bug importante é aquele que afeta usuário, valor, dinheiro, confiança ou operação.</span></button>
+                <button data-open="qa-visao-postura"><strong>Postura</strong><span>QA não acusa. QA evidencia, comunica e ajuda o time a decidir melhor.</span></button>
+              </div>
+            </article>
+
+            <article class="qa-panel" id="qa-manual">
+              <h3>Testes manuais bem feitos</h3>
+              <p>
+                Teste manual não é sair clicando. É pensar em cenário, pré-condição, massa de dados,
+                resultado esperado, exceção, evidência e bug report.
+              </p>
+              <div class="build-cards">
+                <button data-open="qa-manual-cenarios"><strong>Cenários</strong><span>Fluxo feliz, alternativo, negativo, borda e regressão.</span></button>
+                <button data-open="qa-manual-casos"><strong>Casos de teste</strong><span>Passos claros, resultado esperado e rastreabilidade.</span></button>
+                <button data-open="qa-manual-exploratorio"><strong>Exploratório</strong><span>Investigar comportamento real e encontrar riscos que o roteiro não cobriu.</span></button>
+              </div>
+            </article>
+
+            <article class="qa-panel" id="qa-api">
+              <h3>API Testing</h3>
+              <p>
+                Teste de API olha o sistema por trás da tela. Valida contrato, status code, payload,
+                regra, autenticação, autorização, erro e comportamento com dados inválidos.
+              </p>
+              <div class="build-cards">
+                <button data-open="qa-api-contrato"><strong>Contrato</strong><span>O endpoint entrega o que prometeu?</span></button>
+                <button data-open="qa-api-negativo"><strong>Testes negativos</strong><span>O sistema reage bem quando recebe entrada errada?</span></button>
+                <button data-open="qa-api-auth"><strong>Auth</strong><span>Usuário só acessa o que realmente pode acessar?</span></button>
+              </div>
+            </article>
+
+            <article class="qa-panel" id="qa-automacao">
+              <h3>Automação com propósito</h3>
+              <p>
+                Automação não é sair automatizando tudo. Ela precisa proteger fluxo importante, reduzir retrabalho
+                e dar confiança para alteração de código.
+              </p>
+              <div class="build-cards">
+                <button data-open="qa-auto-cypress"><strong>Cypress</strong><span>E2E, componentes de fluxo, intercept, fixtures e comandos customizados.</span></button>
+                <button data-open="qa-auto-pageobjects"><strong>Page Objects</strong><span>Organizar tela, ação e intenção para manter o teste legível.</span></button>
+                <button data-open="qa-auto-flaky"><strong>Flaky tests</strong><span>Teste instável não dá confiança. Precisa investigar causa, espera e dependência.</span></button>
+              </div>
+            </article>
+
+            <article class="qa-panel" id="qa-bdd">
+              <h3>BDD / Cucumber</h3>
+              <p>
+                BDD ajuda a transformar regra em conversa. O foco não é escrever “Given/When/Then bonito”,
+                mas alinhar entendimento entre negócio, dev e QA.
+              </p>
+              <div class="build-cards">
+                <button data-open="qa-bdd-gherkin"><strong>Gherkin</strong><span>Cenário em linguagem simples, com contexto, ação e resultado esperado.</span></button>
+                <button data-open="qa-bdd-regra"><strong>Regra de negócio</strong><span>O teste precisa provar comportamento, não só clicar em tela.</span></button>
+                <button data-open="qa-bdd-comunicacao"><strong>Comunicação</strong><span>BDD é ferramenta de alinhamento antes de ser automação.</span></button>
+              </div>
+            </article>
+
+            <article class="qa-panel" id="qa-performance">
+              <h3>Performance</h3>
+              <p>
+                Performance testa comportamento sob carga. Não é só “quantos usuários aguenta”, mas tempo de resposta,
+                estabilidade, gargalo, erro, rampa, duração e evidência.
+              </p>
+              <div class="build-cards">
+                <button data-open="qa-perf-k6"><strong>k6</strong><span>Scripts de carga, métricas, thresholds e análise de resposta.</span></button>
+                <button data-open="qa-perf-jmeter"><strong>JMeter</strong><span>Plano de teste, usuários virtuais, ramp-up, CSV e relatório.</span></button>
+                <button data-open="qa-perf-analise"><strong>Análise</strong><span>O valor está no diagnóstico, não só no gráfico bonito.</span></button>
+              </div>
+            </article>
+
+            <article class="qa-panel" id="qa-mobile">
+              <h3>Mobile Testing</h3>
+              <p>
+                Mobile exige olhar fluxo, toque, tela pequena, estado do app, permissões, rede, teclado, login,
+                carrinho, deep link e comportamento em dispositivos diferentes.
+              </p>
+              <div class="build-cards">
+                <button data-open="qa-mobile-appium"><strong>Appium / WDIO</strong><span>Automação mobile com estrutura, páginas e ações reutilizáveis.</span></button>
+                <button data-open="qa-mobile-fluxo"><strong>Fluxos críticos</strong><span>Login, busca, compra, endereço, carrinho e checkout.</span></button>
+                <button data-open="qa-mobile-real"><strong>Realidade mobile</strong><span>Rede ruim, teclado abrindo, tela menor e timing quebrando teste.</span></button>
+              </div>
+            </article>
+
+            <article class="qa-panel" id="qa-evidencia">
+              <h3>Evidências e bug report</h3>
+              <p>
+                Bug bom é bug que o time entende. Evidência precisa mostrar o problema, o contexto, o impacto
+                e o caminho para reproduzir.
+              </p>
+              <div class="build-cards">
+                <button data-open="qa-evid-titulo"><strong>Título claro</strong><span>Direto ao ponto: onde acontece e qual comportamento errado.</span></button>
+                <button data-open="qa-evid-passos"><strong>Passos</strong><span>Reprodução simples, massa usada e ambiente.</span></button>
+                <button data-open="qa-evid-impacto"><strong>Impacto</strong><span>Por que esse bug importa para usuário, negócio ou sistema?</span></button>
+              </div>
+            </article>
+
+            <article class="qa-panel" id="qa-carreira">
+              <h3>Minha jornada como QA Júnior</h3>
+              <p>
+                Minha jornada está em construção. O foco é mostrar prática real: estudar, criar projetos,
+                documentar, publicar, melhorar README, explicar decisões e evoluir com consistência.
+              </p>
+              <div class="build-cards">
+                <button data-open="qa-career-base"><strong>Base</strong><span>Manual, API, Git, SQL, automação e evidência.</span></button>
+                <button data-open="qa-career-projetos"><strong>Projetos</strong><span>Portfólio com projetos reais e explicação técnica.</span></button>
+                <button data-open="qa-career-proximo"><strong>Próximo nível</strong><span>CI/CD, Docker, segurança, performance e arquitetura de testes.</span></button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cyber" class="section cyber-section">
+      <div class="container two-columns">
+        <div class="reveal">
+          <p class="eyebrow">Cybersecurity</p>
+          <h2>Segurança é qualidade quando a falha deixa de ser apenas um bug e passa a ser uma porta aberta.</h2>
+          <p>
+            Essa frase mostra a ponte entre QA e cibersegurança. Algumas falhas podem expor dados, permitir acesso indevido,
+            quebrar autenticação, gerar abuso de sistema ou comprometer a confiança do usuário.
+          </p>
+          <p>
+            Minha jornada em cybersecurity ainda está em construção. Quero construir uma base real para ser um QA mais completo,
+            capaz de pensar em funcionalidade, risco, proteção, validação e uso malicioso do sistema.
+          </p>
+        </div>
+
+        <div class="keyboard-card reveal">
+          <div class="keyboard-title">Cyber mindset</div>
+          <div class="keys">
+            <button data-open="cyber-risco">Risco</button>
+            <button data-open="cyber-api">API</button>
+            <button data-open="cyber-auth">Auth</button>
+            <button data-open="cyber-owasp">OWASP</button>
+            <button data-open="cyber-dados">Dados</button>
+            <button data-open="cyber-logs">Logs</button>
+            <button data-open="cyber-abuso">Abuso</button>
+            <button data-open="cyber-validacao">Validação</button>
+            <button data-open="cyber-protecao">Proteção</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projetos" class="section">
+      <div class="container">
+        <p class="eyebrow reveal">Projetos QA</p>
+        <h2 class="reveal">Projetos para mostrar prática, não promessa.</h2>
+        <p class="section-lead reveal">
+          Estes projetos representam minha evolução prática em automação, API, mobile, performance,
+          banco de dados, BDD e qualidade de software.
+        </p>
+
+        <div class="card-grid projects">
+          <article class="project-card reveal">
+            <h3>Teste App iOS SauceLabs</h3>
+            <p>Testes mobile com foco em fluxo de app, organização de páginas e validações.</p>
+            <div class="techs"><span>Mobile</span><span>iOS</span><span>QA</span></div>
+            <a href="https://github.com/dbuG-Hun7er/teste-app-ios-sauceLabs" target="_blank" rel="noopener">Ver no GitHub</a>
+          </article>
+
+          <article class="project-card reveal">
+            <h3>EBAC Cypress Profissional</h3>
+            <p>Automação E2E em e-commerce com Page Objects, Actions, fixtures, comandos customizados e cy.intercept().</p>
+            <div class="techs"><span>Cypress</span><span>JavaScript</span><span>E2E</span></div>
+            <a href="https://github.com/dbuG-Hun7er/ebac-cypress-profissional" target="_blank" rel="noopener">Ver no GitHub</a>
+          </article>
+
+          <article class="project-card reveal">
+            <h3>EBAC M24 Pactum Tests</h3>
+            <p>Testes de API com PactumJS, validação de endpoints, payloads, respostas e comportamento.</p>
+            <div class="techs"><span>API</span><span>PactumJS</span><span>JS</span></div>
+            <a href="https://github.com/dbuG-Hun7er/ebac-m24-pactum-tests" target="_blank" rel="noopener">Ver no GitHub</a>
+          </article>
+
+          <article class="project-card reveal">
+            <h3>Projeto Final QA</h3>
+            <p>Práticas de qualidade, cenários, execução, evidências e organização técnica.</p>
+            <div class="techs"><span>QA</span><span>Testes</span><span>Evidências</span></div>
+            <a href="https://github.com/dbuG-Hun7er/projeto-final-qa" target="_blank" rel="noopener">Ver no GitHub</a>
+          </article>
+
+          <article class="project-card reveal">
+            <h3>EBAC M28 k6 Tests</h3>
+            <p>Testes de performance com k6, carga, métricas, comportamento e análise de resultado.</p>
+            <div class="techs"><span>k6</span><span>Performance</span><span>Load</span></div>
+            <a href="https://github.com/dbuG-Hun7er/ebac-m28-k6-tests" target="_blank" rel="noopener">Ver no GitHub</a>
+          </article>
+
+          <article class="project-card reveal">
+            <h3>Módulo 32 Banco de Dados</h3>
+            <p>Estudos de banco de dados aplicados à trilha de QA, consulta, validação e apoio aos testes.</p>
+            <div class="techs"><span>SQL</span><span>DB</span><span>QA</span></div>
+            <a href="https://github.com/dbuG-Hun7er/modulo-32-banco-dados" target="_blank" rel="noopener">Ver no GitHub</a>
+          </article>
+
+          <article class="project-card reveal">
+            <h3>Teste Performance</h3>
+            <p>JMeter para carga, ramp-up, duração, massa de dados e evidências de comportamento.</p>
+            <div class="techs"><span>JMeter</span><span>Performance</span><span>CSV</span></div>
+            <a href="https://github.com/dbuG-Hun7er/teste-performance" target="_blank" rel="noopener">Ver no GitHub</a>
+          </article>
+
+          <article class="project-card reveal">
+            <h3>CucumberJS Calc Teste</h3>
+            <p>BDD com CucumberJS, cenários em linguagem natural e validação de regras.</p>
+            <div class="techs"><span>Cucumber</span><span>BDD</span><span>JavaScript</span></div>
+            <a href="https://github.com/dbuG-Hun7er/cucumberJs_calc_Teste" target="_blank" rel="noopener">Ver no GitHub</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="taverna" class="section section-alt tavern-section">
+      <div class="container">
+        <p class="eyebrow reveal">Taverna QA</p>
+        <h2 class="reveal">Uma comunidade social tech com alma de RPG.</h2>
+        <p class="section-lead reveal">
+          A Taverna QA é uma ideia de comunidade digital onde pessoas da área de tecnologia podem conversar,
+          estudar, compartilhar vagas, criar perfis e participar de salas temáticas em um ambiente visual
+          inspirado em jogos 2D, Habbo e Tibia.
+        </p>
+
+        <div class="interactive-tabs reveal">
+          <div class="tab-buttons" role="tablist" aria-label="Taverna QA">
+            <button class="tab-button active" data-tab="tavern-biblioteca">Biblioteca</button>
+            <button class="tab-button" data-tab="tavern-vagas">Mural de Vagas</button>
+            <button class="tab-button" data-tab="tavern-arena">Arena de Desafios</button>
+            <button class="tab-button" data-tab="tavern-mapa">Mapa Futuro</button>
+          </div>
+
+          <div class="tab-panel active" id="tavern-biblioteca">
+            <h3>Biblioteca da Taverna</h3>
+            <p>
+              Área para textos, guias, fragmentos do QA Lendário, fundamentos de QA, automação, cyber,
+              testes manuais e qualidade aplicada a jogos. A biblioteca é o “coração de estudo” da Taverna.
+            </p>
+            <div class="mini-grid">
+              <button data-open="tavern-fundamentos">Fundamentos do QA</button>
+              <button data-open="tavern-automacao">Automação com propósito</button>
+              <button data-open="tavern-cyber">Cyber para QA</button>
+              <button data-open="tavern-games">QA no mundo dos jogos</button>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="tavern-vagas">
+            <h3>Mural de Vagas</h3>
+            <p>
+              Espaço futuro para vagas, indicações, links úteis, oportunidades para QA Júnior e trilhas de preparação.
+              Na primeira versão do site, isso pode nascer como uma página estática com curadoria.
+            </p>
+          </div>
+
+          <div class="tab-panel" id="tavern-arena">
+            <h3>Arena de Desafios</h3>
+            <p>
+              Área futura com desafios de bug report, análise de requisito, cenários de teste, API testing,
+              BDD, automação e investigação. A ideia é transformar estudo em missão.
+            </p>
+          </div>
+
+          <div class="tab-panel" id="tavern-mapa">
+            <h3>Mapa futuro da Taverna</h3>
+            <p>
+              Taverna QA, Taverna Dev, Taverna Cyber, Biblioteca, Mural de Vagas, Arena de Desafios,
+              salas de estudo, perfis e eventos. Primeiro nasce como portfólio; depois pode virar MVP.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="games" class="section games-section">
+      <div class="container">
+        <p class="eyebrow reveal">Games & Sistemas</p>
+        <h2 class="reveal">Jogo também é sistema: economia, risco, progressão e experiência.</h2>
+        <p class="section-lead reveal">
+          Esta área existe para organizar meus estudos sobre MMORPG, game design, progressão, economia,
+          anti-bot, balanceamento, classes e experiência do jogador. Aqui o jogo não entra como bagunça:
+          entra como análise de sistemas.
+        </p>
+
+        <div class="card-grid three">
+          <article class="card clickable-card reveal" data-open="game-mmorpg">
+            <span class="card-icon">🛡</span>
+            <h3>MMORPG como sistema</h3>
+            <p>Progressão, economia, PvP, PvE, mercado, classes, guildas e comportamento de jogador.</p>
+            <small>Clique para ler</small>
+          </article>
+
+          <article class="card clickable-card reveal" data-open="game-qa">
+            <span class="card-icon">🐞</span>
+            <h3>QA em jogos</h3>
+            <p>Bugs, exploits, balanceamento, dupe, anti-bot, eventos, quests e experiência real.</p>
+            <small>Clique para ler</small>
+          </article>
+
+          <article class="card clickable-card reveal" data-open="game-aion-focus">
+            <span class="card-icon">⚔</span>
+            <h3>Foco Aion 2</h3>
+            <p>Meu MMO principal será Aion 2, com foco em Gladiator solo Asmodian.</p>
+            <small>Clique para ler</small>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="aion" class="section section-alt aion-section">
+      <div class="container">
+        <p class="eyebrow reveal">Aion 2</p>
+        <h2 class="reveal">Guia Gladiator Solo Asmodian.</h2>
+        <p class="section-lead reveal">
+          Esta seção será dedicada ao meu guia pessoal de <strong>Aion 2</strong>, com foco em Gladiator solo Asmodian.
+          A ideia não é copiar setup de top player como receita universal, mas estudar sistemas, progressão, builds,
+          PvP, PvE, economia, FPS, macro, delay e tomada de decisão.
+        </p>
+
+        <div class="aion-layout reveal">
+          <aside class="aion-menu" aria-label="Menu do guia Aion 2">
+            <button class="aion-button active" data-aion="aion-visao">Visão geral</button>
+            <button class="aion-button" data-aion="aion-lore-aion1">História Aion 1</button>
+            <button class="aion-button" data-aion="aion-lore-aion2">História Aion 2</button>
+            <button class="aion-button" data-aion="aion-lore-faccoes">Asmodian x Elyos</button>
+            <button class="aion-button" data-aion="aion-build-inicial">Build inicial</button>
+            <button class="aion-button" data-aion="aion-build-pvp">Build PvP</button>
+            <button class="aion-button" data-aion="aion-build-pve">Build PvE</button>
+            <button class="aion-button" data-aion="aion-endgame">Endgame</button>
+            <button class="aion-button" data-aion="aion-skills">Skills</button>
+            <button class="aion-button" data-aion="aion-arcana">Arcana</button>
+            <button class="aion-button" data-aion="aion-economia">Economia</button>
+            <button class="aion-button" data-aion="aion-config">FPS / Macro</button>
+            <button class="aion-button" data-aion="aion-rotina">Rotina solo</button>
+          </aside>
+
+          <div class="aion-content">
+            <article class="aion-panel active" id="aion-visao">
+              <h3>Visão geral do guia</h3>
+              <p>
+                Meu foco no Aion 2 será <strong>Gladiator solo Asmodian</strong>. O objetivo não é ser top 1/ranker absoluto,
+                mas dominar a classe dentro da realidade de um jogador solo, com decisões inteligentes e sem desperdiçar recurso.
+              </p>
+              <div class="build-grid">
+                <button data-open="aion-filosofia">Filosofia: jogar como pobre inteligente</button>
+                <button data-open="aion-objetivo">Objetivo do guia</button>
+                <button data-open="aion-solo">Como penso solo player</button>
+              </div>
+            </article>
+
+
+            <article class="aion-panel" id="aion-lore-aion1">
+              <h3>História base de Aion 1: Atreia, Torre da Eternidade e a guerra</h3>
+              <p>
+                Em Aion 1, a base do mundo gira em torno de <strong>Atreia</strong>, da <strong>Torre da Eternidade</strong>,
+                dos <strong>Balaur</strong>, dos <strong>Daevas</strong> e da divisão entre <strong>Elyos</strong> e <strong>Asmodians</strong>.
+                O ponto central é a queda/destruição da Torre e a separação do mundo em duas metades.
+              </p>
+
+              <div class="lore-timeline">
+                <button data-open="lore-aion1-aion"><strong>01. Aion e Atreia</strong><span>O mundo, a Torre e a origem do conflito.</span></button>
+                <button data-open="lore-aion1-balaur"><strong>02. Balaur</strong><span>Os dragões/Drakan deixam de proteger e viram ameaça.</span></button>
+                <button data-open="lore-aion1-daeva"><strong>03. Daevas</strong><span>Humanos ascendidos para lutar usando Aether.</span></button>
+                <button data-open="lore-aion1-cataclisma"><strong>04. Cataclismo</strong><span>A Torre cai, o mundo parte e nasce a rivalidade.</span></button>
+                <button data-open="lore-aion1-abyss"><strong>05. Abyss</strong><span>O abismo entre as metades vira palco de guerra.</span></button>
+                <button data-open="lore-aion1-balaurea"><strong>06. Balaurea</strong><span>A guerra também se expande para o território dos Balaur.</span></button>
+              </div>
+            </article>
+
+            <article class="aion-panel" id="aion-lore-aion2">
+              <h3>História de Aion 2: retorno a Atreia e guerra de facções</h3>
+              <p>
+                Aion 2 retoma o universo de Atreia com tecnologia moderna, combate aéreo e guerra entre facções.
+                A leitura para o site deve ser: <strong>Aion 2 é o novo campo de estudo do BugHun77er</strong>,
+                onde lore, classe, progressão, PvP, economia e sistema viram guia.
+              </p>
+
+              <div class="build-cards">
+                <button data-open="lore-aion2-retorno"><strong>Retorno a Atreia</strong><span>Aion 2 como volta ao universo clássico com escala maior.</span></button>
+                <button data-open="lore-aion2-daeva"><strong>Ascensão como Daeva</strong><span>O jogador assume papel de guerreiro alado no conflito.</span></button>
+                <button data-open="lore-aion2-guerra"><strong>Guerra de facções</strong><span>Elyos e Asmodians seguem como eixo narrativo e PvP.</span></button>
+                <button data-open="lore-aion2-site"><strong>Como vou usar no site</strong><span>Lore + guia + análise de sistemas.</span></button>
+              </div>
+
+              <div class="warning-note inner-note">
+                <strong>Nota:</strong> como Aion 2 ainda depende de lançamento, patches e material oficial/global,
+                esta parte do guia deve ser atualizada conforme novas informações forem confirmadas.
+              </div>
+            </article>
+
+            <article class="aion-panel" id="aion-lore-faccoes">
+              <h3>Asmodians x Elyos: duas leituras do mesmo mundo quebrado</h3>
+              <p>
+                A rivalidade entre Asmodians e Elyos não é só visual. Ela nasce de sobrevivência, culpa, memória histórica
+                e versões opostas sobre quem foi responsável pela tragédia da Torre.
+              </p>
+
+              <div class="faction-grid">
+                <button data-open="fac-asmodian" class="faction-card asmo">
+                  <strong>Asmodians</strong>
+                  <span>Sobreviventes de Asmodae: mundo escuro, frio, hostil e marcado pela adaptação.</span>
+                </button>
+
+                <button data-open="fac-elyos" class="faction-card elyos">
+                  <strong>Elyos</strong>
+                  <span>Habitantes de Elysea: mundo iluminado, abundante e ligado à ideia de povo escolhido.</span>
+                </button>
+
+                <button data-open="fac-conflito" class="faction-card conflict">
+                  <strong>Conflito</strong>
+                  <span>Os dois lados se culpam, se temem e constroem identidade contra o outro.</span>
+                </button>
+
+                <button data-open="fac-minha-escolha" class="faction-card player-choice">
+                  <strong>Minha escolha</strong>
+                  <span>Vou jogar de Asmodian porque combina com sobrevivência, resistência e minha fantasia de Gladiator.</span>
+                </button>
+              </div>
+            </article>
+
+            <article class="aion-panel" id="aion-build-inicial">
+              <h3>Build inicial: função antes de número bonito</h3>
+              <p>
+                No início, a prioridade não é usar o item mais raro só porque ele tem número alto. A prioridade é entender
+                <strong>o que o item entrega</strong>: ataque, precisão, HP, resistência, PvP ataque, defesa contra arma,
+                redução de dano, controle ou sobrevivência.
+              </p>
+
+              <div class="build-cards">
+                <button data-open="aion-build-inicial-prioridades">
+                  <strong>Prioridades iniciais</strong>
+                  <span>Precisão, HP, ataque, resistência e traits úteis.</span>
+                </button>
+                <button data-open="aion-build-inicial-erros">
+                  <strong>Erros que quero evitar</strong>
+                  <span>Gastar raro cedo, copiar ranker e trocar item só por número alto.</span>
+                </button>
+                <button data-open="aion-build-inicial-rota">
+                  <strong>Rota segura</strong>
+                  <span>Usar item funcional, farmar com estabilidade e guardar recurso.</span>
+                </button>
+              </div>
+            </article>
+
+            <article class="aion-panel" id="aion-build-pvp">
+              <h3>Build PvP: sobreviver, acertar e controlar</h3>
+              <p>
+                Para PvP solo/zerg, Gladiator precisa entrar, causar impacto e não morrer em dois segundos.
+                Minha prioridade será balancear <strong>precisão, ataque PvP, HP, resistência e controle</strong>.
+              </p>
+
+              <div class="build-cards">
+                <button data-open="aion-pvp-core"><strong>Núcleo PvP</strong><span>Precisão + HP + resistência + ataque PvP.</span></button>
+                <button data-open="aion-pvp-jewels"><strong>Joias PvP</strong><span>Impacto cedo sem precisar fechar set perfeito.</span></button>
+                <button data-open="aion-pvp-swap"><strong>Swap PvP</strong><span>Arma/peças para duelo, zerg e sobrevivência.</span></button>
+              </div>
+            </article>
+
+            <article class="aion-panel" id="aion-build-pve">
+              <h3>Build PvE: farm, dungeon e estabilidade</h3>
+              <p>
+                Para PvE, o objetivo é matar bem, farmar com consistência e não travar progressão. A build PvE deve entregar
+                <strong>dano estável, sustain, precisão suficiente e eficiência em mobs/dungeons</strong>.
+              </p>
+
+              <div class="build-cards">
+                <button data-open="aion-pve-core"><strong>Núcleo PvE</strong><span>Dano estável, sustain e velocidade de farm.</span></button>
+                <button data-open="aion-pve-dg"><strong>Dungeons</strong><span>Matar mobs vale recurso; boss sozinho não é tudo.</span></button>
+                <button data-open="aion-pve-arma"><strong>Arma principal</strong><span>PvE para farmar melhor e alimentar a build PvP.</span></button>
+              </div>
+            </article>
+
+            <article class="aion-panel" id="aion-endgame">
+              <h3>Build endgame: referência máxima, não receita cega</h3>
+              <p>
+                A build endgame serve como norte. Ela deve priorizar precisão alta, HP/defesa, redução de cooldown,
+                amplificação de dano de arma, resistência a dano de arma, postura/sobrevivência e skills de controle.
+              </p>
+
+              <div class="build-cards">
+                <button data-open="aion-endgame-stats"><strong>Status endgame</strong><span>Precisão extrema, HP, defesa e resistência.</span></button>
+                <button data-open="aion-endgame-cd"><strong>Cooldown e janelas</strong><span>Redução de cooldown para controlar ritmo de luta.</span></button>
+                <button data-open="aion-endgame-realidade"><strong>Minha realidade</strong><span>Usar como alvo, não como obrigação imediata.</span></button>
+              </div>
+            </article>
+
+            <article class="aion-panel" id="aion-skills">
+              <h3>Skills prioritárias do Gladiator</h3>
+              <p>
+                O foco inicial é evoluir as skills que dão dano, engage, controle, sobrevivência e resposta em combate.
+                A lista abaixo é base de estudo e deve ser ajustada após testes práticos no jogo.
+              </p>
+
+              <div class="skill-list">
+                <button data-open="skill-golpe-carregado">Golpe Carregado</button>
+                <button data-open="skill-furia-ruinosa">Fúria Ruinosa</button>
+                <button data-open="skill-onda-esmagadora">Onda Esmagadora</button>
+                <button data-open="skill-liberacao-choque">Liberação de Choque</button>
+                <button data-open="skill-pancada">Pancada</button>
+                <button data-open="skill-corte-tornozelo">Corte no Tornozelo</button>
+                <button data-open="skill-espada-ruina">Espada da Ruína</button>
+                <button data-open="skill-salto-esmagador">Salto Esmagador</button>
+              </div>
+            </article>
+
+            <article class="aion-panel" id="aion-arcana">
+              <h3>Arcana: organização inicial</h3>
+              <p>
+                A referência de Arcana será organizada por função: PvP, PvE, sobrevivência, controle e dano.
+                A ideia é evitar copiar lista sem entender o motivo de cada peça.
+              </p>
+
+              <div class="arcana-grid">
+                <button data-open="arcana-pvp">PvP: 4 Guardião + 2 Inabalável</button>
+                <button data-open="arcana-pve">PvE: Punição / Sabedoria / Destruição</button>
+                <button data-open="arcana-skills">Skills ligadas à Arcana</button>
+                <button data-open="arcana-regra">Regra de análise</button>
+              </div>
+            </article>
+
+            <article class="aion-panel" id="aion-economia">
+              <h3>Economia: recurso raro não é para torrar no começo</h3>
+              <p>
+                A economia do guia segue uma regra simples: recurso raro deve ser gasto quando existe impacto claro.
+                No começo, a prioridade é farmar, aprender o mercado, entender drop, evitar desperdício e preparar endgame.
+              </p>
+
+              <div class="build-cards">
+                <button data-open="eco-daily"><strong>Dailies</strong><span>Daily não é obrigação. Daily é investimento.</span></button>
+                <button data-open="eco-mercado"><strong>Mercado</strong><span>Entender preço, drop, demanda e timing.</span></button>
+                <button data-open="eco-recursos"><strong>Recursos raros</strong><span>Guardar até saber onde geram poder real.</span></button>
+              </div>
+            </article>
+
+            <article class="aion-panel" id="aion-config">
+              <h3>FPS, macro e delay: combate começa fora da skill</h3>
+              <p>
+                Para Gladiator solo, configuração competitiva não é gráfico bonito. É FPS estável, input limpo,
+                skill registrando, inimigo visível e menor atraso possível.
+              </p>
+
+              <div class="build-cards">
+                <button data-open="config-fps"><strong>FPS estável</strong><span>Preferir estabilidade visual a gráfico pesado.</span></button>
+                <button data-open="config-macro"><strong>Macro e delay</strong><span>Delay curto demais pode engolir skill se o FPS oscilar.</span></button>
+                <button data-open="config-zerg"><strong>Zerg/Mass PvP</strong><span>Visibilidade de player vale mais que efeito bonito.</span></button>
+              </div>
+            </article>
+
+            <article class="aion-panel" id="aion-rotina">
+              <h3>Rotina solo: jogar pouco burro e muito estratégico</h3>
+              <p>
+                A rotina solo precisa separar conteúdo obrigatório, conteúdo opcional e conteúdo que só vale se o retorno for bom.
+                A pergunta diária é: isso me dá poder, recurso, gear, skill, acesso ou aprendizado?
+              </p>
+
+              <div class="build-cards">
+                <button data-open="rotina-login"><strong>Ao logar</strong><span>Checar eventos, loja, dailies úteis e travas.</span></button>
+                <button data-open="rotina-farm"><strong>Farm inteligente</strong><span>Farmar onde existe retorno real para Gladiator.</span></button>
+                <button data-open="rotina-guild"><strong>Guilda</strong><span>Usar guilda para benefício, loja, conteúdo e organização.</span></button>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="warning-note reveal">
+          <strong>Nota do guia:</strong>
+          Aion 2 pode mudar com patch, servidor, balanceamento e lançamento global. Esta seção nasce como guia autoral e será atualizada com testes reais.
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="section contact-section">
+      <div class="container contact-card reveal">
+        <p class="eyebrow">Contato</p>
+        <h2>Quer ver meus projetos ou falar comigo?</h2>
+        <p>
+          Este site é meu hub pessoal de QA, projetos, estudos e ideias. Acompanhe minha evolução pelo GitHub
+          e LinkedIn, ou baixe meu currículo em PDF.
+        </p>
+
+        <div class="contact-actions">
+          <a href="https://github.com/dbuG-Hun7er" target="_blank" rel="noopener" class="btn btn-primary">GitHub</a>
+          <a href="https://linkedin.com/in/dbughun7er" target="_blank" rel="noopener" class="btn btn-secondary">LinkedIn</a>
+          <a href="assets/docs/Lucas_F_de_Lima_CV.pdf" target="_blank" rel="noopener" class="btn btn-secondary">Currículo PDF</a>
+          <a href="mailto:Lucasfdelima42@gmail.com" class="btn btn-ghost">E-mail</a>
+        </div>
+      </div>
+    </section>
   </main>
-  <footer class="site-footer"><div class="container footer-grid"><p>© <span id="year"></span> Lucas F. de Lima — dbuG-Hun7er.</p><p>Construído para GitHub Pages.</p></div></footer>
+
+  <dialog class="modal" id="contentModal">
+    <div class="modal-card">
+      <button class="modal-close" aria-label="Fechar modal">×</button>
+      <p class="eyebrow modal-eyebrow">Detalhe</p>
+      <h3 id="modalTitle">Título</h3>
+      <div id="modalBody"></div>
+    </div>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <p>© <span id="year"></span> Lucas F. de Lima — dbuG-Hun7er.</p>
+      <p>Construído para GitHub Pages.</p>
+    </div>
+  </footer>
+
   <script src="assets/js/main.js"></script>
 </body>
 </html>
