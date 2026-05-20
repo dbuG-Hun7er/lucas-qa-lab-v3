@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cybersecurity | Lucas QA Lab</title>
-  <meta name="description" content="Cybersecurity como extensão de Quality Assurance." />
+  <meta name="description" content="Cybersecurity como extensão de Quality Assurance: risco, API, autenticação, autorização, OWASP, dados, logs, abuso, validação e proteção." />
   <link rel="stylesheet" href="assets/css/main.css" />
 </head>
-<body class="">
+<body>
   <header class="site-header">
     <nav class="navbar container">
       <a href="index.html" class="brand" aria-label="dbuG-Hun7er">
@@ -15,43 +15,168 @@
         <span><strong>dbuG-Hun7er</strong><small>Lucas F. de Lima</small></span>
       </a>
       <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
-      <div class="nav-links"><a href="index.html" class="">Início</a>
-<a href="sobre.html" class="">Sobre</a>
-<a href="qa.html" class="">QA</a>
-<a href="projetos.html" class="">Projetos</a>
-<a href="cyber.html" class="active">Cyber</a>
-<a href="taverna.html" class="">Taverna</a>
-<a href="games.html" class="">Games</a>
-<a href="aion2.html" class="">Aion 2</a>
-<a href="livros.html" class="">Livros</a>
-<a href="meu-livro.html" class="">Meu livro</a>
-<a href="downloads.html" class="">Downloads</a>
-<a href="contato.html" class="">Contato</a></div>
+      <div class="nav-links">
+        <a href="index.html">Início</a><a href="sobre.html">Sobre</a><a href="qa.html">QA</a><a href="projetos.html">Projetos</a><a href="cyber.html" class="active">Cyber</a><a href="taverna.html">Taverna</a><a href="games.html">Games</a><a href="aion2.html">Aion 2</a><a href="livros.html">Livros</a><a href="meu-livro.html">Meu livro</a><a href="downloads.html">Downloads</a><a href="contato.html">Contato</a>
+      </div>
     </nav>
   </header>
 
   <main>
     <section class="page-hero">
-  <div class="container narrow">
-    <p class="eyebrow">Cybersecurity</p>
-    <h1>Segurança é qualidade quando a falha deixa de ser apenas um bug e passa a ser uma porta aberta.</h1>
-    <p class="page-lead">Minha jornada em cybersecurity está em construção, conectada a QA, risco, validação, API, autenticação, autorização e proteção de sistemas.</p>
-    
-  </div>
-</section>
-<section class="section">
-  <div class="container cards-3">
-    <article class="card"><h3>Risco</h3><p>Pensar no impacto real: dados expostos, acesso indevido, abuso, fraude ou quebra de confiança.</p></article>
-    <article class="card"><h3>API e Auth</h3><p>Validar token, permissão, payload, status, resposta e comportamento com usuário sem autorização.</p></article>
-    <article class="card"><h3>OWASP para QA</h3><p>Usar OWASP como mapa mental para entradas, autenticação, APIs, exposição de dados e falhas comuns.</p></article>
-  </div>
-</section>
-<section class="section section-alt">
-  <div class="container cyber-keys">
-    <span>Risco</span><span>API</span><span>Auth</span><span>OWASP</span><span>Dados</span><span>Logs</span><span>Abuso</span><span>Validação</span><span>Proteção</span>
-  </div>
-</section>
+      <div class="container narrow">
+        <p class="eyebrow">Cybersecurity</p>
+        <h1>Segurança é qualidade quando a falha deixa de ser apenas um bug e passa a ser uma porta aberta.</h1>
+        <p class="page-lead">
+          Minha jornada em cyber ainda está em construção, mas ela faz sentido dentro do QA: um sistema bom não precisa apenas funcionar.
+          Ele precisa proteger dados, respeitar permissões, resistir a abuso e manter a confiança do usuário.
+        </p>
+      </div>
+    </section>
 
+    <section class="section">
+      <div class="container cards-3">
+        <article class="card">
+          <h3>Cyber como extensão de QA</h3>
+          <p>QA olha qualidade. Cyber olha risco de segurança. Quando as duas visões se encontram, o teste fica mais forte.</p>
+        </article>
+        <article class="card">
+          <h3>Não vender senioridade falsa</h3>
+          <p>Minha proposta é ser honesto: estou construindo base em segurança para pensar melhor como QA.</p>
+        </article>
+        <article class="card">
+          <h3>Foco prático</h3>
+          <p>API, autenticação, autorização, dados, logs, validação de entrada, abuso de fluxo e OWASP como mapa mental.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container qa-detail-list">
+        <h2>Mapa de Cyber para QA</h2>
+        <p class="page-lead small">Clique em cada bloco para abrir a explicação detalhada.</p>
+
+        <details class="accordion" open>
+          <summary>1. Risco</summary>
+          <div class="accordion-body">
+            <p>Risco é a chance de uma falha causar impacto real. Em QA, muitas vezes pensamos em bug funcional. Em cyber, pensamos no que essa falha permite: acesso indevido, vazamento, fraude, abuso, escalada de permissão ou quebra de confiança.</p>
+            <ul>
+              <li>Qual dado pode ser exposto?</li>
+              <li>Quem pode acessar o que não deveria?</li>
+              <li>O usuário consegue burlar uma regra?</li>
+              <li>O erro causa impacto financeiro ou reputacional?</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>2. Autenticação</summary>
+          <div class="accordion-body">
+            <p>Autenticação responde: quem é o usuário? Login, senha, token, sessão e MFA fazem parte desse universo.</p>
+            <p>Como QA, eu preciso pensar se o sistema lida bem com token expirado, senha errada, sessão vencida, logout, login simultâneo e tentativa de acessar recurso sem estar autenticado.</p>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>3. Autorização</summary>
+          <div class="accordion-body">
+            <p>Autorização responde: o que esse usuário pode fazer? Esse ponto é crítico. Um usuário comum não pode acessar recurso de admin. Um cliente não pode ver dados de outro cliente.</p>
+            <p>Muito problema sério nasce quando o sistema autentica corretamente, mas autoriza errado.</p>
+            <ul>
+              <li>Usuário comum acessando rota administrativa.</li>
+              <li>Alteração de ID na URL para ver dados de outro usuário.</li>
+              <li>Botão escondido no front, mas endpoint liberado no back-end.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>4. API Security</summary>
+          <div class="accordion-body">
+            <p>APIs são portas de entrada do sistema. Não basta testar status 200. É preciso testar o que acontece quando o payload vem errado, quando o token está ausente, quando o usuário não tem permissão ou quando o dado é manipulado.</p>
+            <ul>
+              <li>Endpoint aceita campo que não deveria?</li>
+              <li>Retorna dados sensíveis demais?</li>
+              <li>Permite alterar recurso de outro usuário?</li>
+              <li>Valida limite, tipo e obrigatoriedade?</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>5. Validação de entrada</summary>
+          <div class="accordion-body">
+            <p>Validação de entrada é uma barreira básica. Campo de texto, número, e-mail, CPF, senha, upload, query string e payload precisam rejeitar dados inválidos ou perigosos.</p>
+            <p>Para QA, isso vira cenário de teste: campo vazio, formato inválido, excesso de caracteres, caracteres especiais, scripts, payload inesperado e manipulação manual da requisição.</p>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>6. Dados sensíveis</summary>
+          <div class="accordion-body">
+            <p>Um sistema pode funcionar e ainda assim vazar informação. QA precisa observar se a aplicação mostra dados demais na tela, na resposta da API, nos logs ou em mensagens de erro.</p>
+            <ul>
+              <li>Senha nunca deve aparecer.</li>
+              <li>Token não deve vazar em log.</li>
+              <li>Dados pessoais precisam de cuidado.</li>
+              <li>Mensagem de erro não deve revelar detalhe interno desnecessário.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>7. Logs</summary>
+          <div class="accordion-body">
+            <p>Logs ajudam muito na investigação, mas também podem virar risco. O sistema precisa registrar informação útil sem expor senha, token, dados pessoais ou segredo de ambiente.</p>
+            <p>Como QA, eu posso observar mensagens, console, retorno de erro, logs de teste e evidências para perceber se existe exposição indevida.</p>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>8. Abuso de fluxo</summary>
+          <div class="accordion-body">
+            <p>Usuário malicioso não segue o caminho feliz. Ele repete ação, altera ID, volta tela, chama endpoint direto, manipula payload, tenta pular etapa e força limite.</p>
+            <p>Cyber para QA é pensar nesse usuário também. Não para virar hacker de filme, mas para testar se o sistema resiste ao uso indevido.</p>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>9. OWASP como mapa mental</summary>
+          <div class="accordion-body">
+            <p>OWASP ajuda a organizar riscos comuns de aplicações web e APIs. Para mim, como QA, serve como mapa mental para pensar em autenticação, autorização, exposição de dados, validação de entrada, configuração insegura e falhas de controle de acesso.</p>
+            <p>A ideia não é decorar lista. É aprender a fazer perguntas melhores durante o teste.</p>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>10. Segurança em testes mobile</summary>
+          <div class="accordion-body">
+            <p>No mobile, além do fluxo normal, existe o cuidado com sessão, token, cache, dados salvos no dispositivo, permissões, prints, logout e comportamento em rede instável.</p>
+            <p>Um app pode parecer correto visualmente, mas manter sessão indevida ou expor dado sensível de forma errada.</p>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>11. Segurança e bug report</summary>
+          <div class="accordion-body">
+            <p>Bug de segurança precisa de cuidado na comunicação. Não é para expor publicamente, nem espalhar detalhe sensível sem necessidade. O ideal é registrar de forma responsável, com evidência suficiente e controle de acesso.</p>
+            <ul>
+              <li>Descrever impacto sem sensacionalismo.</li>
+              <li>Evitar vazar dados reais em print.</li>
+              <li>Usar massa fictícia quando possível.</li>
+              <li>Comunicar prioridade com clareza.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="accordion">
+          <summary>12. Minha trilha cyber dentro do QA</summary>
+          <div class="accordion-body">
+            <p>Meu objetivo não é fingir que sou especialista sênior em segurança. Meu objetivo é construir uma base real para ser um QA mais completo.</p>
+            <p>A trilha faz sentido assim: fundamentos de rede, web, API, autenticação, autorização, OWASP, testes de segurança básicos, documentação de evidência e ética profissional.</p>
+          </div>
+        </details>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">

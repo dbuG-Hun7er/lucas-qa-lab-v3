@@ -35,3 +35,11 @@ Settings > Pages > Deploy from a branch > main > /root
 ## Privacidade do manuscrito
 
 O manuscrito do livro **não** é incluído como download público nesta versão. Ele foi usado apenas como referência de conteúdo para a página do livro.
+
+## v8
+
+Removido o bloco de observação/curadoria da página de livros para deixar a seção mais direta e profissional.
+
+## v9
+
+Páginas QA e Cyber reescritas com mais profundidade e blocos clicáveis/expansíveis usando `<details>` e `<summary>`.
