@@ -2,6 +2,9 @@ User-agent: *
 Allow: /
 Disallow: /private-docs/
 Disallow: /private-assets/
+Disallow: /assets/docs/leituras-html/
 Disallow: /assets/docs/*manuscrito*
+Disallow: /assets/docs/*manuscript*
+Disallow: /assets/docs/*.docx
 
 Sitemap: https://dbug-hun7er.github.io/lucas-qa-lab-v3/sitemap.xml

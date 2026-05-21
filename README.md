@@ -1,59 +1,83 @@
-# Lucas QA Lab v6 — Multipage
+# Lucas QA Lab
 
-Site estático multipage do dbuG-Hun7er / Lucas F. de Lima.
+Site estático multipage de Lucas F. de Lima, também assinado como dbuG-Hun7er.
+
+O projeto funciona como portfólio profissional em Quality Assurance, automação de testes, estudos de cybersecurity, projetos autorais e materiais públicos de apoio. A proposta é manter uma base simples, publicável em GitHub Pages, com HTML, CSS e JavaScript puro.
+
+## Páginas
+
+- `index.html`: home e visão geral do lab
+- `sobre.html`: trajetória profissional
+- `qa.html`: mapa de estudos e prática em Quality Assurance
+- `projetos.html`: projetos técnicos e repositórios
+- `cyber.html`: segurança aplicada ao olhar de QA
+- `taverna.html`: conceito autoral da Taverna QA
+- `games.html`: jogos analisados como sistemas
+- `aion2.html`: guia autoral de Aion 2
+- `livros.html`: curadoria de livros
+- `meu-livro.html`: apresentação pública de O QA Lendário
+- `downloads.html`: currículo, storytelling e leituras HTML
+- `contato.html`: links profissionais
 
 ## Estrutura
 
-- Home profissional
-- Sobre
-- QA
-- Projetos
-- Cybersecurity
-- Taverna QA
-- Games & Sistemas
-- Aion 2
-- Livros recomendados
-- Meu livro: O QA Lendário
-- Downloads
-- Contato
+```text
+assets/
+  css/main.css
+  js/main.js
+  docs/
+    Lucas_F_de_Lima_CV.pdf
+    storytelling_lucas_corporativo.pdf
+  img/
+downloads/
+  leituras-html/
+private-docs/
+private-assets/
+```
 
 ## Como rodar
 
-Abra `index.html` no navegador ou use Live Server no VS Code.
+Abra `index.html` no navegador ou use a extensão Live Server no VS Code.
 
-## Como publicar
+Como é um site estático, não há etapa de build.
 
-Suba todos os arquivos para um repositório GitHub e ative:
+## Publicação
 
-Settings > Pages > Deploy from a branch > main > /root
+Para publicar no GitHub Pages:
 
-## Observações
+1. Envie os arquivos para o repositório.
+2. Acesse `Settings > Pages`.
+3. Escolha `Deploy from a branch`.
+4. Selecione `main` e `/root`.
 
-- A página de livros usa imagens remotas da Amazon CDN. Se alguma capa não carregar, o placeholder local aparece.
-- Os HTMLs de leitura estão em `assets/docs/leituras-html/`.
+## SEO e compartilhamento
 
-## Privacidade do manuscrito
+O projeto inclui:
 
-O manuscrito do livro **não** fica dentro de `assets/` nem é incluído como download público. Caso seja necessário manter uma cópia local, use `private-docs/`, que está no `.gitignore`.
+- Metatags de descrição por página
+- Canonical URLs
+- Open Graph básico
+- Favicon
+- `sitemap.xml`
+- `robots.txt`
 
-Antes de publicar, confirme que `assets/docs/` contém apenas currículo, storytelling e HTMLs de leitura.
+## Privacidade
 
-## v8
+O manuscrito de **O QA Lendário** não deve ficar na área pública do site.
 
-Removido o bloco de observação/curadoria da página de livros para deixar a seção mais direta e profissional.
+Regras adotadas:
 
-## v9
+- Manuscritos locais ficam em `private-docs/`.
+- `private-docs/` e `private-assets/` estão no `.gitignore`.
+- Arquivos `.docx` dentro de `assets/docs/` são ignorados para evitar publicação acidental.
+- A página `meu-livro.html` apresenta a obra, mas não publica o manuscrito.
+- As leituras HTML ficam somente em `downloads/leituras-html/` e não entram no sitemap.
 
-Páginas QA e Cyber reescritas com mais profundidade e blocos clicáveis/expansíveis usando `<details>` e `<summary>`.
+Antes de publicar, rode:
 
-## v10
+```bash
+git status --short
+git ls-files
+```
 
-Páginas QA e Cyber refeitas com cards grandes clicáveis, explicações detalhadas e melhor apresentação visual.
-
-## v11
-
-Removido o bloco 'Arquitetura do site' da home e página Aion 2 complementada com cards clicáveis mais completos.
-
-## v12
-
-Auditoria técnica aplicada: SEO/OG/canonical, `robots.txt`, `sitemap.xml`, acessibilidade de navegação, foco visível, imagens otimizadas e reforço de privacidade do manuscrito.
+Confirme que nenhum manuscrito aparece na lista de arquivos versionados.

@@ -1,4 +1,6 @@
 private-docs/
 private-assets/
 assets/docs/*manuscrito*.docx
+assets/docs/*manuscript*.docx
 assets/docs/QA_Lendario_manuscrito.docx
+assets/docs/*.docx

@@ -13,12 +13,16 @@ if (toggle && navLinks) {
 
   const closeMenu = () => {
     navLinks.classList.remove("open");
+    document.body.classList.remove("nav-open");
     toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "Abrir menu");
   };
 
   toggle.addEventListener("click", () => {
     const isOpen = navLinks.classList.toggle("open");
+    document.body.classList.toggle("nav-open", isOpen);
     toggle.setAttribute("aria-expanded", String(isOpen));
+    toggle.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
   });
 
   navLinks.querySelectorAll("a").forEach((link) => {
@@ -29,6 +33,14 @@ if (toggle && navLinks) {
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeMenu();
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (!navLinks.classList.contains("open")) return;
+    if (navLinks.contains(target) || toggle.contains(target)) return;
+    closeMenu();
   });
 }
 
