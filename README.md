@@ -61,17 +61,6 @@ O projeto inclui:
 - `sitemap.xml`
 - `robots.txt`
 
-## Privacidade
-
-O manuscrito de **O QA Lendário** não deve ficar na área pública do site.
-
-Regras adotadas:
-
-- Manuscritos locais ficam em `private-docs/`.
-- `private-docs/` e `private-assets/` estão no `.gitignore`.
-- Arquivos `.docx` dentro de `assets/docs/` são ignorados para evitar publicação acidental.
-- A página `meu-livro.html` apresenta a obra, mas não publica o manuscrito.
-- As leituras HTML ficam somente em `downloads/leituras-html/` e não entram no sitemap.
 
 Antes de publicar, rode:
 

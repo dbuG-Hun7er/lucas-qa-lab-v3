@@ -1,0 +1,2191 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Leitor Dark — Web Automation Testing Using Playwright</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=JetBrains+Mono:wght@400;500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06070f;--bg2:#0b0d1a;--panel:rgba(11,13,26,.95);--panel2:#111428;
+  --text:#e8eaf6;--muted:#8892b0;--line:rgba(180,160,255,.10);
+  --accent:#c084fc;--accent2:#a855f7;--accent3:#e879f9;
+  --accent-soft:rgba(168,85,247,.12);--green:#34d399;--amber:#fbbf24;
+  --shadow:rgba(0,0,0,.65);--max:940px;--font:18.5px;--sidebar-w:300px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 90% -5%,rgba(168,85,247,.22),transparent 50%),
+    radial-gradient(ellipse 700px 600px at -5% 35%,rgba(232,121,249,.10),transparent 48%),
+    radial-gradient(ellipse 500px 400px at 55% 85%,rgba(99,102,241,.10),transparent 50%),
+    linear-gradient(180deg,#0b0d1a 0%,var(--bg) 40%);
+  color:var(--text);font-family:'Literata',Georgia,serif;font-size:var(--font);line-height:1.80;min-height:100vh;overflow-x:hidden;
+}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.8),transparent 80%);}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;color:var(--accent3)}
+.progress{position:fixed;top:0;left:0;height:3px;width:0%;z-index:100;background:linear-gradient(90deg,var(--accent2),var(--accent3),var(--accent));box-shadow:0 0 20px var(--accent),0 0 8px var(--accent3);transition:width .1s linear;}
+.shell{display:grid;grid-template-columns:var(--sidebar-w) minmax(0,1fr);min-height:100vh;position:relative;z-index:1}
+.sidebar{position:sticky;top:0;height:100vh;overflow:auto;padding:20px 16px 32px;border-right:1px solid var(--line);background:linear-gradient(180deg,rgba(8,9,20,.97) 0%,rgba(10,11,24,.90) 100%);backdrop-filter:blur(24px);display:flex;flex-direction:column;}
+.sidebar::-webkit-scrollbar{width:4px}.sidebar::-webkit-scrollbar-thumb{background:rgba(192,132,252,.25);border-radius:4px}
+.brand{display:flex;gap:11px;align-items:center;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.logo{width:42px;height:42px;border-radius:13px;flex-shrink:0;background:linear-gradient(135deg,#1a0a2e 0%,#2d1b69 50%,#0f0620 100%);border:1px solid rgba(192,132,252,.30);display:grid;place-items:center;box-shadow:0 0 24px rgba(168,85,247,.30),inset 0 1px rgba(255,255,255,.06);font-family:'Syne',sans-serif;font-weight:900;font-size:13px;color:var(--accent);letter-spacing:-.02em;}
+.brand-text h1{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#f0eaff;line-height:1.2}
+.brand-text p{font-size:11px;color:var(--muted);margin-top:3px}
+.search-wrap{position:relative;margin:14px 0 10px}
+.search-wrap input{width:100%;padding:10px 36px 10px 13px;border:1px solid var(--line);border-radius:12px;background:rgba(192,132,252,.05);color:var(--text);font-family:'Literata',serif;font-size:14px;outline:none;transition:.2s;}
+.search-wrap input:focus{border-color:rgba(192,132,252,.5);background:rgba(192,132,252,.08);box-shadow:0 0 0 3px rgba(192,132,252,.10);}
+.search-wrap input::placeholder{color:var(--muted)}
+.search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;opacity:0;transition:.2s;pointer-events:none;}
+.search-clear.visible{opacity:1;pointer-events:auto}
+.search-count{font-size:11px;color:var(--accent);margin-bottom:4px;min-height:16px;text-align:center}
+.search-nav{display:flex;gap:6px;margin-bottom:8px}
+.search-nav button{flex:1;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:6px;border-radius:9px;border:1px solid var(--line);background:rgba(192,132,252,.06);color:var(--text);cursor:pointer;transition:.15s}
+.search-nav button:hover{border-color:rgba(192,132,252,.4)}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.btn{appearance:none;border:1px solid var(--line);background:rgba(192,132,252,.06);color:var(--text);border-radius:11px;padding:8px 10px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;transition:.18s ease;letter-spacing:.02em;}
+.btn:hover{border-color:rgba(192,132,252,.45);background:rgba(192,132,252,.12);transform:translateY(-1px);box-shadow:0 0 12px rgba(192,132,252,.15)}
+.btn.active{border-color:var(--accent2);color:var(--accent);background:rgba(168,85,247,.15)}
+.btn.highlight-mode{border-color:var(--amber);color:var(--amber);background:rgba(251,191,36,.10)}
+.btn-full{grid-column:1/-1}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0 14px}
+.stat{background:linear-gradient(160deg,rgba(192,132,252,.06),rgba(192,132,252,.02));border:1px solid var(--line);border-radius:14px;padding:10px 12px;}
+.stat b{display:block;font-family:'Syne',sans-serif;font-size:17px;font-weight:900;color:var(--accent)}
+.stat span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.10em;font-family:'Syne',sans-serif}
+.reading-time{margin:0 0 14px}
+.rt-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px;font-family:'Syne',sans-serif;text-transform:uppercase;letter-spacing:.08em}
+.rt-bar{height:4px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden}
+.rt-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent3));border-radius:4px;width:0%;transition:width .3s ease}
+.toc-title{font-size:10px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin:14px 0 6px;font-weight:800;font-family:'Syne',sans-serif}
+.toc{font-size:13px;flex:1}
+.toc a{display:block;color:#b0bfd6;border-left:2px solid transparent;padding:5px 8px 5px 10px;border-radius:0 10px 10px 0;line-height:1.3;transition:.15s;font-family:'Syne',sans-serif;font-weight:500;}
+.toc a:hover,.toc a.active{background:rgba(192,132,252,.09);border-left-color:var(--accent);text-decoration:none;color:#f0eaff;}
+.toc a.active{color:var(--accent)}
+.toc .h3{padding-left:22px;font-size:12px;color:var(--muted);font-weight:400}
+.toc .h1{font-weight:800;color:#f0eaff}.toc .h2{font-weight:700}
+.content-wrap{padding:44px min(6vw,80px) 100px;position:relative}
+.hero{max-width:var(--max);margin:0 auto 36px;padding:40px;border-radius:28px;border:1px solid rgba(192,132,252,.18);background:radial-gradient(600px 300px at 100% 0%,rgba(168,85,247,.16),transparent 55%),radial-gradient(400px 250px at 0% 100%,rgba(232,121,249,.08),transparent 55%),linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.015));box-shadow:0 30px 80px var(--shadow),inset 0 1px rgba(255,255,255,.04);overflow:hidden;position:relative;}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(105deg,transparent 0 20px,rgba(192,132,252,.025) 21px 22px);}
+.hero>*{position:relative}
+.eyebrow{color:var(--accent);font-size:12px;letter-spacing:.20em;text-transform:uppercase;font-weight:800;font-family:'Syne',sans-serif;margin-bottom:10px;}
+.hero h2{font-family:'Syne',sans-serif;font-size:clamp(28px,4.5vw,52px);line-height:1.05;letter-spacing:-.04em;color:#fff;margin:0 0 14px;font-weight:900;}
+.hero h2 em{color:var(--accent);font-style:normal}
+.hero p{color:var(--muted);max-width:700px;font-size:16px}
+.top-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.top-actions .btn{font-size:13px;padding:11px 18px}
+.reader{max-width:var(--max);margin:0 auto;padding:28px 0;font-family:'Literata',Georgia,serif;}
+.reader h1,.reader h2,.reader h3{font-family:'Syne',sans-serif;line-height:1.15;letter-spacing:-.03em;scroll-margin-top:20px;}
+.reader h1{font-size:42px;margin:40px 0 20px;color:#fff;font-weight:900}
+.reader h2{font-size:30px;margin:56px 0 18px;color:#f0eaff;font-weight:800;border-top:1px solid rgba(192,132,252,.12);padding-top:32px;}
+.reader h3{font-size:21px;margin:32px 0 12px;font-weight:700;color:color-mix(in srgb,var(--accent) 55%,#fff);}
+.reader p{margin:0 0 20px;color:#dde4f5;text-wrap:pretty}
+.reader ul,.reader ol{padding-left:1.4em;margin:0 0 22px}
+.reader li{margin:8px 0;color:#dde4f5}
+.reader strong{color:#fff}.reader em{color:var(--accent);font-style:italic}
+.reader hr{border:0;border-top:1px solid var(--line);margin:32px 0}
+.reader blockquote{margin:26px 0;padding:18px 22px;border:1px solid rgba(192,132,252,.20);border-left:4px solid var(--accent2);border-radius:16px;background:rgba(168,85,247,.06);color:#c5b8e8;font-style:italic;}
+.reader blockquote strong{color:var(--accent)}
+.reader code{background:rgba(192,132,252,.10);border:1px solid rgba(192,132,252,.18);color:#e0d0ff;border-radius:7px;padding:.12em .38em;font-family:'JetBrains Mono',monospace;font-size:.88em;}
+.reader pre{position:relative;margin:26px 0;padding:24px;overflow:auto;border-radius:20px;background:#060810;border:1px solid rgba(192,132,252,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 20px 60px rgba(0,0,0,.35);}
+.reader pre code{background:transparent;border:0;padding:0;color:#c9d1f5;font-size:13.5px;line-height:1.68;font-family:'JetBrains Mono',monospace;}
+.pre-header{display:flex;justify-content:space-between;align-items:center;padding:0 24px 16px;margin:-24px -24px 16px;border-bottom:1px solid rgba(255,255,255,.06);}
+.pre-lang{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+.pre-dots{display:flex;gap:5px}
+.pre-dots span{width:10px;height:10px;border-radius:50%}
+.pre-dots span:nth-child(1){background:#ff5f57}.pre-dots span:nth-child(2){background:#ffbd2e}.pre-dots span:nth-child(3){background:#27c93f}
+.copy-code{position:absolute;right:12px;bottom:12px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;padding:6px 10px;border-radius:9px;border:1px solid rgba(192,132,252,.25);background:rgba(8,6,16,.88);color:var(--accent);cursor:pointer;transition:.15s;letter-spacing:.05em;}
+.copy-code:hover{border-color:var(--accent);background:rgba(168,85,247,.15)}
+.copy-code.ok{color:var(--green);border-color:var(--green)}
+.mark{background:rgba(192,132,252,.28);color:#fff;border-radius:4px;padding:.05em .2em}
+.mark-current{background:rgba(251,191,36,.45);color:#fff;outline:2px solid var(--amber);border-radius:4px}
+[data-hl]{border-radius:3px;padding:0 2px}
+.float-bar{position:fixed;bottom:24px;right:24px;z-index:50;display:flex;flex-direction:column;gap:8px;align-items:flex-end;}
+.float-btn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(192,132,252,.30);background:rgba(11,13,26,.92);color:var(--accent);font-size:18px;display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.50);transition:.2s;backdrop-filter:blur(12px);}
+.float-btn:hover{border-color:var(--accent);background:rgba(168,85,247,.18);transform:scale(1.08);box-shadow:0 8px 30px rgba(0,0,0,.50),0 0 20px rgba(192,132,252,.25)}
+.float-btn.highlight-mode{border-color:var(--amber);color:var(--amber);background:rgba(251,191,36,.12)}
+.hl-tooltip{position:fixed;z-index:200;display:none;background:rgba(11,13,26,.97);border:1px solid rgba(192,132,252,.35);border-radius:14px;padding:8px;gap:6px;backdrop-filter:blur(16px);box-shadow:0 16px 40px rgba(0,0,0,.5);}
+.hl-tooltip.show{display:flex}
+.hl-btn{width:34px;height:34px;border-radius:8px;border:none;cursor:pointer;font-size:16px;display:grid;place-items:center;transition:.15s;background:rgba(255,255,255,.06);color:var(--text);}
+.hl-btn:hover{background:rgba(192,132,252,.2)}
+.bk-panel{display:none;position:fixed;top:0;right:0;bottom:0;width:280px;z-index:60;background:rgba(8,9,20,.97);border-left:1px solid var(--line);backdrop-filter:blur(24px);padding:24px 16px;overflow:auto;box-shadow:-20px 0 60px rgba(0,0,0,.5);}
+.bk-panel.open{display:block}
+.bk-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.bk-header h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#f0eaff}
+.bk-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.bk-list{display:flex;flex-direction:column;gap:8px}
+.bk-item{padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(192,132,252,.04);cursor:pointer;transition:.15s;}
+.bk-item:hover{border-color:rgba(192,132,252,.35);background:rgba(192,132,252,.08)}
+.bk-item-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--accent);margin-bottom:3px}
+.bk-item-text{font-size:11px;color:var(--muted);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bk-del{float:right;background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;margin-left:6px}
+.bk-del:hover{color:#f87171}
+.bk-empty{color:var(--muted);font-size:13px;text-align:center;padding:30px 0;font-family:'Syne',sans-serif}
+.focus .sidebar{display:none}.focus .shell{display:block}.focus .content-wrap{padding-left:min(8vw,100px)}
+.mobile-menu{display:none;position:fixed;right:16px;bottom:80px;z-index:40;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:999px;padding:12px 16px;box-shadow:0 16px 40px var(--shadow);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+@media(max-width:980px){.shell{display:block}.sidebar{position:fixed;z-index:25;left:0;top:0;transform:translateX(-110%);transition:.25s cubic-bezier(.4,0,.2,1);width:min(85vw,320px)}.sidebar.open{transform:translateX(0)}.content-wrap{padding:28px 20px 90px}.hero{padding:26px;border-radius:22px}.reader h1{font-size:32px}.reader h2{font-size:25px}.mobile-menu{display:block}.float-bar{bottom:90px;right:16px}}
+@media print{body{background:white;color:#111}.sidebar,.mobile-menu,.progress,.top-actions,.float-bar,.hl-tooltip,.bk-panel{display:none}.shell{display:block}.content-wrap{padding:0}.hero{box-shadow:none;border:1px solid #ddd}.reader{max-width:100%}a{color:#5b21b6}}
+</style>
+</head>
+<body>
+<div class="progress" id="bar"></div>
+<button class="mobile-menu" id="menu">☰ Sumário</button>
+<div class="hl-tooltip" id="hlTooltip">
+  <button class="hl-btn" onclick="applyHl('rgba(251,191,36,.40)')">🟡</button>
+  <button class="hl-btn" onclick="applyHl('rgba(192,132,252,.40)')">🟣</button>
+  <button class="hl-btn" onclick="applyHl('rgba(52,211,153,.35)')">🟢</button>
+  <button class="hl-btn" onclick="applyHl('rgba(248,113,113,.35)')">🔴</button>
+  <button class="hl-btn" onclick="removeHl()">✕</button>
+  <button class="hl-btn" onclick="bookmarkSel()">🔖</button>
+</div>
+<div class="bk-panel" id="bkPanel">
+  <div class="bk-header"><h3>🔖 Marcadores</h3><button class="bk-close" id="bkClose">✕</button></div>
+  <div class="bk-list" id="bkList"></div>
+</div>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">PW</div>
+      <div class="brand-text"><h1>Leitor Playwright</h1><p>Dark mode • violeta profundo</p></div>
+    </div>
+    <div class="search-wrap">
+      <input id="q" placeholder="Buscar... (Enter)" autocomplete="off"/>
+      <button class="search-clear" id="qClear">✕</button>
+    </div>
+    <div class="search-nav" id="searchNav" style="display:none">
+      <button onclick="navSearch(-1)">◀ Anterior</button>
+      <button onclick="navSearch(1)">Próximo ▶</button>
+    </div>
+    <div class="search-count" id="searchCount"></div>
+    <div class="controls">
+      <button class="btn" id="dec">A−</button>
+      <button class="btn" id="inc">A+</button>
+      <button class="btn" id="focusBtn">⊡ Foco</button>
+      <button class="btn" id="printBtn">⎙ PDF</button>
+      <button class="btn btn-full" id="hlModeBtn">✏ Modo Grifar</button>
+      <button class="btn btn-full" id="bkBtn">🔖 Marcadores</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>12</b><span>capítulos</span></div>
+      <div class="stat"><b>~11k</b><span>palavras</span></div>
+      <div class="stat"><b id="readPct">0%</b><span>lido</span></div>
+      <div class="stat"><b id="timeLeft">~45min</b><span>restante</span></div>
+    </div>
+    <div class="reading-time">
+      <div class="rt-label"><span>Progresso</span></div>
+      <div class="rt-bar"><div class="rt-fill" id="rtFill"></div></div>
+    </div>
+    <div class="toc-title">Sumário</div>
+    <nav class="toc" id="toc"></nav>
+  </aside>
+  <main class="content-wrap">
+    <section class="hero">
+      <div class="eyebrow">QA • Playwright • End-to-End • API • Acessibilidade • Visual</div>
+      <h2>Web Automation Testing<br>Using <em>Playwright</em></h2>
+      <p>End-to-end, API, acessibilidade e testes visuais usando Playwright — Kailash Pathak. Dark mode com grifos coloridos, marcadores persistentes, busca avançada e modo foco.</p>
+      <div class="top-actions">
+        <button class="btn" onclick="document.querySelector('.reader h1')?.scrollIntoView({behavior:'smooth'})">▶ Começar leitura</button>
+        <button class="btn" onclick="document.getElementById('focusBtn').click()">⊡ Modo foco</button>
+        <button class="btn" id="hlHeroBtn">✏ Grifar texto</button>
+      </div>
+    </section>
+    <article class="reader">
+
+      <section class="level1" id="testes-web-end-to-end-com-cypress">
+<h1>Testes Web End-to-End com Cypress</h1>
+<hr/>
+<section class="level2" id="prefácio">
+<h2>Prefácio</h2>
+<p>Cypress é um framework de automação de testes em JavaScript criado
+com o único propósito de realizar testes de frontend. O Cypress se
+destaca por reinventar a forma como os testes são realizados,
+especialmente para a web moderna. Diferentemente de outros frameworks de
+teste, como o Selenium WebDriver, o Cypress é muito mais rápido pois
+roda no navegador e também tem uma curva de aprendizado menor em
+comparação com outros frameworks de teste.</p>
+<p>Desenvolvedores que trabalham com aplicações frontend poderão colocar
+seus conhecimentos em prática com este guia prático e desenvolver suas
+habilidades em testes end-to-end. Este livro adota uma abordagem prática
+de implementação e metodologias associadas que farão você estar em
+funcionamento e produtivo em pouco tempo.</p>
+<hr/>
+<section class="level3" id="para-quem-é-este-livro">
+<h3>Para quem é este livro</h3>
+<p>O livro é destinado a profissionais de teste, testadores de software
+e web, e desenvolvedores web que dominam JavaScript e podem ou não estar
+familiarizados com os conceitos de automação de testes. Os três
+primeiros capítulos oferecem um guia introdutório rápido que ajudará
+você a se familiarizar com o funcionamento do Cypress e como começar
+caso seja um completo iniciante no Cypress. Se você é um testador de
+Selenium que deseja migrar para o Cypress e descobrir suas capacidades,
+este livro será muito útil. É necessário um bom entendimento de testes
+web e JavaScript.</p>
+<hr/>
+</section>
+<section class="level3" id="o-que-este-livro-aborda">
+<h3>O que este livro aborda</h3>
+<p><strong>Capítulo 1, Instalando e Configurando o Cypress</strong>,
+leva você pelos fundamentos de como começar com o Cypress, incluindo a
+instalação do pacote Cypress, as configurações padrão e a personalização
+das configurações. Neste capítulo, você aprenderá como o Cypress
+funciona, quais módulos ele requer para executar, as recomendações de
+nomenclatura de arquivos de teste e como começar a usar o Cypress.
+Entender como o Cypress funciona garantirá que você seja capaz de
+compreender o funcionamento interno do Cypress e poderá instalar e
+configurar os projetos subsequentes por conta própria com total
+entendimento da estrutura do framework Cypress.</p>
+<p><strong>Capítulo 2, Diferenças entre Selenium WebDriver e
+Cypress</strong>, é onde exploraremos como o Cypress é diferente do
+Selenium WebDriver e destacaremos alguns dos prós e contras de escolher
+o Cypress para executar testes end-to-end. Neste capítulo, também
+exploraremos os elementos que tornam o Cypress mais adequado para testes
+do que o Selenium e como os usuários podem estender sua
+funcionalidade.</p>
+<p><strong>Capítulo 3, Trabalhando com as Ferramentas de Linha de
+Comando do Cypress</strong>, expõe você aos diferentes comandos Cypress
+que você pode usar para executar comandos Cypress. O capítulo explicará
+como executar os comandos e também como depurar a aplicação usando
+comandos Cypress.</p>
+<p><strong>Capítulo 4, Escrevendo Seu Primeiro Teste</strong>, verá você
+escrever seu primeiro teste usando Cypress. Começaremos com um teste
+aprovado para verificar que tudo funciona corretamente, depois
+passaremos para um teste com falha, e então veremos como o Cypress se
+comporta e como a funcionalidade de auto-reload funciona. Na segunda
+seção deste capítulo, focaremos em cenários mais avançados para que você
+se acostume com a forma correta de escrever testes Cypress.</p>
+<p><strong>Capítulo 5, Depurando Testes Cypress</strong>, mergulha nos
+diferentes tipos de ferramentas que o Cypress inclui para auxiliar na
+depuração de aplicações. Usando as ferramentas de depuração do Cypress,
+você aprenderá como viajar de volta ao snapshot de cada comando, ver
+diferentes eventos de página que ocorreram durante a execução e
+visualizar diferentes comandos e os momentos em que os elementos estavam
+ocultos e foram encontrados. Você também aprenderá como pode avançar e
+retroceder entre snapshots de comandos e pausar e percorrer snapshots de
+comandos de forma iterativa.</p>
+<p><strong>Capítulo 6, Escrevendo Testes Cypress Usando a Abordagem
+TDD</strong>, apresenta os conceitos de Test-Driven Development (TDD) e
+como você pode aplicá-los à escrita de testes Cypress. Você aprenderá
+como escrever testes usando uma abordagem TDD e também mergulhará fundo
+em como pode aplicar praticamente o TDD em uma aplicação que ainda está
+por ser desenvolvida.</p>
+<p><strong>Capítulo 7, Entendendo a Interação com Elementos no
+Cypress</strong>, cobre como interagir com vários elementos do DOM. O
+capítulo também ensinará como interagir com animações, como passar o
+mouse sobre elementos e como verificar se os elementos estão
+desabilitados. Ao final deste capítulo, você estará confortável com a
+navegação pelos elementos do DOM e com a escrita de testes
+significativos para os elementos.</p>
+<p><strong>Capítulo 8, Entendendo Variáveis e Aliases no
+Cypress</strong>, explora como lidar com comandos assíncronos através do
+uso de aliases. Também identificaremos formas nas quais podemos
+simplificar nossos testes usando aliases. Por fim, identificaremos como
+usar aliases com rotas e requisições.</p>
+<p><strong>Capítulo 9, Usos Avançados do Test Runner do
+Cypress</strong>, analisa como utilizar o test runner do Cypress para
+escrever melhores testes. Nosso foco estará no painel de instrumentos e
+no selector playground. Aprenderemos como usar o painel de instrumentos
+para entender os conceitos de spying e stubbing e como o Cypress os
+interpreta.</p>
+<p><strong>Capítulo 10, Exercício – Navegação e Requisições de
+Rede</strong>, expõe você a exemplos práticos e exercícios voltados para
+praticar como usar e fazer navegação de requisições de rede. O exercício
+também combinará conceitos como aliasing e uso de variáveis para
+garantir que você seja capaz de encadear os diferentes conceitos
+aprendidos na segunda seção do livro.</p>
+<p><strong>Capítulo 11, Exercício – Stubbing e Spying de Requisições
+XHR</strong>, analisa o entendimento do que são requisições XHR e como o
+Cypress pode auxiliar no stubbing de requisições que demoram muito ou
+que são complicadas para receber respostas. O stubbing no Cypress será
+importante para garantir que os testes implementados não sejam instáveis
+e que possamos ter respostas personalizadas em vez de aguardar as
+respostas do servidor para uma requisição.</p>
+<p><strong>Capítulo 12, Testes Visuais no Cypress</strong>, cobre como
+os testes visuais funcionam no Cypress. Exploraremos o que é teste
+visual, os diferentes tipos de teste e o quanto o teste visual é crítico
+para a web moderna. Também veremos os viewports e como eles influenciam
+o processo de teste visual e, por fim, veremos ferramentas de testes
+visuais automatizados como Applitools e Percy que podemos usar para
+realizar a validação visual.</p>
+<hr/>
+</section>
+<section class="level3" id="para-aproveitar-ao-máximo-este-livro">
+<h3>Para aproveitar ao máximo este livro</h3>
+<p>Você precisará de algum entendimento de JavaScript e precisará ter o
+Node.js e os gerenciadores de pacotes Yarn e npm instalados em sua
+máquina. Todos os exemplos de código fornecidos foram testados no macOS
+e devem funcionar bem com todos os sistemas operacionais Linux também.
+Para sistemas operacionais Windows, especialmente para os três últimos
+capítulos, por gentileza leia as notas adicionais na caixa de destaque,
+na seção de Requisitos Técnicos, sobre como executar os comandos no
+Windows. No momento da escrita, todos os exemplos foram testados com o
+Cypress versão 6.2.1.</p>
+<blockquote>
+<p><strong>Nota importante</strong> No momento da publicação, este livro
+foi escrito com a versão 6.2.1 do Cypress, e alguns recursos podem ter
+sido quebrados ou descontinuados. Por gentileza, verifique nosso
+repositório GitHub para as atualizações e mudanças de código mais
+recentes.</p>
+</blockquote>
+<p>Se você estiver usando a versão digital deste livro, recomendamos que
+você digite o código você mesmo ou acesse o código pelo repositório
+GitHub (link disponível na próxima seção). Fazer isso o ajudará a evitar
+possíveis erros relacionados à cópia e colagem de código. Sempre tente
+os exercícios; eles não são apenas por diversão, mas são elaborados para
+ajudá-lo a aprender e assimilar o conteúdo dos capítulos.</p>
+<hr/>
+</section>
+<section class="level3" id="baixando-os-arquivos-de-código-de-exemplo">
+<h3>Baixando os arquivos de código de exemplo</h3>
+<p>Você pode baixar os arquivos de código de exemplo deste livro em sua
+conta em www.packt.com. Se você comprou este livro em outro lugar, pode
+visitar www.packtpub.com/support e se registrar para ter os arquivos
+enviados diretamente para você.</p>
+<p>Você pode baixar os arquivos de código seguindo estas etapas:</p>
+<ol type="1">
+<li>Faça login ou registre-se em www.packt.com.</li>
+<li>Selecione a aba Support.</li>
+<li>Clique em Code Downloads.</li>
+<li>Digite o nome do livro na caixa Search e siga as instruções na
+tela.</li>
+</ol>
+<p>Depois que o arquivo for baixado, certifique-se de descompactar ou
+extrair a pasta usando a versão mais recente de:</p>
+<ul>
+<li>WinRAR/7-Zip para Windows</li>
+<li>Zipeg/iZip/UnRarX para Mac</li>
+<li>7-Zip/PeaZip para Linux</li>
+</ul>
+<p>O pacote de código do livro também está hospedado no GitHub em
+https://github.com/PacktPublishing/End-to-End-Web-Testing-with-Cypress.
+Caso haja uma atualização no código, ela será atualizada no repositório
+GitHub existente. Também temos outros pacotes de código do nosso rico
+catálogo de livros e vídeos disponíveis em
+https://github.com/PacktPublishing/. Confira!</p>
+<hr/>
+</section>
+<section class="level3" id="convenções-utilizadas">
+<h3>Convenções utilizadas</h3>
+<p>Há uma série de convenções de texto utilizadas ao longo deste
+livro.</p>
+<p><strong>Código no texto</strong>: indica palavras-chave no texto,
+nomes de tabelas de banco de dados, nomes de pastas, nomes de arquivos,
+extensões de arquivos, nomes de caminhos, URLs fictícias, entradas do
+usuário e identificadores do Twitter. Aqui está um exemplo: “O comando
+<code>cy.intercept()</code> escuta respostas XHR e sabe quando o Cypress
+retornou uma resposta para uma requisição XHR específica.”</p>
+<p>Um bloco de código é definido da seguinte forma:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript code-card" data-code-index="1"><code class="sourceCode javascript"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can wait for a comment response'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">request</span>(<span class="st">'https://jsonplaceholder.cypress.io/comments/6'</span>)</span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a>      <span class="op">.</span><span class="fu">as</span>(<span class="st">'sixthComment'</span>)<span class="op">;</span></span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'@sixthComment'</span>)<span class="op">.</span><span class="fu">should</span>((response) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a>        <span class="fu">expect</span>(response<span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">id</span>)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="dv">6</span>)</span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb1-7"><a aria-hidden="true" href="#cb1-7" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>Qualquer entrada ou saída de linha de comando é escrita da seguinte
+forma:</p>
+<pre class="code-card" data-code-index="2"><code>npm run cypress:open</code></pre>
+<p><strong>Negrito</strong>: Indica um novo termo, uma palavra
+importante ou palavras que você vê na tela. Por exemplo, palavras em
+menus ou caixas de diálogo aparecem no texto desta forma. Aqui está um
+exemplo: “Para fazer isso, abra o console do navegador em seu browser e
+clique na aba <strong>Network</strong>, depois selecione a opção de
+filtro <strong>XHR</strong>.”</p>
+<blockquote>
+<p><strong>Dicas ou notas importantes</strong> Aparecem desta forma.</p>
+</blockquote>
+<hr/>
+</section>
+</section>
+<section class="level2" id="seção-1-cypress-como-solução-de-testes-end-to-end-para-aplicações-frontend">
+<h2>Seção 1: Cypress como Solução de Testes End-to-End para Aplicações
+Frontend</h2>
+<p>Esta seção foca nos princípios básicos e nas metodologias de
+desenvolvimento que utilizaremos ao longo do livro. Estes capítulos
+introdutórios são essenciais para entender mais sobre o Cypress, como
+configurá-lo e como ele difere de outras ferramentas de teste como o
+Selenium WebDriver.</p>
+<p>Primeiro veremos como instalar e configurar o Cypress. Em seguida,
+abordaremos os diferentes tópicos da arquitetura do Cypress e as
+diferenças entre Cypress e Selenium. Depois, passaremos a escrever nosso
+primeiro teste, onde entenderemos melhor como depurar corretamente os
+testes Cypress.</p>
+<p>Nesta seção, abordaremos os seguintes capítulos:</p>
+<ul>
+<li>Capítulo 1, Instalando e Configurando o Cypress</li>
+<li>Capítulo 2, Diferenças entre Selenium WebDriver e Cypress</li>
+<li>Capítulo 3, Trabalhando com as Ferramentas de Linha de Comando do
+Cypress</li>
+<li>Capítulo 4, Escrevendo Seu Primeiro Teste</li>
+<li>Capítulo 5, Depurando Testes Cypress</li>
+</ul>
+<hr/>
+</section>
+<section class="level2" id="capítulo-1-instalando-e-configurando-o-cypress">
+<h2>Capítulo 1 — Instalando e Configurando o Cypress</h2>
+<p>O Cypress é um framework de automação de testes end-to-end construído
+e projetado para aplicações web modernas. Ele foca em eliminar
+inconsistências nos testes, garantindo que você possa escrever, depurar
+e executar testes no navegador sem precisar de configurações adicionais
+ou pacotes extras. O Cypress funciona como uma aplicação independente e
+pode ser instalado no macOS, Unix/Linux e Windows, seja usando
+aplicações de interface gráfica ou ferramentas de linha de comando. O
+Cypress foi principalmente construído para desenvolvedores que escrevem
+suas aplicações usando JavaScript, pois pode ser usado para testar todas
+as aplicações que rodam em um navegador. Neste capítulo, vamos abordar
+os seguintes tópicos:</p>
+<ul>
+<li>Instalando o Cypress no Windows</li>
+<li>Instalando o Cypress no macOS</li>
+<li>Instalando o Cypress via download direto</li>
+<li>Abrindo o test runner do Cypress</li>
+<li>Alternando navegadores no Cypress</li>
+<li>Adicionando scripts npm</li>
+<li>Executando testes Cypress</li>
+</ul>
+<p>Ao final deste capítulo, você entenderá como configurar corretamente
+o Cypress tanto no Windows quanto no Mac e como executar testes Cypress.
+Você também entenderá como os scripts npm podem ser usados para
+automatizar o processo de execução de testes e abertura do test
+runner.</p>
+<section class="level3" id="requisitos-técnicos">
+<h3>Requisitos Técnicos</h3>
+<p>O Cypress pode ser instalado como uma aplicação independente em seu
+computador e pode ser executado em uma máquina com pelo menos 2 GB de
+RAM que atenda a qualquer um dos seguintes requisitos de sistema
+operacional:</p>
+<ul>
+<li>macOS 10.9 e acima (apenas 64-bit)</li>
+<li>Linux Ubuntu 12.04 e acima, Fedora 21 e Debian 8 (apenas
+64-bit)</li>
+<li>Windows 7 e acima</li>
+</ul>
+<p>Para usar o Cypress em um dos sistemas operacionais listados aqui, o
+Node.js 8 ou superior deve ser instalado primeiro. O Node.js é um
+ambiente de execução JavaScript que permite que o código JavaScript seja
+executado fora do navegador. A instalação do Node.js instala o npm, que
+nos permite instalar pacotes JavaScript de https://www.npmjs.com/. O npm
+é o gerenciador de pacotes padrão para Node.js, e os usuários podem
+usá-lo ou utilizar gerenciadores de pacotes de terceiros, como o Yarn.
+Nesta seção, instalaremos o Cypress tanto no macOS quanto no
+Windows.</p>
+<hr/>
+</section>
+<section class="level3" id="instalando-o-cypress-no-windows">
+<h3>Instalando o Cypress no Windows</h3>
+<p>Nesta seção, instalaremos o Cypress e o Node.js no Windows para que
+possamos executar nossos testes.</p>
+<section class="level4" id="baixando-e-instalando-o-node.js">
+<h4>Baixando e instalando o Node.js</h4>
+<p>As seguintes etapas irão guiá-lo pela instalação do Node.js:</p>
+<ol type="1">
+<li>Visite o site oficial do Node.js
+(https://nodejs.org/en/download/).</li>
+<li>Selecione a opção Windows installer.</li>
+<li>Baixe o pacote de instalação.</li>
+<li>Instale o pacote Node.js seguindo as instruções no site do
+Node.js.</li>
+</ol>
+<p>Em seguida, vamos inicializar o projeto.</p>
+</section>
+<section class="level4" id="inicializando-o-projeto">
+<h4>Inicializando o projeto</h4>
+<p>Como boa prática, o Cypress é instalado no diretório onde o projeto
+está localizado; dessa forma, podemos ter certeza de que os testes
+Cypress pertencem ao projeto. Em nosso caso, criaremos uma pasta dentro
+de Documents e a chamaremos de <code>cypress-tests</code>, depois
+navegaremos até esse diretório ao instalar o Cypress. Podemos usar os
+seguintes comandos em um terminal Windows PowerShell para criar o
+diretório <code>cypress-tests</code> e navegar até ele:</p>
+<pre class="code-card" data-code-index="3"><code>$ cd .\Documents
+$ cd mkdir cypress-tests</code></pre>
+<p>Depois que esses comandos forem executados com sucesso, lançaremos o
+PowerShell e navegaremos até o diretório que acabamos de criar com o
+seguinte comando:</p>
+<pre class="code-card" data-code-index="4"><code>$ cd .\Documents\cypress-tests</code></pre>
+<p>Após criar o diretório, inicializaremos um projeto JavaScript vazio
+executando o seguinte comando no PowerShell:</p>
+<pre class="code-card" data-code-index="5"><code>$ npm init –y</code></pre>
+<p>Isso criará um arquivo <code>package.json</code> padrão que será
+usado para definir nosso projeto.</p>
+</section>
+<section class="level4" id="instalando-o-cypress-no-windows-1">
+<h4>Instalando o Cypress no Windows</h4>
+<p>Agora instalaremos o Cypress usando npm em nosso diretório de projeto
+com o seguinte comando:</p>
+<pre class="code-card" data-code-index="6"><code>$ npm install cypress --save-dev</code></pre>
+<p>Após executar este comando, você deverá ver a instalação do Cypress e
+o progresso da instalação. Essa abordagem instala o Cypress como uma
+dependência de desenvolvimento para nosso projeto vazio.</p>
+<p>Para a instalação no macOS, consulte a próxima seção principal.</p>
+</section>
+<section class="level4" id="recapitulando-instalando-o-cypress-no-windows">
+<h4>Recapitulando – Instalando o Cypress no Windows</h4>
+<p>Nesta seção, aprendemos como instalar o Cypress no sistema
+operacional Windows. Também aprendemos como usar o PowerShell para
+adicionar o Cypress a um projeto e como inicializar um projeto vazio. Na
+próxima seção, veremos como instalar o Cypress no macOS.</p>
+<hr/>
+</section>
+</section>
+<section class="level3" id="instalando-o-cypress-no-macos">
+<h3>Instalando o Cypress no macOS</h3>
+<p>Nesta seção, usarei uma máquina macOS para instalar o Cypress e o
+Node.js. Ao final desta seção, você terá aprendido como inicializar um
+projeto JavaScript vazio e como adicionar o framework de testes Cypress
+ao macOS. Também mergulharemos em como podemos usar npm, Yarn ou
+downloads diretos do Cypress em nossos projetos.</p>
+<section class="level4" id="instalando-o-node.js">
+<h4>Instalando o Node.js</h4>
+<p>As seguintes etapas irão guiá-lo pela instalação do Node.js:</p>
+<ol type="1">
+<li>Visite o site oficial do Node.js
+(https://nodejs.org/en/download/).</li>
+<li>Selecione a opção macOS installer.</li>
+<li>Baixe o pacote de instalação.</li>
+<li>Instale o pacote Node.js seguindo as instruções no site do
+Node.js.</li>
+</ol>
+</section>
+<section class="level4" id="inicializando-o-projeto-1">
+<h4>Inicializando o projeto</h4>
+<p>Para instalar o Cypress, precisamos navegar até a pasta do projeto e
+instalá-lo onde queremos que os testes Cypress fiquem localizados. Em
+nosso caso, criaremos uma pasta dentro de Documents e a chamaremos de
+<code>cypress-tests</code>, depois navegaremos até esse diretório ao
+instalar o Cypress usando nosso terminal. Então lançaremos nossa
+aplicação de terminal e navegaremos até o diretório que acabamos de
+criar usando o seguinte comando:</p>
+<pre class="code-card" data-code-index="7"><code>$ cd ~/Documents/cypress-tests</code></pre>
+<p>Após criar o diretório, inicializaremos um projeto JavaScript vazio
+executando o seguinte comando:</p>
+<pre class="code-card" data-code-index="8"><code>$ npm init –y</code></pre>
+<p>Isso criará um arquivo <code>package.json</code> padrão que será
+usado para definir nosso projeto.</p>
+</section>
+<section class="level4" id="instalando-o-cypress-no-mac">
+<h4>Instalando o Cypress no Mac</h4>
+<p>Para instalar o Cypress, usaremos o gerenciador de pacotes npm que
+vem com o Node.js. Para isso, precisamos executar o seguinte
+comando:</p>
+<pre class="code-card" data-code-index="9"><code>$ npm install cypress --save-dev</code></pre>
+<p>Após executar este comando, você deverá ser capaz de ver a instalação
+do Cypress no arquivo <code>package.json</code> e o progresso da
+instalação na linha de comando. Essa abordagem instala o Cypress como
+uma dependência de desenvolvimento para nosso projeto vazio.</p>
+<p>Para um gerenciador de pacotes alternativo que você pode usar tanto
+no Windows quanto no macOS, você pode usar o Yarn. Veremos como instalar
+o Cypress usando o Yarn na próxima seção.</p>
+</section>
+<section class="level4" id="instalando-o-cypress-usando-yarn">
+<h4>Instalando o Cypress usando Yarn</h4>
+<p>Tanto no Windows quanto no macOS, você pode escolher um gerenciador
+de pacotes alternativo. Uma das alternativas disponíveis é o gerenciador
+de pacotes Yarn. Assim como o npm, você primeiro precisa baixar o
+gerenciador de pacotes Yarn usando o gerenciador de pacotes Homebrew do
+macOS executando o seguinte comando:</p>
+<pre class="code-card" data-code-index="10"><code>$ brew install yarn</code></pre>
+<p>Assim como o npm, o Yarn faz o trabalho de gerenciar as dependências
+do seu projeto e pode ser usado como um gerenciador de projetos. Uma
+vantagem que o Yarn tem sobre o npm é que ele é capaz de fazer cache dos
+pacotes baixados de tal forma que não precisa baixá-los novamente,
+levando a uma melhor utilização dos recursos.</p>
+<p>Após a instalação do Yarn, podemos usá-lo para instalar pacotes como
+faríamos com o npm executando o seguinte comando:</p>
+<pre class="code-card" data-code-index="11"><code>$ yarn add cypress –dev</code></pre>
+<p>Temos um método final de instalação, que é via download direto. Isso
+será abordado na próxima seção.</p>
+<hr/>
+</section>
+</section>
+<section class="level3" id="instalando-o-cypress-via-download-direto">
+<h3>Instalando o Cypress via download direto</h3>
+<p>Podemos instalar o Cypress para Windows, Linux ou macOS via download
+direto. Esta abordagem é recomendada se você não precisa instalar as
+dependências que vêm com o Cypress ou se está apenas experimentando o
+Cypress. É importante notar que, embora esta seja a forma mais rápida de
+instalar o Cypress, esta versão não vem com recursos como a capacidade
+de gravar testes no dashboard.</p>
+<p>As seguintes etapas irão guiá-lo pela instalação do Cypress via
+download direto:</p>
+<ol type="1">
+<li>Navegue até https://cypress.io.</li>
+<li>Selecione o link Download Now.</li>
+</ol>
+<p>O Cypress será baixado automaticamente, pois detectará
+automaticamente o sistema operacional do usuário que está baixando o
+arquivo <code>.zip</code>. Você deve então extrair o arquivo zip e
+executar o Cypress sem instalar quaisquer outras dependências.</p>
+<section class="level4" id="recapitulando-instalando-o-cypress-no-macos">
+<h4>Recapitulando – Instalando o Cypress no macOS</h4>
+<p>Nesta seção, aprendemos como instalar o framework de testes Cypress
+no macOS usando npm e também como inicializar um projeto JavaScript
+vazio que utilizará os testes Cypress. Também aprendemos como usar o
+gerenciador de pacotes Yarn para instalar o Cypress e como baixar
+diretamente o Cypress em nosso projeto sem usar nenhum gerenciador de
+pacotes. Na próxima seção, veremos como abrir o framework de testes
+Cypress.</p>
+<hr/>
+</section>
+</section>
+<section class="level3" id="abrindo-o-cypress">
+<h3>Abrindo o Cypress</h3>
+<p>Instalar o Cypress é o primeiro passo na jornada de escrever testes
+end-to-end; agora, precisamos aprender como usar as ferramentas que o
+Cypress fornece para executar os testes tanto pela interface gráfica do
+usuário quanto pelos dashboards. Existem quatro maneiras de executar o
+executável do Cypress instalado em sua máquina. Após abrir o Cypress,
+você deverá ver o test runner do Cypress. Não importa de que forma você
+abra o Cypress, o dashboard do test runner que é apresentado a você é o
+mesmo. As seções a seguir detalham as diferentes formas de abrir e
+executar o Cypress.</p>
+<section class="level4" id="executando-com-npx">
+<h4>Executando com Npx</h4>
+<p>O <code>npx</code> é usado para executar binários de pacotes npm e
+vem com todas as versões npm a partir da versão 5.2. O Npx também pode
+ser instalado usando npm do npmjs.com. Para executar o Cypress usando o
+npx, você precisa executar o seguinte comando:</p>
+<pre class="code-card" data-code-index="12"><code>npx cypress open</code></pre>
+</section>
+<section class="level4" id="executando-com-yarn">
+<h4>Executando com Yarn</h4>
+<p>Se o Cypress foi instalado usando o Yarn, você pode então abrir o
+Cypress usando o seguinte comando:</p>
+<pre class="code-card" data-code-index="13"><code>Yarn run cypress open</code></pre>
+</section>
+<section class="level4" id="executando-com-o-caminho-do-node-modules">
+<h4>Executando com o caminho do node modules</h4>
+<p>O Cypress também pode ser executado referenciando o caminho raiz da
+instalação nos node modules. Isso pode ser feito tanto usando o caminho
+completo para o bin do <code>node_modules</code> onde o executável do
+Cypress está localizado, quanto usando o atalho de bin do npm.</p>
+<p><strong>Lançando o Cypress usando o caminho completo</strong></p>
+<p>Este método de lançamento do Cypress referencia o executável do
+Cypress instalado localizado em <code>node_modules</code> e funciona
+executando o executável para abrir o Cypress:</p>
+<pre class="code-card" data-code-index="14"><code>$ ./node_modules/.bin/cypress open</code></pre>
+<p><strong>Lançando o Cypress usando o atalho</strong></p>
+<p>Assim como ao lançar o Cypress usando o caminho completo, este método
+lança o Cypress da mesma forma, mas em vez de referenciar o caminho
+completo, usa a variável bin do npm para localizar o local padrão da
+pasta bin do <code>node_modules</code>:</p>
+<pre class="code-card" data-code-index="15"><code>$(npm bin)/cypress open</code></pre>
+</section>
+<section class="level4" id="lançamento-como-aplicação-desktop">
+<h4>Lançamento como aplicação desktop</h4>
+<p>Se você baixou sua aplicação como uma aplicação desktop, você pode
+abrir o Cypress navegando até o local da pasta Cypress descompactada e
+clicando no executável do Cypress que está presente na pasta.</p>
+<p>Agora que abrimos com sucesso o Cypress pelo método de nossa
+preferência, veremos como podemos escolher navegadores alternativos no
+Cypress, caso não queiramos usar o navegador padrão que vem com o
+Cypress.</p>
+</section>
+<section class="level4" id="recapitulando-abrindo-o-cypress">
+<h4>Recapitulando – Abrindo o Cypress</h4>
+<p>Nesta seção, aprendemos como abrir o dashboard do framework de testes
+Cypress e também como executar o Cypress de diferentes formas, incluindo
+executar o dashboard do Cypress usando npx, Yarn ou com o caminho do
+<code>node_modules</code>. Na próxima seção, aprenderemos como alternar
+os navegadores dos testes em execução no Cypress.</p>
+<hr/>
+</section>
+</section>
+<section class="level3" id="alternando-navegadores">
+<h3>Alternando navegadores</h3>
+<p>O Cypress vem com o Electron como navegador padrão na instalação, mas
+também pode integrar com outros navegadores compatíveis que contêm o
+projeto Chromium, com exceção do Firefox. Atualmente, o Cypress suporta
+navegadores Firefox, Chrome, Chromium e Edge. Ao lançar o Cypress, ele
+encontrará automaticamente todos os navegadores compatíveis na máquina
+em execução e você poderá alternar entre quaisquer navegadores a
+qualquer momento usando o test runner. Para alternar de um navegador
+para outro, você precisará clicar no botão do navegador no canto
+superior direito e escolher um navegador alternativo no link
+dropdown.</p>
+<p>Os testes Cypress também podem ser executados ou abertos em
+diferentes navegadores usando a linha de comando, e isso pode ser
+conseguido especificando o navegador ao abrir o test runner do Cypress
+ou ao executar os testes Cypress. Todos os navegadores baseados em
+Chromium, Edge e Firefox podem ser lançados usando a linha de comando
+com o seguinte comando:</p>
+<pre class="code-card" data-code-index="16"><code>$ cypress run --browser {browser-name}</code></pre>
+<p>O <code>browser-name</code> especificado no comando pode ser Edge,
+Chrome ou Firefox. Para especificar o caminho do navegador que o Cypress
+deve lançar, você pode optar por executar o nome do navegador com o
+binário executável do navegador em vez do nome do navegador, como
+mostrado aqui:</p>
+<pre class="code-card" data-code-index="17"><code>$ cypress run --browser /path/to/binary/of/browser</code></pre>
+<p>Ser capaz de alternar navegadores no Cypress garante que um usuário
+possa executar seu conjunto de testes em diferentes dispositivos e
+verificar que a saída de diferentes navegadores é consistente ao longo
+do conjunto de testes. Alternar navegadores no Cypress também garante
+que a verificação dos testes possa ocorrer e que todos os elementos
+visíveis ou ações que podem ser realizadas em um navegador possam ser
+realizadas em outro.</p>
+<section class="level4" id="exercício">
+<h4>Exercício</h4>
+<p>Para combinar o conhecimento de abertura do Cypress e alternância de
+navegadores, tente as seguintes etapas:</p>
+<ol type="1">
+<li>Navegue até a pasta que criamos ao inicializar o Cypress.</li>
+<li>Execute todos os testes padrão que o Cypress gerou automaticamente
+quando foi lançado.</li>
+<li>Alterne os navegadores no test runner.</li>
+<li>Reexecute os testes com um navegador diferente.</li>
+</ol>
+<hr/>
+</section>
+</section>
+<section class="level3" id="adicionando-scripts-npm">
+<h3>Adicionando scripts npm</h3>
+<p>Os scripts npm permitem que você execute comandos a partir do arquivo
+<code>package.json</code> diretamente da linha de comando. O Cypress
+permite definir scripts npm que você pode usar para automatizar o
+processo de execução de testes, seja por meio da linha de comando ou por
+meio do test runner do Cypress. Ao executar comandos Cypress via linha
+de comando, você estará no modo headless, o que significa que os testes
+serão executados sem a necessidade de abrir um navegador visível.</p>
+<p>Para adicionar scripts npm ao arquivo <code>package.json</code>, você
+precisará modificar a seção <code>"scripts"</code> do arquivo:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode json code-card" data-code-index="18"><code class="sourceCode json"><span id="cb18-1"><a aria-hidden="true" href="#cb18-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb18-2"><a aria-hidden="true" href="#cb18-2" tabindex="-1"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb18-3"><a aria-hidden="true" href="#cb18-3" tabindex="-1"></a>    <span class="dt">"cypress:run"</span><span class="fu">:</span> <span class="st">"cypress run"</span><span class="fu">,</span></span>
+<span id="cb18-4"><a aria-hidden="true" href="#cb18-4" tabindex="-1"></a>    <span class="dt">"cypress:open"</span><span class="fu">:</span> <span class="st">"cypress open"</span></span>
+<span id="cb18-5"><a aria-hidden="true" href="#cb18-5" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb18-6"><a aria-hidden="true" href="#cb18-6" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Para executar qualquer um desses scripts, usamos <code>npm run</code>
+seguido pelo nome do script:</p>
+<pre class="code-card" data-code-index="19"><code>npm run cypress:run
+npm run cypress:open</code></pre>
+<hr/>
+</section>
+<section class="level3" id="executando-testes-cypress">
+<h3>Executando testes Cypress</h3>
+<p>Existem duas maneiras distintas de executar testes Cypress: usando o
+test runner ou a linha de comando. Usar o test runner do Cypress permite
+que você veja os testes rodando em tempo real no navegador, enquanto
+executar testes via linha de comando é mais adequado para ambientes de
+integração contínua (CI) onde não é necessária uma saída visual.
+Independentemente do método escolhido, os resultados dos testes Cypress
+serão os mesmos.</p>
+<hr/>
+</section>
+</section>
+<section class="level2" id="capítulo-2-diferenças-entre-selenium-webdriver-e-cypress">
+<h2>Capítulo 2 — Diferenças entre Selenium WebDriver e Cypress</h2>
+<p>O Selenium WebDriver é um dos frameworks de automação de testes mais
+populares para testes end-to-end, e quando alguém menciona o Cypress, há
+a necessidade rápida de comparar ou descobrir qual é melhor. Antes de
+começarmos a entender as diferenças entre Selenium WebDriver e Cypress,
+primeiro precisaremos entender os diferentes motivos de desenvolvimento
+entre os dois frameworks de teste e quem são seus usuários
+pretendidos.</p>
+<p>Entender as razões pelas quais o Cypress e o Selenium WebDriver são
+arquiteturalmente diferentes desempenhará um papel importante em
+ajudá-lo a entender os aspectos diferentes e similares de ambos. Nesta
+seção, avaliaremos formas em que o WebDriver e o Cypress são únicos,
+diferentes e similares.</p>
+<p>Os seguintes são os tópicos principais que abordaremos neste
+capítulo:</p>
+<ul>
+<li>Por que escolher o Cypress?</li>
+<li>Comparando Cypress e Selenium WebDriver</li>
+<li>Usando o Cypress para testes de frontend</li>
+</ul>
+<section class="level3" id="por-que-escolher-o-cypress">
+<h3>Por que escolher o Cypress?</h3>
+<p>O Cypress é um framework de testes end-to-end escrito por
+desenvolvedores, para desenvolvedores e engenheiros de Quality Assurance
+(QA). O Cypress foca em testar aplicações web e, como a única forma de
+automatizar a web é usando JavaScript, o Cypress só suporta o uso de
+JavaScript para escrever seus testes.</p>
+<p>O Cypress foi especificamente escrito para equipes de frontend que
+utilizam JavaScript para o desenvolvimento de seus produtos, junto com
+equipes que precisam começar rapidamente com o processo de escrever
+testes unitários, de integração e end-to-end sem as complicadas
+complexidades de configurar corretamente um framework de testes.</p>
+<p>O Cypress não é apenas amigável para iniciantes, mas também garante
+que tudo que um desenvolvedor ou engenheiro de QA precisa para começar
+seus testes já está empacotado no bundle que é baixado e instalado do
+site do Cypress. O Cypress vem com seu próprio navegador, um test runner
+e o Chai como framework de asserção.</p>
+<p>Ter um bundle que contém tudo necessário para começar o processo de
+escrever testes significa que qualquer pessoa pode simplesmente começar
+com o trabalho de testes sem precisar saber sobre o processo de
+configuração de frameworks de asserção, test runners ou mesmo a adição
+de drivers de navegador, como no caso de usar o Selenium WebDriver.</p>
+<p>O Cypress faz uso de JavaScript, o que o torna significativamente
+mais fácil para desenvolvedores JavaScript embarcarem e aprenderem
+rapidamente os conceitos do Cypress. A facilidade de embarque também
+garante que desenvolvedores e engenheiros de QA possam rapidamente se
+adaptar à escrita de testes usando Cypress.</p>
+<p>O Cypress utiliza um driver universal que é atualmente compatível com
+Firefox, Edge, Chrome e a família de navegadores Chromium. Diferente do
+Selenium, que utiliza o WebDriver e interage com o Document Object Model
+(DOM) usando requisições de rede HTTP, o driver do Cypress trabalha
+diretamente no navegador sem a necessidade de fazer requisições de rede.
+A capacidade de executar dentro do navegador com os testes garante que o
+Cypress possa interpretar efetivamente os comandos sem introduzir
+timeouts quando os comandos são passados dos testes para o driver e
+depois para a aplicação em execução no navegador.</p>
+<p>O framework Cypress roda no navegador, pois é arquiteturalmente
+diferente de qualquer outra ferramenta de automação de testes como o
+Selenium WebDriver. A capacidade do Cypress de rodar no navegador lhe dá
+uma vantagem competitiva sobre outras ferramentas de automação, pois vem
+com sequências de espera automáticas que de outra forma precisariam ser
+definidas nos testes. O Cypress, portanto, sabe quando esperar por um
+evento, como uma requisição de rede, que de outra forma precisaria ser
+especificado como uma espera explícita ou implícita em um teste
+orientado pelo Selenium.</p>
+<section class="level4" id="recapitulando-por-que-escolher-o-cypress">
+<h4>Recapitulando – por que escolher o Cypress?</h4>
+<p>Nesta seção, aprendemos por que o Cypress é a escolha preferida
+quando se trata de testes de desenvolvimento web e o que o destaca de
+outros frameworks de testes, incluindo o Selenium WebDriver.</p>
+<hr/>
+</section>
+</section>
+<section class="level3" id="comparando-cypress-e-selenium-webdriver">
+<h3>Comparando Cypress e Selenium WebDriver</h3>
+<p>É fácil cair na armadilha de fazer suposições de que o Cypress é um
+substituto para o Selenium WebDriver e que seu uso poderia tornar o
+Selenium WebDriver completamente obsoleto no mundo da automação de
+testes.</p>
+<section class="level4" id="driver-do-navegador">
+<h4>Driver do navegador</h4>
+<p>O Cypress utiliza um driver universal personalizado para todos os
+navegadores que suporta, enquanto o Selenium WebDriver utiliza drivers
+diferentes para cada um dos diferentes navegadores que suporta. A
+capacidade de usar um driver universal para todos os navegadores
+significa que, na instalação, podemos executar nossos testes em todos os
+navegadores suportados pelo Cypress sem a necessidade de instalar um
+driver externo.</p>
+</section>
+<section class="level4" id="retries-e-waits">
+<h4>Retries e waits</h4>
+<p>O Cypress vem com retries explícitos embutidos para procurar
+elementos no DOM e explicitamente aguarda que eventos aconteçam antes
+que um teste seja considerado como falho. O Cypress vem acoplado com
+eventos que determinam se as requisições precisam ser aguardadas antes
+que o navegador decida se elas falharam ou passaram. O Cypress é capaz
+de lidar com os waits e retries porque roda no navegador com os testes e
+é capaz de entender o estado dos testes a qualquer momento.</p>
+<p>O Selenium, por outro lado, utiliza requisições HTTP para o WebDriver
+e é, portanto, difícil para o framework determinar se waits explícitos
+ou implícitos são necessários quando os testes estão sendo executados.
+Para resolver o problema, os usuários do Selenium têm que escrever os
+waits eles mesmos em situações onde os testes precisariam aguardar que
+uma requisição fosse concluída antes de prosseguir para a próxima etapa
+de execução.</p>
+</section>
+<section class="level4" id="uso-pretendido">
+<h4>Uso pretendido</h4>
+<p>O Cypress é construído para desenvolvedores JavaScript e engenheiros
+de QA que desejam configurar rapidamente um framework de automação e
+começar a testar suas aplicações web end-to-end, sem gastar muita
+largura de banda configurando frameworks de teste.</p>
+<p>O Selenium WebDriver, por outro lado, é construído para testar
+qualquer coisa que rode na web. O Selenium foca em equipes de QA que
+querem testar todos os aspectos de suas aplicações web e não é limitado
+por fatores como compatibilidade de navegador ou um único test runner. O
+Selenium WebDriver dá ao usuário opções para estendê-lo com diferentes
+navegadores e plugins, e também suporta diferentes linguagens como Java,
+Python, Ruby, C#, JavaScript, Perl e PHP.</p>
+</section>
+<section class="level4" id="arquitetura">
+<h4>Arquitetura</h4>
+<p>O Cypress roda no navegador e isso lhe dá uma vantagem sobre
+ferramentas como o Selenium WebDriver. Rodar no navegador significa que
+o Cypress é significativamente mais rápido e pode interpretar comandos
+mais rapidamente em tempo de execução, pois não há serviços de terceiros
+interpretando os comandos em seu nome ou enviando requisições HTTP para
+o driver do navegador.</p>
+</section>
+<section class="level4" id="compatibilidade-entre-navegadores">
+<h4>Compatibilidade entre navegadores</h4>
+<p>O Cypress não suporta atualmente todos os principais navegadores da
+forma que o Selenium WebDriver faz. O Cypress atualmente suporta
+navegadores construídos usando o projeto open source Chromium, Firefox,
+Edge e Electron (o navegador padrão no Cypress).</p>
+</section>
+<section class="level4" id="trade-offs-do-cypress">
+<h4>Trade-offs do Cypress</h4>
+<p>Como mencionado anteriormente, o Cypress é uma ferramenta de
+automação de testes focada em automação de testes end-to-end no
+navegador. Ser capaz de rodar no navegador significa que o Cypress pode
+interagir com os elementos do navegador melhor do que qualquer outra
+ferramenta, mas também significa que o Cypress tem trade-offs
+permanentes que não podem ser alterados devido à sua arquitetura.</p>
+<p><strong>Limitações de escopo</strong>: O Cypress funciona melhor
+quando usado como utilitário de automação para engenheiros de QA e
+desenvolvedores que estão escrevendo testes. O Cypress não suporta
+ferramentas para automação manual e não tem planos de integrar
+ferramentas de testes manuais no framework.</p>
+<p><strong>Limitações de ambiente</strong>: O Cypress roda no navegador
+e isso significa que a linguagem que suporta sempre será JavaScript.
+Para se conectar a um banco de dados ou servidor, só podemos usar os
+comandos Cypress de <code>cy.exec()</code>, <code>cy.request()</code> ou
+<code>cy.task()</code>.</p>
+<p><strong>Múltiplos navegadores e múltiplas abas – limitações</strong>:
+O framework Cypress não suporta a capacidade de um teste controlar
+múltiplos navegadores quando em execução. O framework Cypress também não
+suporta a capacidade de interagir com mais de uma aba do navegador.</p>
+<p><strong>Limitações de controle de origem</strong>: O Cypress só
+suporta visitar URLs que são da mesma origem no mesmo teste.</p>
+<p><strong>A forma correta de utilizar cross-origin para executar
+testes</strong></p>
+<p>No seguinte teste, o usuário instrui o Cypress a primeiro navegar
+para o site do GitHub (https://github.com) e depois para
+https://docs.github.com/en (link de documentação) dos recursos do
+GitHub. Ambos os links pertencem à mesma origem, github.com, e,
+portanto, o Cypress não terá problemas para executar as requisições:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode javascript code-card" data-code-index="20"><code class="sourceCode javascript"><span id="cb20-1"><a aria-hidden="true" href="#cb20-1" tabindex="-1"></a><span class="fu">It</span>(<span class="st">'can navigate to code repository hosting service'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb20-2"><a aria-hidden="true" href="#cb20-2" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'https://github.com'</span>)<span class="op">;</span></span>
+<span id="cb20-3"><a aria-hidden="true" href="#cb20-3" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'https://docs.github.com'</span>)<span class="op">;</span></span>
+<span id="cb20-4"><a aria-hidden="true" href="#cb20-4" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>A forma incorreta de utilizar cross-origin para executar
+testes</strong></p>
+<p>Neste teste, o usuário instrui o Cypress a primeiro navegar para
+https://github.com, depois navegar para https://gitlab.com, que é de uma
+origem diferente da primeira URL. Isso levará a um erro sendo lançado
+quando o teste for executado:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode javascript code-card" data-code-index="21"><code class="sourceCode javascript"><span id="cb21-1"><a aria-hidden="true" href="#cb21-1" tabindex="-1"></a><span class="fu">It</span>(<span class="st">'can navigate to code repository hosting service'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb21-2"><a aria-hidden="true" href="#cb21-2" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'https://github.com'</span>)<span class="op">;</span></span>
+<span id="cb21-3"><a aria-hidden="true" href="#cb21-3" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'https://gitlab.com'</span>)<span class="op">;</span></span>
+<span id="cb21-4"><a aria-hidden="true" href="#cb21-4" tabindex="-1"></a>})</span></code></pre></div>
+</section>
+<section class="level4" id="ações-complementares-de-cypress-e-selenium">
+<h4>Ações complementares de Cypress e Selenium</h4>
+<p>Podemos utilizar tanto o Cypress quanto o Selenium juntos em algumas
+instâncias raras, mas ainda alcançáveis, ao escrever nossos testes.
+Enquanto o Cypress tem a limitação de não poder controlar mais de uma
+aba do navegador, é possível configurar o Cypress para usar o Selenium
+para executar múltiplas abas.</p>
+<hr/>
+</section>
+</section>
+<section class="level3" id="usando-o-cypress-para-testes-de-frontend">
+<h3>Usando o Cypress para testes de frontend</h3>
+<p>O Cypress é construído para a web e é otimizado para rodar em
+navegadores. A arquitetura do Cypress permite que ele execute testes
+efetivamente, ao mesmo tempo em que supera os desafios do WebDriver. O
+Cypress também mira em engenheiros de QA e desenvolvedores que estão
+buscando escrever testes sem se preocupar com a infraestrutura
+subjacente.</p>
+<hr/>
+</section>
+</section>
+<section class="level2" id="capítulo-3-trabalhando-com-as-ferramentas-de-linha-de-comando-do-cypress">
+<h2>Capítulo 3 — Trabalhando com as Ferramentas de Linha de Comando do
+Cypress</h2>
+<p>Neste capítulo, abordaremos as ferramentas de linha de comando do
+Cypress, incluindo a execução de testes Cypress, depuração do Cypress e
+lançamento de testes Cypress em diferentes navegadores, entre outras
+funções de linha de comando do Cypress.</p>
+<p>Abordaremos os seguintes tópicos principais neste capítulo:</p>
+<ul>
+<li>Executando comandos Cypress</li>
+<li>Entendendo comandos básicos do Cypress</li>
+<li>Depuração do Cypress na linha de comando</li>
+</ul>
+<section class="level3" id="executando-comandos-cypress">
+<h3>Executando comandos Cypress</h3>
+<p>A utilização eficaz do framework Cypress requer que você tenha um
+entendimento do Cypress e como diferentes funcionalidades podem ser
+executadas usando a linha de comando. Os comandos Cypress permitem que
+os usuários do framework Cypress automatizem processos e também forneçam
+instruções específicas para o framework e os testes durante a
+inicialização e em tempo de execução.</p>
+<p>Na maioria das instâncias, executar testes Cypress pela linha de
+comando é mais rápido do que executá-los usando o navegador. Isso ocorre
+porque executar testes pela linha de comando reduz o número de recursos
+necessários para executar um teste específico. A razão para isso é que
+os testes executados na linha de comando são normalmente headless, o que
+significa que menos recursos são alocados para executar os testes.</p>
+<blockquote>
+<p><strong>Nota importante</strong> O modo headed é quando os testes
+podem ser visualmente vistos rodando em um navegador, enquanto no modo
+headless, o processo de execução do teste não abre um navegador visível.
+Em vez disso, todos os testes são executados e exibidos na linha de
+comando.</p>
+</blockquote>
+<section class="level4" id="comandos-globais-e-locais">
+<h4>Comandos globais e locais</h4>
+<p>Os comandos Cypress podem ser executados a partir de um diretório
+específico contendo uma instalação e código Cypress, ou executados a
+partir da instalação global do Cypress. Instalar o Cypress globalmente
+garante que os usuários possam executar o Cypress a partir de qualquer
+diretório no sistema operacional, enquanto com uma instalação local do
+Cypress, o Cypress só pode ser acessado a partir do único diretório em
+que foi instalado.</p>
+<p><strong>Executando comandos globais do Cypress</strong></p>
+<p>Para poder executar comandos Cypress globalmente, você precisa
+instalar o Cypress globalmente com o seguinte comando:</p>
+<pre class="code-card" data-code-index="22"><code>npm install cypress --global
+ou (versão mais curta)
+npm i -g cypress</code></pre>
+<p><strong>Executando comandos locais do Cypress</strong></p>
+<p>Para executar comandos Cypress localmente, você precisará instalar o
+Cypress em seu diretório com o seguinte comando:</p>
+<pre class="code-card" data-code-index="23"><code>npm install cypress
+ou (versão mais curta)
+npm i cypress</code></pre>
+<p>Podemos integrar os comandos necessários ao ambiente de
+desenvolvimento definindo-os no arquivo <code>package.json</code>, na
+seção de scripts:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode json code-card" data-code-index="24"><code class="sourceCode json"><span id="cb24-1"><a aria-hidden="true" href="#cb24-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb24-2"><a aria-hidden="true" href="#cb24-2" tabindex="-1"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb24-3"><a aria-hidden="true" href="#cb24-3" tabindex="-1"></a>    <span class="dt">"cypress:run"</span><span class="fu">:</span> <span class="st">"cypress run"</span><span class="fu">,</span></span>
+<span id="cb24-4"><a aria-hidden="true" href="#cb24-4" tabindex="-1"></a>    <span class="dt">"cypress:open"</span><span class="fu">:</span> <span class="st">"cypress open"</span></span>
+<span id="cb24-5"><a aria-hidden="true" href="#cb24-5" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb24-6"><a aria-hidden="true" href="#cb24-6" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Para executar scripts na linha de comando, você precisa invocar
+<code>npm run</code>, seguido pelo nome do comando:</p>
+<pre class="code-card" data-code-index="25"><code>npm run cypress:run // comando para executar testes no terminal
+npm run cypress:open // comando para executar testes no cypress runner</code></pre>
+<blockquote>
+<p><strong>Nota importante</strong> A equipe de desenvolvimento do
+Cypress recomenda instalar o Cypress por projeto e não usar a abordagem
+de instalação global. A instalação local fornece certas vantagens, como
+a capacidade dos usuários de atualizar rapidamente a dependência do
+Cypress e reduzir os problemas de dependência cíclica.</p>
+</blockquote>
+<hr/>
+</section>
+</section>
+<section class="level3" id="entendendo-comandos-básicos-do-cypress">
+<h3>Entendendo comandos básicos do Cypress</h3>
+<p>Nesta seção, exploraremos vários comandos Cypress que podemos usar
+para executar nossos testes. Os comandos que exploraremos são os
+seguintes:</p>
+<ul>
+<li><code>cypress run</code></li>
+<li><code>cypress open</code></li>
+<li><code>cypress info</code></li>
+<li><code>cypress version</code></li>
+</ul>
+<section class="level4" id="cypress-run">
+<h4>cypress run</h4>
+<p>O comando <code>cypress run</code> executa todos os testes em um
+conjunto Cypress de forma headless e executa os testes no navegador
+Electron por padrão. As opções de configuração mais comuns do Cypress
+incluem as seguintes:</p>
+<p><strong><code>cypress run --env &lt;env-variable&gt;</code></strong></p>
+<p>As variáveis de ambiente do Cypress são pares nome-valor dinâmicos
+que influenciam a forma como o Cypress executa os testes. Essas
+variáveis de ambiente são úteis quando há necessidade de executar os
+testes em múltiplos ambientes.</p>
+<p>Por exemplo, no arquivo <code>Todo-app.spec.js</code>:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode javascript code-card" data-code-index="26"><code class="sourceCode javascript"><span id="cb26-1"><a aria-hidden="true" href="#cb26-1" tabindex="-1"></a><span class="fu">context</span>(<span class="st">'TODO MVC Application Tests'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb26-2"><a aria-hidden="true" href="#cb26-2" tabindex="-1"></a>  <span class="fu">beforeEach</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb26-3"><a aria-hidden="true" href="#cb26-3" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">visit</span>(</span>
+<span id="cb26-4"><a aria-hidden="true" href="#cb26-4" tabindex="-1"></a>      <span class="vs">`</span><span class="sc">${</span>Cypress<span class="op">.</span><span class="fu">env</span>(<span class="st">'TransferProtocol'</span>)<span class="sc">}</span><span class="vs">://todomvc.com/examples/react/#/`</span>)</span>
+<span id="cb26-5"><a aria-hidden="true" href="#cb26-5" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>E no <code>package.json</code>:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode json code-card" data-code-index="27"><code class="sourceCode json"><span id="cb27-1"><a aria-hidden="true" href="#cb27-1" tabindex="-1"></a><span class="er">"scripts":</span> <span class="fu">{</span></span>
+<span id="cb27-2"><a aria-hidden="true" href="#cb27-2" tabindex="-1"></a>  <span class="dt">"cypress:run"</span><span class="fu">:</span> <span class="st">"cypress run --env TransferProtocol='http'"</span><span class="fu">,</span></span>
+<span id="cb27-3"><a aria-hidden="true" href="#cb27-3" tabindex="-1"></a>  <span class="dt">"cypress:run:v2"</span><span class="fu">:</span> <span class="st">"cypress run --env TransferProtocol='https'"</span></span>
+<span id="cb27-4"><a aria-hidden="true" href="#cb27-4" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<blockquote>
+<p><strong>Nota importante</strong> HTTPS é o mesmo que HTTP, com a
+diferença de que HTTPS é mais seguro. Isso ocorre porque o processo de
+envio de requisições e recebimento de respostas é criptografado usando o
+protocolo de segurança TLS(SSL).</p>
+</blockquote>
+<p><strong><code>cypress run --browser &lt;browser-name&gt;</code></strong></p>
+<p>A linha de comando do Cypress tem a capacidade embutida de executar
+testes Cypress em diferentes navegadores que foram instalados no
+computador host. O Cypress tenta detectar automaticamente os navegadores
+instalados e pode executar os testes em chrome, chromium, edge, firefox
+ou electron.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode json code-card" data-code-index="28"><code class="sourceCode json"><span id="cb28-1"><a aria-hidden="true" href="#cb28-1" tabindex="-1"></a><span class="er">"scripts":</span> <span class="fu">{</span></span>
+<span id="cb28-2"><a aria-hidden="true" href="#cb28-2" tabindex="-1"></a>  <span class="dt">"cypress:chrome"</span><span class="fu">:</span> <span class="st">"cypress run --env TransferProtocol='http' --browser chrome"</span><span class="fu">,</span></span>
+<span id="cb28-3"><a aria-hidden="true" href="#cb28-3" tabindex="-1"></a>  <span class="dt">"cypress:firefox"</span><span class="fu">:</span> <span class="st">"cypress run --env TransferProtocol='http' --browser firefox"</span></span>
+<span id="cb28-4"><a aria-hidden="true" href="#cb28-4" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong><code>cypress run --config &lt;configuration(s)-option&gt;</code></strong></p>
+<p>O Cypress pode definir e sobrescrever configurações usando comandos
+no terminal. As opções de configuração podem incluir especificar um
+<code>viewportHeight</code> e <code>ViewportWidth</code> alternativos,
+timeouts e mudanças de arquivos, entre outras configurações.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode json code-card" data-code-index="29"><code class="sourceCode json"><span id="cb29-1"><a aria-hidden="true" href="#cb29-1" tabindex="-1"></a><span class="er">"scripts":</span> <span class="fu">{</span></span>
+<span id="cb29-2"><a aria-hidden="true" href="#cb29-2" tabindex="-1"></a>  <span class="dt">"cypress:tablet-view"</span><span class="fu">:</span> <span class="st">"cypress run --env TransferProtocol='http' --config viewportHeight=763,viewportWidth=700"</span></span>
+<span id="cb29-3"><a aria-hidden="true" href="#cb29-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong><code>cypress run --config-file &lt;configuration-file&gt;</code></strong></p>
+<p>O Cypress pode sobrescrever o arquivo de configuração padrão
+localizado em <code>/cypressRootDirectory/cypress.json</code>.</p>
+<p><strong><code>cypress run --headed</code></strong></p>
+<p>Por padrão, o Cypress executa testes no modo headless quando o
+comando <code>cypress run</code> é usado. No entanto, se você quiser que
+os testes sejam executados com uma interface visual do navegador em vez
+de apenas a linha de comando, você pode usar a opção
+<code>--headed</code>.</p>
+<p><strong><code>cypress run --no-exit</code></strong></p>
+<p>Por padrão, o Cypress sairá do test runner após os testes terem sido
+executados. Passando o <code>--no-exit</code> para o comando
+<code>cypress run</code>, você pode garantir que o test runner permaneça
+aberto no terminal.</p>
+<p><strong><code>cypress run --parallel</code></strong></p>
+<p>A opção <code>--parallel</code> nos permite distribuir os testes
+Cypress em múltiplas máquinas, reduzindo assim o tempo geral para
+executar a suíte de testes.</p>
+<p><strong><code>cypress run --record</code></strong></p>
+<p>Ao gravar um conjunto de testes no Cypress, garantimos que os
+resultados dos testes, juntamente com os vídeos e screenshots tirados
+durante a execução do teste, são gravados no dashboard do Cypress.</p>
+<p><strong><code>cypress run --spec &lt;spec-file&gt;</code></strong></p>
+<p>O Cypress tem a capacidade de executar um único arquivo de
+especificação usando a opção <code>--spec</code> no momento de execução.
+Isso é útil quando você deseja executar um único arquivo de
+especificação em vez de toda a suíte de testes.</p>
+</section>
+<section class="level4" id="cypress-open">
+<h4>cypress open</h4>
+<p>O comando <code>cypress open</code> abre o test runner do Cypress em
+modo headed. O test runner do Cypress é uma interface gráfica do usuário
+que permite aos usuários ver os testes sendo executados em tempo real.
+As opções de configuração mais comuns para o comando
+<code>cypress open</code> incluem:</p>
+<p><strong><code>cypress open --env &lt;env-variable&gt;</code></strong></p>
+<p>Assim como a opção <code>--env</code> no <code>cypress run</code>,
+podemos passar variáveis de ambiente para o comando
+<code>cypress open</code>.</p>
+<p><strong><code>cypress open --browser &lt;browser-path-or-name&gt;</code></strong></p>
+<p>Assim como a opção <code>--browser</code> no
+<code>cypress run</code>, podemos especificar o navegador que o Cypress
+deve usar ao abrir o test runner.</p>
+<p><strong><code>cypress open --config &lt;configuration-option&gt;</code></strong></p>
+<p>Assim como no <code>cypress run</code>, podemos sobrescrever as
+configurações do Cypress quando abrimos o test runner.</p>
+<p><strong><code>cypress open --project &lt;project-path&gt;</code></strong></p>
+<p>O Cypress vem com a capacidade embutida de sobrescrever o caminho
+padrão que o Cypress inicia ao executar os testes.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode json code-card" data-code-index="30"><code class="sourceCode json"><span id="cb30-1"><a aria-hidden="true" href="#cb30-1" tabindex="-1"></a><span class="er">"scripts":</span> <span class="fu">{</span></span>
+<span id="cb30-2"><a aria-hidden="true" href="#cb30-2" tabindex="-1"></a>  <span class="dt">"cypress:project:v3"</span><span class="fu">:</span> <span class="st">"cypress open --env TransferProtocol='http' --project 'cypress/todo-app-v3/'"</span></span>
+<span id="cb30-3"><a aria-hidden="true" href="#cb30-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong><code>cypress open --port &lt;port-number&gt;</code></strong></p>
+<p>Por padrão, o Cypress roda na porta 8080. Executar o comando
+<code>cypress run</code> passando a opção <code>--port</code> permite
+sobrescrever a porta padrão onde os testes são executados.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode json code-card" data-code-index="31"><code class="sourceCode json"><span id="cb31-1"><a aria-hidden="true" href="#cb31-1" tabindex="-1"></a><span class="er">"scripts":</span> <span class="fu">{</span></span>
+<span id="cb31-2"><a aria-hidden="true" href="#cb31-2" tabindex="-1"></a>  <span class="dt">"cypress:open:changed-port"</span><span class="fu">:</span> <span class="st">"cypress open --env TransferProtocol='http' --port 3004"</span></span>
+<span id="cb31-3"><a aria-hidden="true" href="#cb31-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</section>
+<section class="level4" id="usando-o-comando-cypress-info">
+<h4>Usando o comando cypress info</h4>
+<p>Executar o comando <code>cypress info</code> em um terminal imprimirá
+as informações de instalação do Cypress e a configuração do ambiente no
+terminal. As informações impressas pelo comando incluem:</p>
+<ul>
+<li>Navegadores instalados na máquina que foram detectados pelo
+Cypress.</li>
+<li>Informações sobre o sistema operacional do host.</li>
+<li>A localização do cache do binário do Cypress.</li>
+<li>A localização do armazenamento de dados de tempo de execução.</li>
+<li>Variáveis de ambiente que foram prefixadas com CYPRESS.</li>
+</ul>
+</section>
+<section class="level4" id="usando-o-comando-cypress-version">
+<h4>Usando o comando cypress version</h4>
+<p>O comando <code>cypress version</code> imprime a versão binária do
+Cypress e a versão npm do módulo Cypress que foi instalado.</p>
+<hr/>
+</section>
+</section>
+<section class="level3" id="depuração-do-cypress-na-linha-de-comando">
+<h3>Depuração do Cypress na linha de comando</h3>
+<p>Nesta seção, exploraremos como usar as propriedades de depuração da
+linha de comando do Cypress para solucionar os problemas que podemos
+encontrar ao executar nossos testes.</p>
+<p>O Cypress tem um módulo de depuração embutido que pode ser exposto
+aos usuários passando comandos de depuração antes de executar os testes.
+Para receber saída de depuração do terminal, a variável de ambiente
+<code>DEBUG</code> precisa ser definida antes das execuções de testes
+Cypress em ambientes Mac ou Linux.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode json code-card" data-code-index="32"><code class="sourceCode json"><span id="cb32-1"><a aria-hidden="true" href="#cb32-1" tabindex="-1"></a><span class="er">"scripts":</span> <span class="fu">{</span></span>
+<span id="cb32-2"><a aria-hidden="true" href="#cb32-2" tabindex="-1"></a>  <span class="dt">"cypress:open:debugger"</span><span class="fu">:</span> <span class="st">"DEBUG=cypress:* cypress open --env TransferProtocol='http'"</span><span class="fu">,</span></span>
+<span id="cb32-3"><a aria-hidden="true" href="#cb32-3" tabindex="-1"></a>  <span class="dt">"cypress:run:debugger"</span><span class="fu">:</span> <span class="st">"DEBUG=cypress:* cypress run --env TransferProtocol='http'"</span></span>
+<span id="cb32-4"><a aria-hidden="true" href="#cb32-4" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Executar <code>npm run cypress:open:debugger</code> executará os
+testes Cypress em um terminal e registrará a saída de depuração da
+execução. O segundo comando, que pode ser executado com
+<code>npm run cypress:run:debugger</code>, executará o depurador
+enquanto executa os testes no test runner do Cypress.</p>
+<p>Para filtrar a saída de depuração para módulos específicos:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode json code-card" data-code-index="33"><code class="sourceCode json"><span id="cb33-1"><a aria-hidden="true" href="#cb33-1" tabindex="-1"></a><span class="er">"scripts":</span> <span class="fu">{</span></span>
+<span id="cb33-2"><a aria-hidden="true" href="#cb33-2" tabindex="-1"></a>  <span class="dt">"cypress:open:server-debugger"</span><span class="fu">:</span> <span class="st">"DEBUG=cypress:server:* cypress open --env TransferProtocol='http'"</span></span>
+<span id="cb33-3"><a aria-hidden="true" href="#cb33-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr/>
+</section>
+</section>
+<section class="level2" id="capítulo-4-escrevendo-seu-primeiro-teste">
+<h2>Capítulo 4 — Escrevendo Seu Primeiro Teste</h2>
+<p>Antes de começar este capítulo, você precisa ter um entendimento de
+como os testes Cypress são executados, os diferentes comandos Cypress,
+como configurar o Cypress, executar o Cypress na linha de comando e como
+usar o test runner para abrir testes Cypress.</p>
+<p>Neste capítulo, abordaremos os seguintes tópicos:</p>
+<ul>
+<li>Criando arquivos de teste</li>
+<li>Escrevendo seu primeiro teste</li>
+<li>Escrevendo testes práticos</li>
+<li>O recurso de auto-reload do Cypress</li>
+<li>Asserções Cypress</li>
+</ul>
+<section class="level3" id="criando-arquivos-de-teste">
+<h3>Criando arquivos de teste</h3>
+<p>Todos os testes no Cypress devem estar em um arquivo de teste para
+serem executados. O Cypress cria arquivos de teste por padrão quando é
+inicializado no diretório <code>cypress/integration/examples</code>.</p>
+<section class="level4" id="localização-dos-arquivos-de-teste">
+<h4>Localização dos arquivos de teste</h4>
+<p>Para reconfigurar as estruturas de pastas do Cypress, você pode
+alterar a configuração padrão do Cypress e passar a nova configuração
+para o arquivo <code>cypress.json</code>:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode json code-card" data-code-index="34"><code class="sourceCode json"><span id="cb34-1"><a aria-hidden="true" href="#cb34-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb34-2"><a aria-hidden="true" href="#cb34-2" tabindex="-1"></a>  <span class="dt">"integrationFolder"</span><span class="fu">:</span> <span class="st">"cypress/tests"</span></span>
+<span id="cb34-3"><a aria-hidden="true" href="#cb34-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</section>
+<section class="level4" id="extensões-de-arquivos-de-teste">
+<h4>Extensões de arquivos de teste</h4>
+<p>O Cypress aceita diferentes extensões de arquivo:</p>
+<ul>
+<li><code>.js</code></li>
+<li><code>.jsx</code></li>
+<li><code>.coffee</code></li>
+<li><code>.cjsx</code></li>
+</ul>
+<p>Além disso, o Cypress também suporta ES2015 prontos para uso e
+módulos CommonJS, o que nos permite usar palavras-chave como
+<code>import</code> e <code>require</code> sem nenhuma configuração
+adicional.</p>
+</section>
+<section class="level4" id="estrutura-do-arquivo-de-teste">
+<h4>Estrutura do arquivo de teste</h4>
+<div class="sourceCode" id="cb35"><pre class="sourceCode javascript code-card" data-code-index="35"><code class="sourceCode javascript"><span id="cb35-1"><a aria-hidden="true" href="#cb35-1" tabindex="-1"></a><span class="co">// Declarações de módulo</span></span>
+<span id="cb35-2"><a aria-hidden="true" href="#cb35-2" tabindex="-1"></a><span class="im">import</span> {module} <span class="im">from</span> <span class="st">'module-package'</span><span class="op">;</span></span>
+<span id="cb35-3"><a aria-hidden="true" href="#cb35-3" tabindex="-1"></a></span>
+<span id="cb35-4"><a aria-hidden="true" href="#cb35-4" tabindex="-1"></a><span class="co">// corpo do teste</span></span>
+<span id="cb35-5"><a aria-hidden="true" href="#cb35-5" tabindex="-1"></a><span class="fu">describe</span>(<span class="st">'Test Body'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb35-6"><a aria-hidden="true" href="#cb35-6" tabindex="-1"></a>  <span class="fu">it</span>(<span class="st">'runs sample test'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb35-7"><a aria-hidden="true" href="#cb35-7" tabindex="-1"></a>    <span class="fu">expect</span>(<span class="dv">2</span>)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb35-8"><a aria-hidden="true" href="#cb35-8" tabindex="-1"></a>  })</span>
+<span id="cb35-9"><a aria-hidden="true" href="#cb35-9" tabindex="-1"></a>})</span></code></pre></div>
+</section>
+<section class="level4" id="criando-nosso-arquivo-de-teste">
+<h4>Criando nosso arquivo de teste</h4>
+<p>Usando o link do GitHub localizado na seção de Requisitos Técnicos,
+abra a pasta <code>chapter-04</code>. Siga estas etapas para criar seu
+primeiro arquivo de teste:</p>
+<ol type="1">
+<li>Navegue até o diretório da pasta <code>integration</code> localizada
+dentro do diretório Cypress.</li>
+<li>Crie um arquivo de teste vazio chamado
+<code>sample.spec.js</code>.</li>
+<li>Lance o test runner do Cypress com o comando
+<code>npm run cypress:run</code>.</li>
+<li>Verifique a pré-visualização do test runner e confirme que o arquivo
+de teste que adicionamos está visível.</li>
+</ol>
+<hr/>
+</section>
+</section>
+<section class="level3" id="escrevendo-seu-primeiro-teste">
+<h3>Escrevendo seu primeiro teste</h3>
+<p>Os testes Cypress não são diferentes de nenhum outro teste. Assim
+como em todos os outros testes, os testes Cypress devem passar quando o
+resultado esperado é consistente com o que a aplicação sob teste está
+retornando.</p>
+<section class="level4" id="testes-com-falha-aprovados-e-ignorados">
+<h4>Testes com falha, aprovados e ignorados</h4>
+<p><strong>Testes aprovados</strong> são os testes que não encontram
+nenhum problema durante a execução e que atendem ao resultado esperado
+definido no código do teste.</p>
+<p><strong>Testes com falha</strong> são testes que são esperados para
+passar, mas que encontraram problemas durante a execução, levando à
+falha do teste.</p>
+<p><strong>Testes ignorados</strong> são os testes que o desenvolvedor
+não quer executar em um ponto particular da execução dos testes, e são
+assim marcados por palavras-chave específicas que instruem o Cypress a
+não executar os testes marcados.</p>
+<hr/>
+</section>
+</section>
+<section class="level3" id="escrevendo-testes-práticos">
+<h3>Escrevendo testes práticos</h3>
+<div class="sourceCode" id="cb36"><pre class="sourceCode javascript code-card" data-code-index="36"><code class="sourceCode javascript"><span id="cb36-1"><a aria-hidden="true" href="#cb36-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can visit a url'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb36-2"><a aria-hidden="true" href="#cb36-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)</span>
+<span id="cb36-3"><a aria-hidden="true" href="#cb36-3" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode javascript code-card" data-code-index="37"><code class="sourceCode javascript"><span id="cb37-1"><a aria-hidden="true" href="#cb37-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can find a todo input element'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb37-2"><a aria-hidden="true" href="#cb37-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)</span>
+<span id="cb37-3"><a aria-hidden="true" href="#cb37-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)</span>
+<span id="cb37-4"><a aria-hidden="true" href="#cb37-4" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode javascript code-card" data-code-index="38"><code class="sourceCode javascript"><span id="cb38-1"><a aria-hidden="true" href="#cb38-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can type in a todo input element'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb38-2"><a aria-hidden="true" href="#cb38-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)</span>
+<span id="cb38-3"><a aria-hidden="true" href="#cb38-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.new-todo'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'New Todo {enter}'</span>)</span>
+<span id="cb38-4"><a aria-hidden="true" href="#cb38-4" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<section class="level4" id="asserindo-o-estado-da-aplicação">
+<h4>Asserindo o estado da aplicação</h4>
+<div class="sourceCode" id="cb39"><pre class="sourceCode javascript code-card" data-code-index="39"><code class="sourceCode javascript"><span id="cb39-1"><a aria-hidden="true" href="#cb39-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'asserts change in application state'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb39-2"><a aria-hidden="true" href="#cb39-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)</span>
+<span id="cb39-3"><a aria-hidden="true" href="#cb39-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.new-todo'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'New Todo {enter}'</span>)</span>
+<span id="cb39-4"><a aria-hidden="true" href="#cb39-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.new-todo'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'Another Todo {enter}'</span>)</span>
+<span id="cb39-5"><a aria-hidden="true" href="#cb39-5" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".todo-list"</span>)<span class="op">.</span><span class="fu">find</span>(<span class="st">'li'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'have.length'</span><span class="op">,</span> <span class="dv">2</span>)</span>
+<span id="cb39-6"><a aria-hidden="true" href="#cb39-6" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode javascript code-card" data-code-index="40"><code class="sourceCode javascript"><span id="cb40-1"><a aria-hidden="true" href="#cb40-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'asserts inserted todo items are present'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb40-2"><a aria-hidden="true" href="#cb40-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)</span>
+<span id="cb40-3"><a aria-hidden="true" href="#cb40-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.new-todo'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'New Todo {enter}'</span>)</span>
+<span id="cb40-4"><a aria-hidden="true" href="#cb40-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.new-todo'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'Another Todo {enter}'</span>)</span>
+<span id="cb40-5"><a aria-hidden="true" href="#cb40-5" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".todo-list"</span>)<span class="op">.</span><span class="fu">find</span>(<span class="st">'li'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'have.length'</span><span class="op">,</span> <span class="dv">2</span>)</span>
+<span id="cb40-6"><a aria-hidden="true" href="#cb40-6" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'li:nth-child(1)&gt;div&gt;label'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'have.text'</span><span class="op">,</span> <span class="st">'New Todo'</span>)</span>
+<span id="cb40-7"><a aria-hidden="true" href="#cb40-7" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'li:nth-child(2)&gt;div&gt;label'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'have.text'</span><span class="op">,</span> <span class="st">'Another Todo'</span>)</span>
+<span id="cb40-8"><a aria-hidden="true" href="#cb40-8" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<hr/>
+</section>
+</section>
+<section class="level3" id="o-recurso-de-auto-reload-do-cypress">
+<h3>O recurso de auto-reload do Cypress</h3>
+<p>Por padrão, o Cypress monitora mudanças de arquivo e recarrega os
+testes imediatamente quando uma mudança de arquivo é detectada. Esse
+recurso permite que você tenha feedback instantâneo sem precisar
+reexecutar os testes após fazer mudanças nos arquivos de teste.</p>
+<p>Para desabilitar o auto-reload via <code>cypress.json</code>:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode json code-card" data-code-index="41"><code class="sourceCode json"><span id="cb41-1"><a aria-hidden="true" href="#cb41-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb41-2"><a aria-hidden="true" href="#cb41-2" tabindex="-1"></a>  <span class="dt">"watchForFileChanges"</span><span class="fu">:</span> <span class="st">"false"</span></span>
+<span id="cb41-3"><a aria-hidden="true" href="#cb41-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Ou via opção de linha de comando:</p>
+<pre class="code-card" data-code-index="42"><code>cypress open --config watchForFileChanges=false</code></pre>
+<hr/>
+</section>
+<section class="level3" id="asserções-cypress">
+<h3>Asserções Cypress</h3>
+<p>As asserções Cypress se originam dos módulos chai, chai-jquery e
+sinon-chai, que vêm com a instalação do Cypress. Podemos escrever
+asserções Cypress de duas formas: definindo sujeitos explicitamente ou
+implicitamente.</p>
+<ul>
+<li><strong>Sujeitos implícitos</strong>: <code>.should()</code> ou
+<code>.and()</code></li>
+<li><strong>Sujeitos explícitos</strong>: <code>expect()</code></li>
+</ul>
+<section class="level4" id="sujeitos-implícitos">
+<h4>Sujeitos implícitos</h4>
+<div class="sourceCode" id="cb43"><pre class="sourceCode javascript code-card" data-code-index="43"><code class="sourceCode javascript"><span id="cb43-1"><a aria-hidden="true" href="#cb43-1" tabindex="-1"></a><span class="fu">describe</span>(<span class="st">'Cypress Assertions'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb43-2"><a aria-hidden="true" href="#cb43-2" tabindex="-1"></a>  <span class="fu">it</span>(<span class="st">'Using Implicit subjects - should'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb43-3"><a aria-hidden="true" href="#cb43-3" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)</span>
+<span id="cb43-4"><a aria-hidden="true" href="#cb43-4" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'have.attr'</span><span class="op">,</span> <span class="st">'placeholder'</span><span class="op">,</span> <span class="st">'What needs to be done?'</span>)</span>
+<span id="cb43-5"><a aria-hidden="true" href="#cb43-5" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb43-6"><a aria-hidden="true" href="#cb43-6" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode javascript code-card" data-code-index="44"><code class="sourceCode javascript"><span id="cb44-1"><a aria-hidden="true" href="#cb44-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'Using Implicit subjects - and()'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb44-2"><a aria-hidden="true" href="#cb44-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)</span>
+<span id="cb44-3"><a aria-hidden="true" href="#cb44-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)</span>
+<span id="cb44-4"><a aria-hidden="true" href="#cb44-4" tabindex="-1"></a>    <span class="op">.</span><span class="fu">should</span>(<span class="st">'have.attr'</span><span class="op">,</span> <span class="st">'placeholder'</span><span class="op">,</span> <span class="st">'What needs to be done?'</span>)</span>
+<span id="cb44-5"><a aria-hidden="true" href="#cb44-5" tabindex="-1"></a>    <span class="op">.</span><span class="fu">and</span>(<span class="st">'have.class'</span><span class="op">,</span> <span class="st">'new-todo'</span>)</span>
+<span id="cb44-6"><a aria-hidden="true" href="#cb44-6" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+</section>
+<section class="level4" id="sujeitos-explícitos">
+<h4>Sujeitos explícitos</h4>
+<div class="sourceCode" id="cb45"><pre class="sourceCode javascript code-card" data-code-index="45"><code class="sourceCode javascript"><span id="cb45-1"><a aria-hidden="true" href="#cb45-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can assert explicit subjects'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb45-2"><a aria-hidden="true" href="#cb45-2" tabindex="-1"></a>  <span class="kw">const</span> eqString <span class="op">=</span> <span class="st">'foo'</span><span class="op">;</span></span>
+<span id="cb45-3"><a aria-hidden="true" href="#cb45-3" tabindex="-1"></a>  <span class="fu">expect</span>(eqString)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'foo'</span>)<span class="op">;</span></span>
+<span id="cb45-4"><a aria-hidden="true" href="#cb45-4" tabindex="-1"></a>  <span class="fu">expect</span>(eqString)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="at">have</span><span class="op">.</span><span class="fu">lengthOf</span>(<span class="dv">3</span>)<span class="op">;</span></span>
+<span id="cb45-5"><a aria-hidden="true" href="#cb45-5" tabindex="-1"></a>  <span class="fu">expect</span>(eqString)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="at">be</span><span class="op">.</span><span class="fu">a</span>(<span class="st">'string'</span>)<span class="op">;</span></span>
+<span id="cb45-6"><a aria-hidden="true" href="#cb45-6" tabindex="-1"></a>})</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode javascript code-card" data-code-index="46"><code class="sourceCode javascript"><span id="cb46-1"><a aria-hidden="true" href="#cb46-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'Using Should with Explicit subjects'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb46-2"><a aria-hidden="true" href="#cb46-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)</span>
+<span id="cb46-3"><a aria-hidden="true" href="#cb46-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">should</span>( ($elem) <span class="kw">=&gt;</span> {</span>
+<span id="cb46-4"><a aria-hidden="true" href="#cb46-4" tabindex="-1"></a>    <span class="fu">expect</span>($elem)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="at">have</span><span class="op">.</span><span class="fu">class</span>(<span class="st">'new-todo'</span>)</span>
+<span id="cb46-5"><a aria-hidden="true" href="#cb46-5" tabindex="-1"></a>  })</span>
+<span id="cb46-6"><a aria-hidden="true" href="#cb46-6" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<hr/>
+</section>
+</section>
+</section>
+<section class="level2" id="capítulo-5-depurando-testes-cypress">
+<h2>Capítulo 5 — Depurando Testes Cypress</h2>
+<p>Depuração é a capacidade de identificar e remover bugs de aplicações
+de software. Ter conhecimento de depuração no Cypress e aprender como
+interpretar a saída de depuração do Cypress é crítico para trabalhar com
+o framework Cypress.</p>
+<p>Neste capítulo, abordaremos os seguintes tópicos:</p>
+<ul>
+<li>Entendendo eventos de página</li>
+<li>Entendendo erros do test runner</li>
+<li>Entendendo viagem no tempo em testes executados</li>
+<li>Entendendo snapshots de testes</li>
+<li>Entendendo a saída de depuração do console</li>
+<li>Comandos especiais de depuração</li>
+</ul>
+<section class="level3" id="entendendo-a-saída-de-depuração-do-console">
+<h3>Entendendo a saída de depuração do console</h3>
+<p>O Cypress é excelente em fornecer informações de depuração. Para
+abrir o console DevTools:</p>
+<p><strong>macOS</strong>: Mantenha o trackpad pressionado com dois
+dedos enquanto estiver na pré-visualização do test browser do Cypress e
+selecione a opção Inspect, ou use o atalho <code>Option + J</code>.</p>
+<p><strong>Windows/Linux OS</strong>: Clique com o botão direito na
+pré-visualização do test browser do Cypress, selecione a opção Inspect e
+use a aba Console do console DevTools. Você também pode usar o atalho
+<code>Shift + Ctrl + J</code>.</p>
+<p>Na área do Console, podemos ver o seguinte:</p>
+<ul>
+<li><strong>Command</strong>: O comando que emitimos (por exemplo,
+<code>cy.get()</code>).</li>
+<li><strong>Yielded</strong>: A declaração retornada pelo comando
+invocado.</li>
+<li><strong>Elements</strong>: Os elementos retornados do comando
+<code>get</code>.</li>
+<li><strong>Selector</strong>: O seletor CSS que usamos para identificar
+nosso item no DOM.</li>
+</ul>
+</section>
+<section class="level3" id="comandos-especiais-de-depuração">
+<h3>Comandos especiais de depuração</h3>
+<p><strong><code>cy.debug()</code></strong></p>
+<p>O comando <code>cy.debug()</code> é, por padrão, o comando de
+depuração que o Cypress oferece. O comando registrará no console a saída
+do comando ao qual foi encadeado.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode javascript code-card" data-code-index="47"><code class="sourceCode javascript"><span id="cb47-1"><a aria-hidden="true" href="#cb47-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'Special commands-debug : can mark a todo as completed'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb47-2"><a aria-hidden="true" href="#cb47-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">"New Todo {Enter}"</span>)<span class="op">;</span></span>
+<span id="cb47-3"><a aria-hidden="true" href="#cb47-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">"Another New Todo {Enter}"</span>)<span class="op">.</span><span class="fu">debug</span>()<span class="op">;</span></span>
+<span id="cb47-4"><a aria-hidden="true" href="#cb47-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.todo-list&gt;li:nth-child(1)'</span>)<span class="op">.</span><span class="fu">find</span>(<span class="st">'.toggle'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb47-5"><a aria-hidden="true" href="#cb47-5" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.todo-list&gt;li:nth-child(2)'</span>)<span class="op">.</span><span class="fu">find</span>(<span class="st">'.toggle'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb47-6"><a aria-hidden="true" href="#cb47-6" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong><code>cy.pause()</code></strong></p>
+<p>O comando de pause do Cypress funciona de forma muito similar ao
+comando <code>cy.debug()</code>, mas em vez de ser encadeado a outros
+comandos, pode ser usado de forma independente, como um debugger.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode javascript code-card" data-code-index="48"><code class="sourceCode javascript"><span id="cb48-1"><a aria-hidden="true" href="#cb48-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'Special commands - Pause: can mark a todo as completed'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb48-2"><a aria-hidden="true" href="#cb48-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">"New Todo {Enter}"</span>)<span class="op">;</span></span>
+<span id="cb48-3"><a aria-hidden="true" href="#cb48-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">pause</span>()<span class="op">;</span></span>
+<span id="cb48-4"><a aria-hidden="true" href="#cb48-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.todo-list&gt;li:nth-child(1)'</span>)<span class="op">.</span><span class="fu">find</span>(<span class="st">'.toggle'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb48-5"><a aria-hidden="true" href="#cb48-5" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<blockquote>
+<p><strong>Nota importante</strong> Os comandos especiais de depuração
+do Cypress só devem ser usados quando estamos investigando o estado dos
+testes em execução ou para fins de depuração. Eles não devem ser usados
+em testes que estão executando em integração contínua (CI), pois podem
+levar a timeouts e, consequentemente, falhas nos testes.</p>
+</blockquote>
+<hr/>
+</section>
+</section>
+<section class="level2" id="seção-2-testes-automatizados-com-a-abordagem-tdd">
+<h2>Seção 2: Testes Automatizados com a Abordagem TDD</h2>
+<p>Esta seção forma a espinha dorsal deste livro e apresentará tópicos
+mais avançados relacionados ao Cypress e como usá-lo. Nesta seção,
+haverá uma introdução a como podemos pensar em uma ideia e usar o
+Test-Driven Development (TDD) para levar nossa ideia da fase de
+concepção ao desenvolvimento.</p>
+<p>Esta seção inclui os seguintes capítulos:</p>
+<ul>
+<li>Capítulo 6, Escrevendo Testes Cypress Usando a Abordagem TDD</li>
+<li>Capítulo 7, Entendendo a Interação com Elementos no Cypress</li>
+<li>Capítulo 8, Entendendo Variáveis e Aliases no Cypress</li>
+<li>Capítulo 9, Usos Avançados do Test Runner do Cypress</li>
+</ul>
+<hr/>
+</section>
+<section class="level2" id="capítulo-6-escrevendo-testes-cypress-usando-a-abordagem-tdd">
+<h2>Capítulo 6 — Escrevendo Testes Cypress Usando a Abordagem TDD</h2>
+<p>Neste capítulo, utilizaremos uma abordagem orientada por testes para
+escrever testes que contribuirão significativamente para um aumento no
+nível de confiança em nossas aplicações e soluções de software.</p>
+<p>Abordaremos os seguintes tópicos principais neste capítulo:</p>
+<ul>
+<li>O que é TDD?</li>
+<li>Configurando a aplicação</li>
+<li>Modificando testes TDD</li>
+</ul>
+<section class="level3" id="o-que-é-tdd">
+<h3>O que é TDD?</h3>
+<p>O Test-Driven Development (TDD), ou Desenvolvimento Orientado por
+Testes, é um processo de desenvolvimento que é dependente da repetição
+de ciclos de desenvolvimento curtos. O processo começa com um
+desenvolvedor escrevendo um teste de caso de uso que define uma melhoria
+desejada ou nova função, antes de escrever qualquer código de
+produção.</p>
+<p>O processo de TDD segue o seguinte ciclo:</p>
+<ol type="1">
+<li><strong>Vermelhor (Red)</strong>: Escrever um teste que falha.</li>
+<li><strong>Verde (Green)</strong>: Escrever o código mínimo para fazer
+o teste passar.</li>
+<li><strong>Refatorar (Refactor)</strong>: Refatorar o código para
+melhorar sua qualidade.</li>
+</ol>
+</section>
+<section class="level3" id="configurando-a-aplicação">
+<h3>Configurando a aplicação</h3>
+<p>Nesta seção, escreveremos testes TDD para uma aplicação todo que
+ainda está em desenvolvimento. Os seguintes são os requisitos para nossa
+aplicação todo:</p>
+<ul>
+<li>Adicionar novos itens todo</li>
+<li>Deletar itens todo</li>
+<li>Visualizar itens todo adicionados</li>
+<li>Visualizar a contagem dos itens todo adicionados</li>
+</ul>
+<p><strong>Adicionando um novo item todo</strong></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode javascript code-card" data-code-index="49"><code class="sourceCode javascript"><span id="cb49-1"><a aria-hidden="true" href="#cb49-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can add a todo item'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb49-2"><a aria-hidden="true" href="#cb49-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todo-item-input"]'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'New Todo'</span>)<span class="op">;</span></span>
+<span id="cb49-3"><a aria-hidden="true" href="#cb49-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="add-todo-button"]'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb49-4"><a aria-hidden="true" href="#cb49-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todolist"]'</span>)<span class="op">.</span><span class="fu">contains</span>(<span class="st">'New Todo'</span>)<span class="op">;</span></span>
+<span id="cb49-5"><a aria-hidden="true" href="#cb49-5" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Deletando um item todo</strong></p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode javascript code-card" data-code-index="50"><code class="sourceCode javascript"><span id="cb50-1"><a aria-hidden="true" href="#cb50-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can delete a todo item'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb50-2"><a aria-hidden="true" href="#cb50-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todo-item-input"]'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'New Todo'</span>)<span class="op">;</span></span>
+<span id="cb50-3"><a aria-hidden="true" href="#cb50-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="add-todo-button"]'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb50-4"><a aria-hidden="true" href="#cb50-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="delete-todo-1-button"]'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb50-5"><a aria-hidden="true" href="#cb50-5" tabindex="-1"></a>  <span class="fu">expect</span>(<span class="st">'[data-testid="todolist"]'</span>)<span class="op">.</span><span class="at">not</span><span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">contain</span>(<span class="st">'New Todo'</span>)</span>
+<span id="cb50-6"><a aria-hidden="true" href="#cb50-6" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Visualizando itens todo adicionados</strong></p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode javascript code-card" data-code-index="51"><code class="sourceCode javascript"><span id="cb51-1"><a aria-hidden="true" href="#cb51-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can view added todo item'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb51-2"><a aria-hidden="true" href="#cb51-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todo-item-input"]'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'New todo'</span>)<span class="op">;</span></span>
+<span id="cb51-3"><a aria-hidden="true" href="#cb51-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="add-todo-button"]'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb51-4"><a aria-hidden="true" href="#cb51-4" tabindex="-1"></a>  <span class="fu">expect</span>(<span class="st">'[data-testid="todolist"]'</span>)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">contain</span>(<span class="st">'New Todo'</span>)</span>
+<span id="cb51-5"><a aria-hidden="true" href="#cb51-5" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Visualizando a contagem de itens todo
+adicionados</strong></p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode javascript code-card" data-code-index="52"><code class="sourceCode javascript"><span id="cb52-1"><a aria-hidden="true" href="#cb52-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can view number of added todo items'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb52-2"><a aria-hidden="true" href="#cb52-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todo-item-input"]'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'New todo'</span>)<span class="op">;</span></span>
+<span id="cb52-3"><a aria-hidden="true" href="#cb52-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="add-todo-button"]'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb52-4"><a aria-hidden="true" href="#cb52-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todo-item-input"]'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'Another todo'</span>)<span class="op">;</span></span>
+<span id="cb52-5"><a aria-hidden="true" href="#cb52-5" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="add-todo-button"]'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb52-6"><a aria-hidden="true" href="#cb52-6" tabindex="-1"></a>  <span class="fu">expect</span>(<span class="st">'[data-testid="todo-item-number"]'</span>)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'2'</span>)</span>
+<span id="cb52-7"><a aria-hidden="true" href="#cb52-7" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="delete-todo-1-button"]'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb52-8"><a aria-hidden="true" href="#cb52-8" tabindex="-1"></a>  <span class="fu">expect</span>(<span class="st">'[data-testid="todo-item-number"]'</span>)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'1'</span>)</span>
+<span id="cb52-9"><a aria-hidden="true" href="#cb52-9" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+</section>
+<section class="level3" id="modificando-testes-tdd">
+<h3>Modificando testes TDD</h3>
+<p>Após a construção das funcionalidades, modificamos os testes TDD para
+executar contra a funcionalidade desenvolvida.</p>
+<p><strong>Adicionando novos itens todo (versão final)</strong></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode javascript code-card" data-code-index="53"><code class="sourceCode javascript"><span id="cb53-1"><a aria-hidden="true" href="#cb53-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can create and displays new todo'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb53-2"><a aria-hidden="true" href="#cb53-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://localhost:3000/'</span>)</span>
+<span id="cb53-3"><a aria-hidden="true" href="#cb53-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todo-input-element"]'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'New todo'</span>)<span class="op">;</span></span>
+<span id="cb53-4"><a aria-hidden="true" href="#cb53-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="add-todo-button"]'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb53-5"><a aria-hidden="true" href="#cb53-5" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todolist"]'</span>)<span class="op">.</span><span class="fu">contains</span>(<span class="st">'New todo'</span>)<span class="op">;</span></span>
+<span id="cb53-6"><a aria-hidden="true" href="#cb53-6" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Deletando um item todo (versão final)</strong></p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode javascript code-card" data-code-index="54"><code class="sourceCode javascript"><span id="cb54-1"><a aria-hidden="true" href="#cb54-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can delete an added todo item'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb54-2"><a aria-hidden="true" href="#cb54-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://localhost:3000/'</span>)</span>
+<span id="cb54-3"><a aria-hidden="true" href="#cb54-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todo-input-element"]'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'New todo'</span>)<span class="op">;</span></span>
+<span id="cb54-4"><a aria-hidden="true" href="#cb54-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="add-todo-button"]'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb54-5"><a aria-hidden="true" href="#cb54-5" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="delete-todo-0-button"]'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb54-6"><a aria-hidden="true" href="#cb54-6" tabindex="-1"></a>  <span class="fu">expect</span>(<span class="st">'[data-testid="todolist"]'</span>)<span class="op">.</span><span class="at">not</span><span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">contain</span>(<span class="st">'New todo'</span>)</span>
+<span id="cb54-7"><a aria-hidden="true" href="#cb54-7" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Visualizando itens todo adicionados (versão
+final)</strong></p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode javascript code-card" data-code-index="55"><code class="sourceCode javascript"><span id="cb55-1"><a aria-hidden="true" href="#cb55-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can view added todo items'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb55-2"><a aria-hidden="true" href="#cb55-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://localhost:3000/'</span>)</span>
+<span id="cb55-3"><a aria-hidden="true" href="#cb55-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todo-input-element"]'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'New todo, {enter}'</span>)</span>
+<span id="cb55-4"><a aria-hidden="true" href="#cb55-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todo-input-element"]'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'Another todo, {enter}'</span>)</span>
+<span id="cb55-5"><a aria-hidden="true" href="#cb55-5" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todolist"]'</span>)<span class="op">.</span><span class="fu">contains</span>(<span class="st">'New todo'</span>)<span class="op">;</span></span>
+<span id="cb55-6"><a aria-hidden="true" href="#cb55-6" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-testid="todolist"]'</span>)<span class="op">.</span><span class="fu">contains</span>(<span class="st">'Another todo'</span>)<span class="op">;</span></span>
+<span id="cb55-7"><a aria-hidden="true" href="#cb55-7" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<hr/>
+</section>
+</section>
+<section class="level2" id="capítulo-7-entendendo-a-interação-com-elementos-no-cypress">
+<h2>Capítulo 7 — Entendendo a Interação com Elementos no Cypress</h2>
+<p>Neste capítulo, aprenderemos como o Cypress interage com elementos do
+DOM e como ele determina a acionabilidade (actionability) dos
+elementos.</p>
+<p>Abordaremos os seguintes tópicos principais neste capítulo:</p>
+<ul>
+<li>Entendendo acionabilidade</li>
+<li>Forçando acionabilidade</li>
+<li>Interagindo com elementos</li>
+</ul>
+<section class="level3" id="entendendo-acionabilidade">
+<h3>Entendendo acionabilidade</h3>
+<p>A acionabilidade é a capacidade do Cypress de determinar se um
+elemento do DOM está em um estado em que pode ser interagido. O Cypress
+executa verificações antes de realizar qualquer ação em um elemento,
+verificando:</p>
+<ul>
+<li>Visibilidade</li>
+<li>Desabilitação</li>
+<li>Desanexamento do DOM</li>
+<li>Modo somente leitura</li>
+<li>Animações</li>
+<li>Cobertura por outros elementos</li>
+<li>Rolagem</li>
+<li>Coordenadas</li>
+</ul>
+<p><strong>Visibilidade</strong>: O Cypress verifica se o elemento é
+visível no DOM verificando: - Que o elemento não tem seu CSS
+<code>display</code> definido como <code>none</code> - Que o elemento
+não tem seu CSS <code>visibility</code> definido como
+<code>hidden</code> - Que o elemento não tem seu CSS
+<code>opacity</code> definido como <code>0</code> - Que o elemento tem
+tanto largura quanto altura acima de 0</p>
+<p><strong>Animações</strong>: O Cypress tem um mecanismo para calcular
+quando um elemento está animando. Há um limite de animação padrão de
+1000 ms, que pode ser configurado via <code>cypress.json</code> ou
+<code>cypress open --config animationDistanceThreshold=50</code>.</p>
+<p><strong>Cobertura por elementos pai</strong>: O Cypress verifica que
+o elemento não está totalmente coberto por um elemento pai como um
+popup, overlay ou caixa de diálogo.</p>
+<p><strong>Coordenadas</strong>: Após o Cypress ter concluído o processo
+de verificação de acionabilidade, por padrão ele dispara eventos no
+centro do elemento. Pode-se sobrescrever essa posição:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode javascript code-card" data-code-index="56"><code class="sourceCode javascript"><span id="cb56-1"><a aria-hidden="true" href="#cb56-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can mark a todo as completed - with changed hitbox position'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb56-2"><a aria-hidden="true" href="#cb56-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)</span>
+<span id="cb56-3"><a aria-hidden="true" href="#cb56-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">"New Todo {Enter}"</span>)<span class="op">;</span></span>
+<span id="cb56-4"><a aria-hidden="true" href="#cb56-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">"Another New Todo {Enter}"</span>)<span class="op">;</span></span>
+<span id="cb56-5"><a aria-hidden="true" href="#cb56-5" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.todo-list&gt;li:nth-child(1)'</span>)<span class="op">.</span><span class="fu">find</span>(<span class="st">'.toggle'</span>)<span class="op">.</span><span class="fu">click</span>({ <span class="dt">position</span><span class="op">:</span> <span class="st">'topLeft'</span> })<span class="op">;</span></span>
+<span id="cb56-6"><a aria-hidden="true" href="#cb56-6" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+</section>
+<section class="level3" id="forçando-acionabilidade">
+<h3>Forçando acionabilidade</h3>
+<p>Para sobrescrever as verificações de acionabilidade do Cypress,
+podemos passar o parâmetro <code>{force: true}</code> para os comandos
+acionáveis do Cypress:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode javascript code-card" data-code-index="57"><code class="sourceCode javascript"><span id="cb57-1"><a aria-hidden="true" href="#cb57-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can mark all todo as completed - with forced toggle option (Success)'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb57-2"><a aria-hidden="true" href="#cb57-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">"New Todo {Enter}"</span>)<span class="op">;</span></span>
+<span id="cb57-3"><a aria-hidden="true" href="#cb57-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">"Another New Todo {Enter}"</span>)<span class="op">;</span></span>
+<span id="cb57-4"><a aria-hidden="true" href="#cb57-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.todo-list&gt;li:nth-child(1)'</span>)<span class="op">.</span><span class="fu">find</span>(<span class="st">'.toggle'</span>)<span class="op">.</span><span class="fu">click</span>()<span class="op">;</span></span>
+<span id="cb57-5"><a aria-hidden="true" href="#cb57-5" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'#toggle-all'</span>)<span class="op">.</span><span class="fu">click</span>({<span class="dt">force</span><span class="op">:</span> <span class="kw">true</span>})<span class="op">;</span></span>
+<span id="cb57-6"><a aria-hidden="true" href="#cb57-6" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>Quando a acionabilidade é forçada em um comando, o Cypress:</p>
+<ul>
+<li>Continua a executar todas as ações padrão</li>
+<li>Força o disparo do evento no elemento</li>
+</ul>
+<p>Porém, o Cypress <strong>não</strong> irá:</p>
+<ul>
+<li>Garantir que o elemento seja visível</li>
+<li>Rolar o elemento para a visualização</li>
+<li>Garantir que o elemento não esteja desabilitado</li>
+<li>Garantir que o elemento não esteja desanexado</li>
+<li>Garantir que o elemento não esteja animando</li>
+<li>Garantir que o elemento não esteja coberto</li>
+<li>Garantir que o elemento não seja somente leitura</li>
+</ul>
+<hr/>
+</section>
+</section>
+<section class="level2" id="capítulo-8-entendendo-variáveis-e-aliases-no-cypress">
+<h2>Capítulo 8 — Entendendo Variáveis e Aliases no Cypress</h2>
+<p>Neste capítulo, focaremos em escrever comandos assíncronos para fazer
+uso das variáveis e aliases com os quais o Cypress vem. Abordaremos os
+seguintes tópicos principais:</p>
+<ul>
+<li>Entendendo variáveis Cypress</li>
+<li>Entendendo aliases Cypress</li>
+</ul>
+<section class="level3" id="entendendo-variáveis-cypress">
+<h3>Entendendo variáveis Cypress</h3>
+<p>As variáveis Cypress são importantes para reduzir a complexidade dos
+testes.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode javascript code-card" data-code-index="58"><code class="sourceCode javascript"><span id="cb58-1"><a aria-hidden="true" href="#cb58-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'carries out asynchronous events'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb58-2"><a aria-hidden="true" href="#cb58-2" tabindex="-1"></a>  <span class="kw">const</span> button <span class="op">=</span> cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'#submit-button'</span>)<span class="op">;</span></span>
+<span id="cb58-3"><a aria-hidden="true" href="#cb58-3" tabindex="-1"></a>  <span class="kw">const</span> username <span class="op">=</span> cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'#username-input'</span>)<span class="op">;</span></span>
+<span id="cb58-4"><a aria-hidden="true" href="#cb58-4" tabindex="-1"></a>  button<span class="op">.</span><span class="fu">click</span>()</span>
+<span id="cb58-5"><a aria-hidden="true" href="#cb58-5" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>O Cypress utiliza APIs assíncronas JavaScript, que controlam como os
+comandos são executados nos testes Cypress.</p>
+<p>Para criar um ambiente que pode ser acessado de forma síncrona,
+podemos usar closures no Cypress:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode javascript code-card" data-code-index="59"><code class="sourceCode javascript"><span id="cb59-1"><a aria-hidden="true" href="#cb59-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can add a list of todo items'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb59-2"><a aria-hidden="true" href="#cb59-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)</span>
+<span id="cb59-3"><a aria-hidden="true" href="#cb59-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">"New Todo {Enter}"</span>)<span class="op">;</span></span>
+<span id="cb59-4"><a aria-hidden="true" href="#cb59-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.todo-list&gt;li:nth-child(1)'</span>)<span class="op">.</span><span class="fu">then</span>(($todoItem) <span class="kw">=&gt;</span> {</span>
+<span id="cb59-5"><a aria-hidden="true" href="#cb59-5" tabindex="-1"></a>    <span class="kw">const</span> todoItem <span class="op">=</span> $todoItem<span class="op">.</span><span class="fu">text</span>()</span>
+<span id="cb59-6"><a aria-hidden="true" href="#cb59-6" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.todo-list&gt;li:nth-child(1)'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'have.text'</span><span class="op">,</span> todoItem)</span>
+<span id="cb59-7"><a aria-hidden="true" href="#cb59-7" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb59-8"><a aria-hidden="true" href="#cb59-8" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+</section>
+<section class="level3" id="entendendo-aliases-cypress">
+<h3>Entendendo aliases Cypress</h3>
+<p>Os aliases no Cypress fornecem uma forma de referenciar e reutilizar
+elementos, rotas e requisições que foram declarados no contexto de
+testes mais cedo.</p>
+<p><strong>Compartilhamento de contexto</strong></p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode javascript code-card" data-code-index="60"><code class="sourceCode javascript"><span id="cb60-1"><a aria-hidden="true" href="#cb60-1" tabindex="-1"></a><span class="fu">describe</span>(<span class="st">'Todo Aliases'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb60-2"><a aria-hidden="true" href="#cb60-2" tabindex="-1"></a>  <span class="fu">beforeEach</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb60-3"><a aria-hidden="true" href="#cb60-3" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)</span>
+<span id="cb60-4"><a aria-hidden="true" href="#cb60-4" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">"New Todo {Enter}"</span>)<span class="op">;</span></span>
+<span id="cb60-5"><a aria-hidden="true" href="#cb60-5" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'.todo-list&gt;li:nth-child(1)'</span>)<span class="op">.</span><span class="fu">invoke</span>(<span class="st">'text'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'todoItem'</span>)</span>
+<span id="cb60-6"><a aria-hidden="true" href="#cb60-6" tabindex="-1"></a>  })</span>
+<span id="cb60-7"><a aria-hidden="true" href="#cb60-7" tabindex="-1"></a></span>
+<span id="cb60-8"><a aria-hidden="true" href="#cb60-8" tabindex="-1"></a>  <span class="fu">it</span>(<span class="st">'can identify the first todo item'</span><span class="op">,</span> <span class="kw">function</span>() {</span>
+<span id="cb60-9"><a aria-hidden="true" href="#cb60-9" tabindex="-1"></a>    <span class="fu">expect</span>(<span class="kw">this</span><span class="op">.</span><span class="at">todoItem</span>)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'New Todo'</span>)<span class="op">;</span></span>
+<span id="cb60-10"><a aria-hidden="true" href="#cb60-10" tabindex="-1"></a>  })</span>
+<span id="cb60-11"><a aria-hidden="true" href="#cb60-11" tabindex="-1"></a>})</span></code></pre></div>
+<blockquote>
+<p><strong>Nota importante</strong> Não é possível usar
+<code>this.*</code> com arrow functions nos seus testes Cypress, pois
+<code>this.*</code> se referirá ao contexto léxico da arrow function e
+não ao contexto do Mocha. Para qualquer uso da palavra-chave
+<code>this</code>, você precisará mudar seus testes Cypress para usar a
+sintaxe de função regular <code>function () {}</code> em vez de
+<code>() =&gt; {}</code>.</p>
+</blockquote>
+<p><strong>Acessando referências de elementos</strong></p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode javascript code-card" data-code-index="61"><code class="sourceCode javascript"><span id="cb61-1"><a aria-hidden="true" href="#cb61-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can add a todo - DOM element access reference'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb61-2"><a aria-hidden="true" href="#cb61-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".new-todo"</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'todoInput'</span>)<span class="op">;</span></span>
+<span id="cb61-3"><a aria-hidden="true" href="#cb61-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'@todoInput'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">"New Todo {Enter}"</span>)<span class="op">;</span></span>
+<span id="cb61-4"><a aria-hidden="true" href="#cb61-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'@todoInput'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">"Another New Todo {Enter}"</span>)<span class="op">;</span></span>
+<span id="cb61-5"><a aria-hidden="true" href="#cb61-5" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">".todo-list"</span>)<span class="op">.</span><span class="fu">find</span>(<span class="st">'li'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'have.length'</span><span class="op">,</span> <span class="dv">2</span>)</span>
+<span id="cb61-6"><a aria-hidden="true" href="#cb61-6" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Acessando referências de rotas</strong></p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode javascript code-card" data-code-index="62"><code class="sourceCode javascript"><span id="cb62-1"><a aria-hidden="true" href="#cb62-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can wait for a todo response'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb62-2"><a aria-hidden="true" href="#cb62-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">server</span>()</span>
+<span id="cb62-3"><a aria-hidden="true" href="#cb62-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">intercept</span>(<span class="st">'POST'</span><span class="op">,</span> <span class="st">'/todos'</span><span class="op">,</span> { <span class="dt">id</span><span class="op">:</span> <span class="dv">123</span> })<span class="op">.</span><span class="fu">as</span>(<span class="st">'todoItem'</span>)</span>
+<span id="cb62-4"><a aria-hidden="true" href="#cb62-4" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'form'</span>)<span class="op">.</span><span class="fu">submit</span>()</span>
+<span id="cb62-5"><a aria-hidden="true" href="#cb62-5" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">wait</span>(<span class="st">'@todoItem'</span>)<span class="op">.</span><span class="fu">its</span>(<span class="st">'requestBody'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'have.property'</span><span class="op">,</span> <span class="st">'name'</span><span class="op">,</span> <span class="st">'New Todo'</span>)</span>
+<span id="cb62-6"><a aria-hidden="true" href="#cb62-6" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">contains</span>(<span class="st">'Successfully created item: New Todo'</span>)</span>
+<span id="cb62-7"><a aria-hidden="true" href="#cb62-7" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Acessando referências de requisições</strong></p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode javascript code-card" data-code-index="63"><code class="sourceCode javascript"><span id="cb63-1"><a aria-hidden="true" href="#cb63-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'can wait for a comment response'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb63-2"><a aria-hidden="true" href="#cb63-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">request</span>(<span class="st">'https://jsonplaceholder.cypress.io/comments/6'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'sixthComment'</span>)<span class="op">;</span></span>
+<span id="cb63-3"><a aria-hidden="true" href="#cb63-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'@sixthComment'</span>)<span class="op">.</span><span class="fu">should</span>((response) <span class="kw">=&gt;</span> {</span>
+<span id="cb63-4"><a aria-hidden="true" href="#cb63-4" tabindex="-1"></a>    <span class="fu">expect</span>(response<span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">id</span>)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="dv">6</span>)</span>
+<span id="cb63-5"><a aria-hidden="true" href="#cb63-5" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb63-6"><a aria-hidden="true" href="#cb63-6" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<hr/>
+</section>
+</section>
+<section class="level2" id="capítulo-9-usos-avançados-do-test-runner-do-cypress">
+<h2>Capítulo 9 — Usos Avançados do Test Runner do Cypress</h2>
+<p>Neste capítulo, aprenderemos como utilizar o Test Runner para
+escrever melhores testes. Abordaremos os seguintes tópicos:</p>
+<ul>
+<li>Entendendo o painel de instrumentos</li>
+<li>Entendendo o Selector Playground</li>
+<li>Atalhos de teclado do Test Runner</li>
+</ul>
+<section class="level3" id="entendendo-o-painel-de-instrumentos">
+<h3>Entendendo o painel de instrumentos</h3>
+<p>O painel de instrumentos é um painel especial no Test Runner do
+Cypress que só é visível quando o Cypress está fornecendo informações
+adicionais sobre seus testes. A aparência do painel de instrumentos é
+acionada por comandos específicos como <code>cy.stub()</code>,
+<code>cy.intercept()</code> e <code>cy.spy()</code>.</p>
+<p><strong>Intercepts</strong></p>
+<p>O Cypress usa o comando <code>cy.intercept()</code> para gerenciar o
+comportamento das requisições HTTP na camada de rede de um teste.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode javascript code-card" data-code-index="64"><code class="sourceCode javascript"><span id="cb64-1"><a aria-hidden="true" href="#cb64-1" tabindex="-1"></a><span class="fu">describe</span>(<span class="st">'Routing a request'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb64-2"><a aria-hidden="true" href="#cb64-2" tabindex="-1"></a>  <span class="fu">it</span>(<span class="st">'can wait for a app initialization'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb64-3"><a aria-hidden="true" href="#cb64-3" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">intercept</span>(<span class="st">'POST'</span><span class="op">,</span> <span class="st">'**/j/**'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'initializeTodoApp'</span>)<span class="op">;</span></span>
+<span id="cb64-4"><a aria-hidden="true" href="#cb64-4" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'http://todomvc.com/examples/react/#/'</span>)<span class="op">;</span></span>
+<span id="cb64-5"><a aria-hidden="true" href="#cb64-5" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">wait</span>(<span class="st">'@initializeTodoApp'</span>)<span class="op">;</span></span>
+<span id="cb64-6"><a aria-hidden="true" href="#cb64-6" tabindex="-1"></a>  })</span>
+<span id="cb64-7"><a aria-hidden="true" href="#cb64-7" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Stubs</strong></p>
+<p>Stubs são usados para substituir uma função, método ou objetos de um
+objeto com lógica personalizada. O Cypress usa <code>cy.stub()</code>
+para criar stubs.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode javascript code-card" data-code-index="65"><code class="sourceCode javascript"><span id="cb65-1"><a aria-hidden="true" href="#cb65-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'cy.stub(): stubs an object method'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb65-2"><a aria-hidden="true" href="#cb65-2" tabindex="-1"></a>  <span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb65-3"><a aria-hidden="true" href="#cb65-3" tabindex="-1"></a>    <span class="fu">foo</span>() {}</span>
+<span id="cb65-4"><a aria-hidden="true" href="#cb65-4" tabindex="-1"></a>  }</span>
+<span id="cb65-5"><a aria-hidden="true" href="#cb65-5" tabindex="-1"></a>  <span class="kw">const</span> stub <span class="op">=</span> cy<span class="op">.</span><span class="fu">stub</span>(obj<span class="op">,</span> <span class="st">'foo'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'fooStub'</span>)</span>
+<span id="cb65-6"><a aria-hidden="true" href="#cb65-6" tabindex="-1"></a>  obj<span class="op">.</span><span class="fu">foo</span>(<span class="st">'foo'</span><span class="op">,</span> <span class="st">'bar'</span>)</span>
+<span id="cb65-7"><a aria-hidden="true" href="#cb65-7" tabindex="-1"></a>  <span class="fu">expect</span>(stub)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="at">be</span><span class="op">.</span><span class="at">called</span></span>
+<span id="cb65-8"><a aria-hidden="true" href="#cb65-8" tabindex="-1"></a>  <span class="fu">expect</span>(stub)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="at">be</span><span class="op">.</span><span class="fu">calledWith</span>(<span class="st">'foo'</span><span class="op">,</span> <span class="st">'bar'</span>)</span>
+<span id="cb65-9"><a aria-hidden="true" href="#cb65-9" tabindex="-1"></a>  <span class="fu">expect</span>(stub<span class="op">.</span><span class="at">args</span>[<span class="dv">0</span>][<span class="dv">0</span>])<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'foo'</span>)</span>
+<span id="cb65-10"><a aria-hidden="true" href="#cb65-10" tabindex="-1"></a>  <span class="fu">expect</span>(stub<span class="op">.</span><span class="at">args</span>[<span class="dv">0</span>][<span class="dv">1</span>])<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'bar'</span>)</span>
+<span id="cb65-11"><a aria-hidden="true" href="#cb65-11" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Spies</strong></p>
+<p>Spies fornecem a capacidade de inspecionar como uma função ou método
+foi chamado. Ao contrário dos stubs, os spies não alteram o
+comportamento da função que estão monitorando.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode javascript code-card" data-code-index="66"><code class="sourceCode javascript"><span id="cb66-1"><a aria-hidden="true" href="#cb66-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'cy.spy(): wraps a method in a spy'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb66-2"><a aria-hidden="true" href="#cb66-2" tabindex="-1"></a>  <span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb66-3"><a aria-hidden="true" href="#cb66-3" tabindex="-1"></a>    <span class="fu">foo</span>() {}</span>
+<span id="cb66-4"><a aria-hidden="true" href="#cb66-4" tabindex="-1"></a>  }</span>
+<span id="cb66-5"><a aria-hidden="true" href="#cb66-5" tabindex="-1"></a>  <span class="kw">const</span> spy <span class="op">=</span> cy<span class="op">.</span><span class="fu">spy</span>(obj<span class="op">,</span> <span class="st">'foo'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'fooSpy'</span>)</span>
+<span id="cb66-6"><a aria-hidden="true" href="#cb66-6" tabindex="-1"></a>  obj<span class="op">.</span><span class="fu">foo</span>(<span class="st">'foo'</span><span class="op">,</span> <span class="st">'bar'</span>)</span>
+<span id="cb66-7"><a aria-hidden="true" href="#cb66-7" tabindex="-1"></a>  <span class="fu">expect</span>(spy)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="at">be</span><span class="op">.</span><span class="at">called</span></span>
+<span id="cb66-8"><a aria-hidden="true" href="#cb66-8" tabindex="-1"></a>  <span class="fu">expect</span>(spy)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="at">be</span><span class="op">.</span><span class="fu">calledWith</span>(<span class="st">'foo'</span><span class="op">,</span> <span class="st">'bar'</span>)</span>
+<span id="cb66-9"><a aria-hidden="true" href="#cb66-9" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+</section>
+<section class="level3" id="entendendo-o-selector-playground">
+<h3>Entendendo o Selector Playground</h3>
+<p>O Selector Playground é uma ferramenta interativa do Test Runner do
+Cypress que nos fornece acesso a um seletor único para identificar
+elementos no DOM. Podemos usar o Selector Playground para:</p>
+<ul>
+<li>Determinar o seletor CSS único</li>
+<li>Encontrar seletores para elementos</li>
+<li>Verificar se o seletor retorna os elementos corretos</li>
+</ul>
+<hr/>
+</section>
+</section>
+<section class="level2" id="capítulo-10-exercício-navegação-e-requisições-de-rede">
+<h2>Capítulo 10 — Exercício: Navegação e Requisições de Rede</h2>
+<p>Neste capítulo, realizaremos exercícios práticos abordando dois
+tópicos importantes:</p>
+<ul>
+<li>Implementando requisições de navegação</li>
+<li>Implementando requisições de rede</li>
+</ul>
+<section class="level3" id="implementando-requisições-de-navegação">
+<h3>Implementando requisições de navegação</h3>
+<p><strong><code>cy.visit()</code></strong></p>
+<p>O <code>cy.visit()</code> é usado no Cypress para navegar até uma
+página remota da aplicação sob teste.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode javascript code-card" data-code-index="67"><code class="sourceCode javascript"><span id="cb67-1"><a aria-hidden="true" href="#cb67-1" tabindex="-1"></a><span class="fu">describe</span>(<span class="st">'Navigation Tests'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb67-2"><a aria-hidden="true" href="#cb67-2" tabindex="-1"></a>  <span class="fu">beforeEach</span>(() <span class="kw">=&gt;</span> {</span>
+<span id="cb67-3"><a aria-hidden="true" href="#cb67-3" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">loginUser</span>()<span class="op">;</span></span>
+<span id="cb67-4"><a aria-hidden="true" href="#cb67-4" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">server</span>()<span class="op">;</span></span>
+<span id="cb67-5"><a aria-hidden="true" href="#cb67-5" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">intercept</span>(<span class="st">'bankAccounts'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'bankAccounts'</span>)<span class="op">;</span></span>
+<span id="cb67-6"><a aria-hidden="true" href="#cb67-6" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">intercept</span>(<span class="st">'transactions/public'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'transactions'</span>)<span class="op">;</span></span>
+<span id="cb67-7"><a aria-hidden="true" href="#cb67-7" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">intercept</span>(<span class="st">'notifications'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'notifications'</span>)<span class="op">;</span></span>
+<span id="cb67-8"><a aria-hidden="true" href="#cb67-8" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">wait</span>(<span class="st">'@bankAccounts'</span>)<span class="op">;</span></span>
+<span id="cb67-9"><a aria-hidden="true" href="#cb67-9" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">wait</span>(<span class="st">'@transactions'</span>)<span class="op">;</span></span>
+<span id="cb67-10"><a aria-hidden="true" href="#cb67-10" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">wait</span>(<span class="st">'@notifications'</span>)<span class="op">;</span></span>
+<span id="cb67-11"><a aria-hidden="true" href="#cb67-11" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb67-12"><a aria-hidden="true" href="#cb67-12" tabindex="-1"></a>  <span class="fu">afterEach</span>(() <span class="kw">=&gt;</span> { cy<span class="op">.</span><span class="fu">logoutUser</span>() })<span class="op">;</span></span>
+<span id="cb67-13"><a aria-hidden="true" href="#cb67-13" tabindex="-1"></a></span>
+<span id="cb67-14"><a aria-hidden="true" href="#cb67-14" tabindex="-1"></a>  <span class="fu">it</span>(<span class="st">'Navigates to notifications page'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb67-15"><a aria-hidden="true" href="#cb67-15" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'notifications'</span><span class="op">,</span> { <span class="dt">timeout</span><span class="op">:</span> <span class="dv">30000</span> })<span class="op">;</span></span>
+<span id="cb67-16"><a aria-hidden="true" href="#cb67-16" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">url</span>()<span class="op">.</span><span class="fu">should</span>(<span class="st">'contain'</span><span class="op">,</span> <span class="st">'notifications'</span>)<span class="op">;</span></span>
+<span id="cb67-17"><a aria-hidden="true" href="#cb67-17" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb67-18"><a aria-hidden="true" href="#cb67-18" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong><code>cy.go()</code></strong></p>
+<p>O comando de navegação <code>cy.go()</code> do Cypress permite que um
+usuário navegue para frente ou para trás na aplicação sob teste.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode javascript code-card" data-code-index="68"><code class="sourceCode javascript"><span id="cb68-1"><a aria-hidden="true" href="#cb68-1" tabindex="-1"></a><span class="fu">describe</span>(<span class="st">'Navigation Tests'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb68-2"><a aria-hidden="true" href="#cb68-2" tabindex="-1"></a>  <span class="fu">it</span>(<span class="st">'cy.go(): Navigates front and backward'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb68-3"><a aria-hidden="true" href="#cb68-3" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'bankaccounts'</span>)<span class="op">;</span></span>
+<span id="cb68-4"><a aria-hidden="true" href="#cb68-4" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">url</span>()<span class="op">.</span><span class="fu">should</span>(<span class="st">'contain'</span><span class="op">,</span> <span class="st">'/bankaccounts'</span>)<span class="op">;</span></span>
+<span id="cb68-5"><a aria-hidden="true" href="#cb68-5" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">go</span>(<span class="st">'back'</span>)<span class="op">;</span></span>
+<span id="cb68-6"><a aria-hidden="true" href="#cb68-6" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">url</span>()<span class="op">.</span><span class="fu">should</span>(<span class="st">'eq'</span><span class="op">,</span> <span class="st">'http://localhost:3000/'</span>)<span class="op">;</span></span>
+<span id="cb68-7"><a aria-hidden="true" href="#cb68-7" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb68-8"><a aria-hidden="true" href="#cb68-8" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong><code>cy.reload()</code></strong></p>
+<p>O comando <code>cy.reload()</code> do Cypress é responsável por
+recarregar uma página.</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode javascript code-card" data-code-index="69"><code class="sourceCode javascript"><span id="cb69-1"><a aria-hidden="true" href="#cb69-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'cy.reload(): Navigates to notifications page'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb69-2"><a aria-hidden="true" href="#cb69-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">reload</span>(<span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb69-3"><a aria-hidden="true" href="#cb69-3" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+</section>
+<section class="level3" id="implementando-requisições-de-rede">
+<h3>Implementando requisições de rede</h3>
+<p><strong><code>cy.request()</code></strong></p>
+<p>O comando <code>cy.request()</code> do Cypress é usado para fazer
+requisições HTTP.</p>
+<p><strong><code>cy.intercept()</code></strong></p>
+<p>O Cypress usa o <code>cy.intercept()</code> para gerenciar o
+comportamento de requisições HTTP na camada de rede de um teste.</p>
+<hr/>
+</section>
+</section>
+<section class="level2" id="capítulo-11-exercício-stubbing-e-spying-de-requisições-xhr">
+<h2>Capítulo 11 — Exercício: Stubbing e Spying de Requisições XHR</h2>
+<p>Neste capítulo, aprenderemos sobre requisições XHR e como o Cypress
+pode auxiliar no stubbing de requisições.</p>
+<section class="level3" id="entendendo-requisições-xhr-em-testes">
+<h3>Entendendo requisições XHR em testes</h3>
+<div class="sourceCode" id="cb70"><pre class="sourceCode javascript code-card" data-code-index="70"><code class="sourceCode javascript"><span id="cb70-1"><a aria-hidden="true" href="#cb70-1" tabindex="-1"></a><span class="fu">describe</span>(<span class="st">'XHR Requests'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb70-2"><a aria-hidden="true" href="#cb70-2" tabindex="-1"></a>  <span class="fu">it</span>(<span class="st">'logs in a user'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb70-3"><a aria-hidden="true" href="#cb70-3" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">intercept</span>(<span class="st">'bankAccounts'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'bankAccounts'</span>)<span class="op">;</span></span>
+<span id="cb70-4"><a aria-hidden="true" href="#cb70-4" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">intercept</span>(<span class="st">'transactions/public'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'transactions'</span>)<span class="op">;</span></span>
+<span id="cb70-5"><a aria-hidden="true" href="#cb70-5" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">intercept</span>(<span class="st">'notifications'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'notifications'</span>)<span class="op">;</span></span>
+<span id="cb70-6"><a aria-hidden="true" href="#cb70-6" tabindex="-1"></a></span>
+<span id="cb70-7"><a aria-hidden="true" href="#cb70-7" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'signin'</span>)<span class="op">;</span></span>
+<span id="cb70-8"><a aria-hidden="true" href="#cb70-8" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'#username'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'Katharina_Bernier'</span>)<span class="op">;</span></span>
+<span id="cb70-9"><a aria-hidden="true" href="#cb70-9" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'#password'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'s3cret'</span>)<span class="op">;</span></span>
+<span id="cb70-10"><a aria-hidden="true" href="#cb70-10" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'[data-test="signin-submit"]'</span>)<span class="op">.</span><span class="fu">click</span>()</span>
+<span id="cb70-11"><a aria-hidden="true" href="#cb70-11" tabindex="-1"></a></span>
+<span id="cb70-12"><a aria-hidden="true" href="#cb70-12" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">wait</span>(<span class="st">'@bankAccounts'</span>)<span class="op">.</span><span class="fu">its</span>(<span class="st">'response.statusCode'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'eq'</span><span class="op">,</span> <span class="dv">200</span>)<span class="op">;</span></span>
+<span id="cb70-13"><a aria-hidden="true" href="#cb70-13" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">wait</span>(<span class="st">'@transactions'</span>)<span class="op">.</span><span class="fu">its</span>(<span class="st">'response.statusCode'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'eq'</span><span class="op">,</span> <span class="dv">304</span>)<span class="op">;</span></span>
+<span id="cb70-14"><a aria-hidden="true" href="#cb70-14" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">wait</span>(<span class="st">'@notifications'</span>)<span class="op">.</span><span class="fu">its</span>(<span class="st">'response.statusCode'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'eq'</span><span class="op">,</span> <span class="dv">304</span>)<span class="op">;</span></span>
+<span id="cb70-15"><a aria-hidden="true" href="#cb70-15" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb70-16"><a aria-hidden="true" href="#cb70-16" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>As vantagens de aguardar respostas XHR em testes incluem:</p>
+<ul>
+<li>Ser capaz de fazer asserções no objeto de resposta XHR retornado da
+rota</li>
+<li>Criar testes robustos, reduzindo assim a instabilidade</li>
+<li>Ter mensagens de falha compreensíveis devido à sua precisão</li>
+<li>Ser capaz de fazer stub das respostas e “falsificar” respostas do
+servidor</li>
+</ul>
+</section>
+<section class="level3" id="entendendo-como-fazer-stub-de-requisições">
+<h3>Entendendo como fazer stub de requisições</h3>
+<p><strong>Fazendo stub de requisições XHR</strong></p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode javascript code-card" data-code-index="71"><code class="sourceCode javascript"><span id="cb71-1"><a aria-hidden="true" href="#cb71-1" tabindex="-1"></a><span class="fu">describe</span>(<span class="st">'XHR Stubbed Requests'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb71-2"><a aria-hidden="true" href="#cb71-2" tabindex="-1"></a>  <span class="fu">it</span>(<span class="st">'Stubs bank Account XHR server response'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb71-3"><a aria-hidden="true" href="#cb71-3" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">intercept</span>(<span class="st">'GET'</span><span class="op">,</span> <span class="st">'bankAccounts'</span><span class="op">,</span></span>
+<span id="cb71-4"><a aria-hidden="true" href="#cb71-4" tabindex="-1"></a>      {<span class="dt">results</span><span class="op">:</span> [{<span class="dt">id</span><span class="op">:</span> <span class="st">"RskoB7r4Bic"</span><span class="op">,</span> <span class="dt">userId</span><span class="op">:</span> <span class="st">"t45AiwidW"</span><span class="op">,</span></span>
+<span id="cb71-5"><a aria-hidden="true" href="#cb71-5" tabindex="-1"></a>      <span class="dt">bankName</span><span class="op">:</span> <span class="st">"Test Bank Account"</span><span class="op">,</span> <span class="dt">accountNumber</span><span class="op">:</span> <span class="st">"6123387981"</span><span class="op">,</span></span>
+<span id="cb71-6"><a aria-hidden="true" href="#cb71-6" tabindex="-1"></a>      <span class="dt">routingNumber</span><span class="op">:</span> <span class="st">"851823229"</span><span class="op">,</span> <span class="dt">isDeleted</span><span class="op">:</span> <span class="kw">false</span>}]})</span>
+<span id="cb71-7"><a aria-hidden="true" href="#cb71-7" tabindex="-1"></a>      <span class="op">.</span><span class="fu">as</span>(<span class="st">'bankAccounts'</span>)<span class="op">;</span></span>
+<span id="cb71-8"><a aria-hidden="true" href="#cb71-8" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">intercept</span>(<span class="st">'GET'</span><span class="op">,</span> <span class="st">'transactions/public'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'transactions'</span>)<span class="op">;</span></span>
+<span id="cb71-9"><a aria-hidden="true" href="#cb71-9" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">intercept</span>(<span class="st">'notifications'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'notifications'</span>)<span class="op">;</span></span>
+<span id="cb71-10"><a aria-hidden="true" href="#cb71-10" tabindex="-1"></a></span>
+<span id="cb71-11"><a aria-hidden="true" href="#cb71-11" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">wait</span>(<span class="st">'@transactions'</span>)<span class="op">.</span><span class="fu">its</span>(<span class="st">'response.statusCode'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'eq'</span><span class="op">,</span> <span class="dv">304</span>)<span class="op">;</span></span>
+<span id="cb71-12"><a aria-hidden="true" href="#cb71-12" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">wait</span>(<span class="st">'@notifications'</span>)<span class="op">.</span><span class="fu">its</span>(<span class="st">'response.statusCode'</span>)<span class="op">.</span><span class="fu">should</span>(<span class="st">'eq'</span><span class="op">,</span> <span class="dv">304</span>)<span class="op">;</span></span>
+<span id="cb71-13"><a aria-hidden="true" href="#cb71-13" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">wait</span>(<span class="st">'@bankAccounts'</span>)<span class="op">.</span><span class="fu">then</span>((xhr) <span class="kw">=&gt;</span> {</span>
+<span id="cb71-14"><a aria-hidden="true" href="#cb71-14" tabindex="-1"></a>      <span class="fu">expect</span>(xhr<span class="op">.</span><span class="at">response</span><span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">results</span>[<span class="dv">0</span>]<span class="op">.</span><span class="at">bankName</span>)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'Test Bank Account'</span>)</span>
+<span id="cb71-15"><a aria-hidden="true" href="#cb71-15" tabindex="-1"></a>      <span class="fu">expect</span>(xhr<span class="op">.</span><span class="at">response</span><span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">results</span>[<span class="dv">0</span>]<span class="op">.</span><span class="at">accountNumber</span>)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="st">'6123387981'</span>)</span>
+<span id="cb71-16"><a aria-hidden="true" href="#cb71-16" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb71-17"><a aria-hidden="true" href="#cb71-17" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb71-18"><a aria-hidden="true" href="#cb71-18" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Vantagens do stubbing de requisições</strong>:</p>
+<ul>
+<li>Ter controle sobre o corpo, cabeçalhos e status das respostas.</li>
+<li>Tempos de resposta rápidos.</li>
+<li>Nenhuma mudança de código necessária no servidor.</li>
+<li>Simulações de atraso de rede podem ser adicionadas à
+requisição.</li>
+</ul>
+<p><strong>Desvantagens do stubbing de requisições</strong>:</p>
+<ul>
+<li>A incapacidade de ter cobertura de testes em alguns endpoints do
+servidor.</li>
+<li>Nenhuma garantia de que os dados de resposta e os dados de stub
+sejam iguais.</li>
+</ul>
+</section>
+<section class="level3" id="entendendo-como-espionar-métodos-em-um-teste">
+<h3>Entendendo como espionar métodos em um teste</h3>
+<p>Os spies obtêm o estado do método ou requisição e não têm a
+capacidade de modificá-los.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode javascript code-card" data-code-index="72"><code class="sourceCode javascript"><span id="cb72-1"><a aria-hidden="true" href="#cb72-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'cy.spy(): calls sum method with arguments'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb72-2"><a aria-hidden="true" href="#cb72-2" tabindex="-1"></a>  <span class="kw">const</span> obj <span class="op">=</span> {</span>
+<span id="cb72-3"><a aria-hidden="true" href="#cb72-3" tabindex="-1"></a>    <span class="fu">sum</span>(a<span class="op">,</span> b) {</span>
+<span id="cb72-4"><a aria-hidden="true" href="#cb72-4" tabindex="-1"></a>      <span class="cf">return</span> a <span class="op">+</span> b</span>
+<span id="cb72-5"><a aria-hidden="true" href="#cb72-5" tabindex="-1"></a>    }</span>
+<span id="cb72-6"><a aria-hidden="true" href="#cb72-6" tabindex="-1"></a>  }</span>
+<span id="cb72-7"><a aria-hidden="true" href="#cb72-7" tabindex="-1"></a>  <span class="kw">const</span> spyRequest <span class="op">=</span> cy<span class="op">.</span><span class="fu">spy</span>(obj<span class="op">,</span> <span class="st">'sum'</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'sumSpy'</span>)<span class="op">;</span></span>
+<span id="cb72-8"><a aria-hidden="true" href="#cb72-8" tabindex="-1"></a>  <span class="kw">const</span> spyRequestWithArgs <span class="op">=</span> spyRequest<span class="op">.</span><span class="fu">withArgs</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">.</span><span class="fu">as</span>(<span class="st">'sumSpyWithArgs'</span>)</span>
+<span id="cb72-9"><a aria-hidden="true" href="#cb72-9" tabindex="-1"></a>  obj<span class="op">.</span><span class="fu">sum</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">;</span> <span class="co">// gatilho do spy</span></span>
+<span id="cb72-10"><a aria-hidden="true" href="#cb72-10" tabindex="-1"></a>  <span class="fu">expect</span>(spyRequest)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="at">be</span><span class="op">.</span><span class="at">called</span><span class="op">;</span></span>
+<span id="cb72-11"><a aria-hidden="true" href="#cb72-11" tabindex="-1"></a>  <span class="fu">expect</span>(spyRequestWithArgs)<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="at">be</span><span class="op">.</span><span class="at">called</span><span class="op">;</span></span>
+<span id="cb72-12"><a aria-hidden="true" href="#cb72-12" tabindex="-1"></a>  <span class="fu">expect</span>(spyRequest<span class="op">.</span><span class="at">returnValues</span>[<span class="dv">0</span>])<span class="op">.</span><span class="at">to</span><span class="op">.</span><span class="fu">eq</span>(<span class="dv">3</span>)<span class="op">;</span></span>
+<span id="cb72-13"><a aria-hidden="true" href="#cb72-13" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<hr/>
+</section>
+</section>
+<section class="level2" id="capítulo-12-testes-visuais-no-cypress">
+<h2>Capítulo 12 — Testes Visuais no Cypress</h2>
+<p>Neste capítulo, aprenderemos sobre testes visuais e sua importância,
+bem como os viewports e ferramentas que podemos usar para realizar
+testes visuais automatizados.</p>
+<section class="level3" id="testes-visuais">
+<h3>Testes visuais</h3>
+<p>Os testes visuais são a capacidade de verificar aspectos visuais da
+interface de usuário de uma aplicação e garantir que eles sejam
+consistentes com as expectativas.</p>
+<p><strong>Por que fazer testes visuais?</strong></p>
+<p>Os testes visuais existem para dar a desenvolvedores e testadores a
+confiança de que a interface de usuário de uma página web não foi
+quebrada por nenhuma mudança do desenvolvedor. Existem dois tipos de
+testes visuais:</p>
+<ul>
+<li>Testes visuais manuais</li>
+<li>Testes visuais automatizados</li>
+</ul>
+<p><strong>Testes visuais manuais</strong>: Envolvem usar os olhos para
+validar se as mudanças feitas pela equipe de desenvolvimento não
+quebraram nenhuma funcionalidade visual da interface.</p>
+<p><strong>Testes visuais automatizados</strong>: Envolvem testar os
+elementos visuais da página usando um processo automatizado. Para
+executar testes visuais automatizados adequadamente, devemos salvar e
+definir nossa interface de usuário desejada como uma linha de base
+(baseline).</p>
+<p>Os dois tipos de testes visuais automatizados são:</p>
+<ol type="1">
+<li><strong>Testes baseados em comparação pixel a pixel</strong>: Uma
+linha de base da aplicação é tirada e usada como ponto de referência
+para identificar mudanças na interface de usuário ao longo do
+tempo.</li>
+<li><strong>Testes baseados em comparação por IA</strong>: Uma linha de
+base é obtida e usada como referência. Ao contrário da comparação pixel
+a pixel, a comparação baseada em IA usa IA para identificar mudanças na
+interface de usuário.</li>
+</ol>
+</section>
+<section class="level3" id="viewports-no-cypress">
+<h3>Viewports no Cypress</h3>
+<p>Os viewports são as dimensões da área de visualização de uma janela
+do navegador, e podem ser configurados no Cypress de várias formas,
+incluindo via <code>cypress.json</code>, especificando o viewport no
+arquivo de teste ou passando o viewport como um argumento de linha de
+comando.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode json code-card" data-code-index="73"><code class="sourceCode json"><span id="cb73-1"><a aria-hidden="true" href="#cb73-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb73-2"><a aria-hidden="true" href="#cb73-2" tabindex="-1"></a>  <span class="dt">"viewportHeight"</span><span class="fu">:</span> <span class="dv">568</span><span class="fu">,</span></span>
+<span id="cb73-3"><a aria-hidden="true" href="#cb73-3" tabindex="-1"></a>  <span class="dt">"viewportWidth"</span><span class="fu">:</span> <span class="dv">320</span></span>
+<span id="cb73-4"><a aria-hidden="true" href="#cb73-4" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode javascript code-card" data-code-index="74"><code class="sourceCode javascript"><span id="cb74-1"><a aria-hidden="true" href="#cb74-1" tabindex="-1"></a><span class="fu">describe</span>(<span class="st">'Cypress Viewport tests'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb74-2"><a aria-hidden="true" href="#cb74-2" tabindex="-1"></a>  <span class="fu">it</span>(<span class="st">'changes to a 340x480 viewport'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb74-3"><a aria-hidden="true" href="#cb74-3" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">viewport</span>(<span class="dv">340</span><span class="op">,</span> <span class="dv">480</span>)</span>
+<span id="cb74-4"><a aria-hidden="true" href="#cb74-4" tabindex="-1"></a>  })</span>
+<span id="cb74-5"><a aria-hidden="true" href="#cb74-5" tabindex="-1"></a></span>
+<span id="cb74-6"><a aria-hidden="true" href="#cb74-6" tabindex="-1"></a>  <span class="fu">it</span>(<span class="st">'shows the default viewport'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb74-7"><a aria-hidden="true" href="#cb74-7" tabindex="-1"></a>    cy<span class="op">.</span><span class="fu">viewport</span>(<span class="st">'macbook-15'</span>)</span>
+<span id="cb74-8"><a aria-hidden="true" href="#cb74-8" tabindex="-1"></a>  })</span>
+<span id="cb74-9"><a aria-hidden="true" href="#cb74-9" tabindex="-1"></a>})</span></code></pre></div>
+</section>
+<section class="level3" id="ferramentas-de-testes-visuais-automatizados">
+<h3>Ferramentas de testes visuais automatizados</h3>
+<p><strong>Percy</strong></p>
+<p>O Percy é uma ferramenta de teste visual que automatiza o processo de
+tirar screenshots e comparar as screenshots com a linha de base. O Percy
+é fácil de integrar com o Cypress e vem com vantagens como:</p>
+<ul>
+<li>Integração fácil com pipelines de CI/CD</li>
+<li>Revisão visual colaborativa</li>
+<li>Gerenciamento de aprovação de screenshot</li>
+</ul>
+<p>Para usar o Percy com o Cypress:</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode javascript code-card" data-code-index="75"><code class="sourceCode javascript"><span id="cb75-1"><a aria-hidden="true" href="#cb75-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'percy snapshot of login page'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb75-2"><a aria-hidden="true" href="#cb75-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">visit</span>(<span class="st">'/signin'</span>)</span>
+<span id="cb75-3"><a aria-hidden="true" href="#cb75-3" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">percySnapshot</span>(<span class="st">'loginPage'</span>)</span>
+<span id="cb75-4"><a aria-hidden="true" href="#cb75-4" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Applitools Eyes</strong></p>
+<p>O Applitools Eyes é uma ferramenta de testes visuais alimentada por
+IA que usa algoritmos de Inteligência Artificial para comparar
+screenshots de testes com screenshots de linha de base.</p>
+<p>O Applitools usa três comandos para controlar os testes Cypress:</p>
+<ol type="1">
+<li><code>cy.eyesOpen()</code>: para inicializar e iniciar o teste</li>
+<li><code>cy.eyesCheckWindow()</code>: responsável por tirar
+screenshots</li>
+<li><code>eyesClose()</code>: conclui a sessão do Applitools Eyes e
+carrega as screenshots para o dashboard</li>
+</ol>
+<div class="sourceCode" id="cb76"><pre class="sourceCode javascript code-card" data-code-index="76"><code class="sourceCode javascript"><span id="cb76-1"><a aria-hidden="true" href="#cb76-1" tabindex="-1"></a><span class="fu">it</span>(<span class="st">'applitools: can signin on login page - second build snapshot'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb76-2"><a aria-hidden="true" href="#cb76-2" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">eyesOpen</span>({</span>
+<span id="cb76-3"><a aria-hidden="true" href="#cb76-3" tabindex="-1"></a>    <span class="dt">appName</span><span class="op">:</span> <span class="st">'SignIn Page'</span><span class="op">,</span></span>
+<span id="cb76-4"><a aria-hidden="true" href="#cb76-4" tabindex="-1"></a>    <span class="dt">browser</span><span class="op">:</span> { <span class="dt">width</span><span class="op">:</span> <span class="dv">1200</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">720</span> }<span class="op">,</span></span>
+<span id="cb76-5"><a aria-hidden="true" href="#cb76-5" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb76-6"><a aria-hidden="true" href="#cb76-6" tabindex="-1"></a></span>
+<span id="cb76-7"><a aria-hidden="true" href="#cb76-7" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'#username'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'Kat'</span>)<span class="op">;</span></span>
+<span id="cb76-8"><a aria-hidden="true" href="#cb76-8" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">get</span>(<span class="st">'#password'</span>)<span class="op">.</span><span class="fu">type</span>(<span class="st">'passd'</span>)<span class="op">;</span></span>
+<span id="cb76-9"><a aria-hidden="true" href="#cb76-9" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">eyesCheckWindow</span>(<span class="st">'loginPage'</span>)<span class="op">;</span></span>
+<span id="cb76-10"><a aria-hidden="true" href="#cb76-10" tabindex="-1"></a></span>
+<span id="cb76-11"><a aria-hidden="true" href="#cb76-11" tabindex="-1"></a>  cy<span class="op">.</span><span class="fu">eyesClose</span>()<span class="op">;</span></span>
+<span id="cb76-12"><a aria-hidden="true" href="#cb76-12" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<blockquote>
+<p><strong>Nota importante</strong> Lembre-se de adicionar sua variável
+<code>APPLITOOLS_API_KEY</code>, que foi obtida no dashboard do
+Applitools, à sua máquina local como uma variável de ambiente antes de
+executar seus testes. Este token garante que os snapshots tirados pelo
+Applitools Eyes SDK sejam carregados com sucesso no seu dashboard do
+Applitools.</p>
+</blockquote>
+<hr/>
+</section>
+<section class="level3" id="recapitulação-ferramentas-de-testes-visuais-automatizados">
+<h3>Recapitulação – ferramentas de testes visuais automatizados</h3>
+<p>Nesta seção, aprendemos sobre duas ferramentas de testes visuais
+automatizados, Percy e Applitools, e como elas podem ser integradas com
+testes Cypress. Aprendemos as diferenças entre Percy e Applitools e como
+o Percy, usando a forma de teste de snapshot, é diferente do Applitools,
+que usa IA para analisar diferenças visuais nos testes.</p>
+<hr/>
+</section>
+</section>
+<section class="level2" id="resumo-final">
+<h2>Resumo Final</h2>
+<p>Neste livro, aprendemos:</p>
+<ul>
+<li>Como instalar e configurar o Cypress tanto no Windows quanto no
+macOS</li>
+<li>As diferenças entre o Cypress e o Selenium WebDriver</li>
+<li>Como trabalhar com as ferramentas de linha de comando do
+Cypress</li>
+<li>Como escrever nosso primeiro teste Cypress</li>
+<li>Como depurar testes Cypress usando o test runner</li>
+<li>Como usar o TDD (Test-Driven Development) com o Cypress</li>
+<li>Como interagir com elementos do DOM no Cypress</li>
+<li>Como usar variáveis e aliases no Cypress</li>
+<li>Como usar os recursos avançados do Test Runner do Cypress</li>
+<li>Como implementar requisições de navegação e de rede</li>
+<li>Como fazer stub e spy de requisições XHR</li>
+<li>Como realizar testes visuais no Cypress usando Percy e
+Applitools</li>
+</ul>
+<p>Com esse conhecimento, você está preparado para escrever testes
+end-to-end robustos e eficazes usando o Cypress como sua ferramenta de
+testes de escolha.</p>
+<hr/>
+<p><em>Tradução fiel ao conteúdo original — todos os termos técnicos,
+nomes de comandos, código, URLs e nomes de ferramentas foram preservados
+em inglês conforme o original.</em></p>
+</section>
+</section>
+
+    
+    </article>
+  </main>
+</div>
+<div class="float-bar">
+  <button class="float-btn" id="topBtn" title="Ir ao topo" style="opacity:0;pointer-events:none">↑</button>
+  <button class="float-btn" id="hlFab" title="Modo grifar">✏</button>
+  <button class="float-btn" id="bkFab" title="Marcadores">🔖</button>
+</div>
+<script>
+const $=(s,r=document)=>r.querySelector(s);const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+// TOC
+function buildToc(){const toc=$('#toc'),heads=$$('.reader h1,.reader h2,.reader h3');heads.forEach((h,i)=>{if(!h.id)h.id='s'+i;const a=document.createElement('a');a.href='#'+h.id;a.textContent=h.textContent.replace(/^\s*#*/,'').trim();a.className=h.tagName.toLowerCase().replace('h','h');toc.appendChild(a);});const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)$$('.toc a').forEach(a=>a.classList.toggle('active',a.hash==='#'+e.target.id));}),{rootMargin:'-10% 0px -75% 0px'});heads.forEach(h=>obs.observe(h));}
+// PROGRESS
+function updateProgress(){const h=document.documentElement,pct=Math.min(h.scrollTop/(h.scrollHeight-h.clientHeight)*100,100);$('#bar').style.width=pct+'%';$('#rtFill').style.width=pct+'%';$('#readPct').textContent=Math.round(pct)+'%';const rem=Math.max(0,Math.round(45*(1-pct/100)));$('#timeLeft').textContent=rem>0?'~'+rem+'min':'✓ Lido';}
+// COPY CODE
+function addCopy(){$$('.reader pre').forEach(pre=>{const hdr=document.createElement('div');hdr.className='pre-header';hdr.innerHTML='<div class="pre-dots"><span></span><span></span><span></span></div><span class="pre-lang">code</span>';pre.insertBefore(hdr,pre.firstChild);const b=document.createElement('button');b.className='copy-code';b.textContent='copiar';b.onclick=async()=>{await navigator.clipboard.writeText(pre.innerText.replace(/^copiar\n/,''));b.className='copy-code ok';b.textContent='✓ copiado';setTimeout(()=>{b.className='copy-code';b.textContent='copiar'},1500);};pre.appendChild(b);});}
+// SEARCH
+let sRes=[],sIdx=0;
+function doSearch(){const q=$('#q').value.trim();$$('.mark,.mark-current').forEach(m=>m.replaceWith(document.createTextNode(m.textContent)));sRes=[];sIdx=0;$('#searchCount').textContent='';$('#searchNav').style.display='none';if(!q){$('#qClear').classList.remove('visible');return;}$('#qClear').classList.add('visible');const re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');const walker=document.createTreeWalker($('.reader'),NodeFilter.SHOW_TEXT,{acceptNode:n=>n.nodeValue.toLowerCase().includes(q.toLowerCase())?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT});const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);nodes.slice(0,300).forEach(n=>{const sp=document.createElement('span');sp.innerHTML=n.nodeValue.replace(re,m=>`<mark class="mark">${m}</mark>`);n.parentNode.replaceChild(sp,n);});sRes=$$('.mark');if(sRes.length){$('#searchCount').textContent=sRes.length+' resultado'+(sRes.length>1?'s':'');$('#searchNav').style.display='flex';navSearch(1,true);}else{$('#searchCount').textContent='Nenhum resultado';}}
+function navSearch(dir,init){if(!sRes.length)return;$$('.mark-current').forEach(m=>m.classList.remove('mark-current'));if(!init)sIdx=(sIdx+dir+sRes.length)%sRes.length;else sIdx=0;sRes[sIdx].classList.add('mark-current');sRes[sIdx].scrollIntoView({behavior:'smooth',block:'center'});$('#searchCount').textContent=(sIdx+1)+'/'+sRes.length;}
+function clearSearch(){$('#q').value='';doSearch();}
+// HIGHLIGHT
+let hlMode=false,savedRange=null;
+function setHlMode(on){hlMode=on;[$('#hlModeBtn'),$('#hlFab'),$('#hlHeroBtn')].forEach(b=>b&&b.classList.toggle('highlight-mode',on));}
+function applyHl(color){hideHlT();if(!savedRange)return;try{const sp=document.createElement('span');sp.style.background=color;sp.style.borderRadius='3px';sp.style.padding='0 2px';sp.dataset.hl='1';savedRange.surroundContents(sp);window.getSelection().removeAllRanges();}catch(e){}saveHl();}
+function removeHl(){hideHlT();if(!savedRange)return;const node=savedRange.commonAncestorContainer;const sp=node.nodeType===3?node.parentElement:node;if(sp&&sp.dataset&&sp.dataset.hl){sp.replaceWith(document.createTextNode(sp.textContent));}saveHl();}
+function saveHl(){try{sessionStorage.setItem('pw-hl',$('.reader').innerHTML);}catch(e){}}
+const hlT=$('#hlTooltip');
+function showHlT(x,y){hlT.style.left=x+'px';hlT.style.top=(y-58)+'px';hlT.classList.add('show');}
+function hideHlT(){hlT.classList.remove('show');}
+document.addEventListener('mouseup',e=>{const sel=window.getSelection();if(!hlMode||!sel||sel.isCollapsed){hideHlT();return;}const txt=sel.toString().trim();if(txt.length<2){hideHlT();return;}savedRange=sel.getRangeAt(0).cloneRange();showHlT(e.clientX,e.clientY);});
+document.addEventListener('mousedown',e=>{if(!hlT.contains(e.target))hideHlT();});
+// BOOKMARKS
+let bks=[];try{bks=JSON.parse(localStorage.getItem('pw-bk')||'[]');}catch(e){}
+function bookmarkSel(){hideHlT();const sel=window.getSelection();if(!sel||sel.isCollapsed)return;const txt=sel.toString().trim().slice(0,200);if(!txt)return;bks.unshift({id:Date.now(),txt,sec:getSection()});bks=bks.slice(0,25);localStorage.setItem('pw-bk',JSON.stringify(bks));renderBk();window.getSelection().removeAllRanges();}
+function getSection(){const heads=$$('.reader h1,.reader h2,.reader h3');let last='Introdução';for(const h of heads){if(h.getBoundingClientRect().top<200)last=h.textContent;else break;}return last;}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function renderBk(){const list=$('#bkList');if(!bks.length){list.innerHTML='<div class="bk-empty">Nenhum marcador ainda.<br>Selecione texto → 🔖</div>';return;}list.innerHTML=bks.map((b,i)=>`<div class="bk-item"><div class="bk-item-title">${esc(b.sec||'')}<button class="bk-del" onclick="event.stopPropagation();delBk(${i})">✕</button></div><div class="bk-item-text">${esc(b.txt)}</div></div>`).join('');}
+function delBk(i){bks.splice(i,1);localStorage.setItem('pw-bk',JSON.stringify(bks));renderBk();}
+function toggleBk(){$('#bkPanel').classList.toggle('open');renderBk();}
+// KEYBOARD SHORTCUTS
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='f'){e.preventDefault();$('#q').focus();}if(e.key==='Escape'){clearSearch();hideHlT();$('#bkPanel').classList.remove('open');}if(e.key==='h')setHlMode(!hlMode);if(e.key==='ArrowLeft')navSearch(-1);if(e.key==='ArrowRight')navSearch(1);});
+// INIT
+document.addEventListener('DOMContentLoaded',()=>{
+  buildToc();addCopy();updateProgress();
+  window.addEventListener('scroll',updateProgress,{passive:true});
+  $('#q').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+  $('#q').addEventListener('input',e=>{if(!e.target.value)clearSearch();});
+  $('#qClear').onclick=clearSearch;
+  $('#inc').onclick=()=>{const v=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--font'))+1;document.documentElement.style.setProperty('--font',Math.min(v,24)+'px');};
+  $('#dec').onclick=()=>{const v=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--font'))-1;document.documentElement.style.setProperty('--font',Math.max(v,14)+'px');};
+  $('#focusBtn').onclick=()=>{document.body.classList.toggle('focus');$('#focusBtn').classList.toggle('active');};
+  $('#printBtn').onclick=()=>print();
+  $('#menu').onclick=()=>$('.sidebar').classList.toggle('open');
+  $$('.toc a').forEach(a=>a.onclick=()=>$('.sidebar').classList.remove('open'));
+  $('#hlModeBtn').onclick=()=>setHlMode(!hlMode);
+  $('#hlFab').onclick=()=>setHlMode(!hlMode);
+  $('#hlHeroBtn').onclick=()=>setHlMode(!hlMode);
+  $('#bkBtn').onclick=toggleBk;
+  $('#bkFab').onclick=toggleBk;
+  $('#bkClose').onclick=()=>$('#bkPanel').classList.remove('open');
+  const topBtn=$('#topBtn');
+  topBtn.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+  window.addEventListener('scroll',()=>{const show=window.scrollY>400;topBtn.style.opacity=show?'1':'0';topBtn.style.pointerEvents=show?'auto':'none';},{passive:true});
+  renderBk();
+});
+</script>
+</body>
+</html>

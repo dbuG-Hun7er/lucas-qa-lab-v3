@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ciência do Sono — Guia de Leitura do Lucas</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --bg2: #111823;
+      --card: #151e2b;
+      --card2: #0f1620;
+      --text: #edf2f7;
+      --muted: #a7b1c2;
+      --line: #273346;
+      --accent: #7dd3fc;
+      --accent2: #38bdf8;
+      --warning: #facc15;
+      --good: #86efac;
+      --danger: #fb7185;
+      --shadow: 0 20px 70px rgba(0,0,0,.35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #14243a 0, #0b0f14 42%, #070a0e 100%);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.7;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page {
+      width: min(1120px, 94vw);
+      margin: 0 auto;
+      padding: 32px 0 80px;
+    }
+
+    .hero {
+      padding: 54px 28px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(56,189,248,.16), rgba(21,30,43,.92) 45%, rgba(5,8,13,.96));
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 380px;
+      height: 380px;
+      right: -160px;
+      top: -130px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(125,211,252,.25), transparent 65%);
+      pointer-events: none;
+    }
+
+    .kicker {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(125,211,252,.12);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: .88rem;
+      letter-spacing: .02em;
+      border: 1px solid rgba(125,211,252,.22);
+    }
+
+    h1, h2, h3 { line-height: 1.18; margin: 0 0 16px; }
+    h1 {
+      max-width: 850px;
+      font-size: clamp(2.15rem, 6vw, 5.2rem);
+      letter-spacing: -.06em;
+      margin-top: 20px;
+    }
+    h2 {
+      font-size: clamp(1.6rem, 3.4vw, 2.45rem);
+      letter-spacing: -.035em;
+      padding-top: 12px;
+    }
+    h3 { font-size: 1.26rem; color: #f8fafc; }
+    p { margin: 0 0 16px; color: var(--muted); }
+    strong { color: #ffffff; }
+
+    .subtitle {
+      max-width: 780px;
+      color: #d8e6f3;
+      font-size: 1.13rem;
+      margin-top: 14px;
+    }
+
+    .quote {
+      margin-top: 26px;
+      border-left: 4px solid var(--accent2);
+      padding: 18px 20px;
+      background: rgba(3,7,18,.36);
+      border-radius: 0 18px 18px 0;
+      color: #e8f6ff;
+      font-size: 1.05rem;
+    }
+
+    .toc {
+      margin: 24px 0 34px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .toc a {
+      display: block;
+      padding: 13px 15px;
+      border: 1px solid var(--line);
+      background: rgba(21,30,43,.78);
+      border-radius: 16px;
+      color: #dce7f2;
+      font-weight: 650;
+    }
+
+    section {
+      margin-top: 32px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(21,30,43,.96), rgba(15,22,32,.96));
+      box-shadow: 0 14px 44px rgba(0,0,0,.22);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 20px 0 10px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(8,12,18,.46);
+      padding: 18px;
+    }
+
+    .card h3 { margin-bottom: 8px; }
+    .card p:last-child { margin-bottom: 0; }
+
+    .tag {
+      display: inline-block;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 4px 9px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .tag.good { background: rgba(134,239,172,.12); color: var(--good); border: 1px solid rgba(134,239,172,.25); }
+    .tag.warn { background: rgba(250,204,21,.12); color: var(--warning); border: 1px solid rgba(250,204,21,.28); }
+    .tag.danger { background: rgba(251,113,133,.12); color: var(--danger); border: 1px solid rgba(251,113,133,.28); }
+    .tag.info { background: rgba(125,211,252,.12); color: var(--accent); border: 1px solid rgba(125,211,252,.25); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      font-size: .96rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th { background: rgba(125,211,252,.12); color: #e7f8ff; }
+    tr:nth-child(even) td { background: rgba(255,255,255,.025); }
+    tr:last-child td { border-bottom: none; }
+
+    .callout {
+      border: 1px solid rgba(125,211,252,.28);
+      background: rgba(56,189,248,.08);
+      border-radius: 18px;
+      padding: 18px;
+      margin: 20px 0;
+    }
+    .callout.warning { border-color: rgba(250,204,21,.35); background: rgba(250,204,21,.08); }
+    .callout.danger { border-color: rgba(251,113,133,.35); background: rgba(251,113,133,.08); }
+
+    .formula {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      background: #05080d;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      color: #eaf8ff;
+      overflow-x: auto;
+    }
+
+    .calculator {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      align-items: end;
+      margin-top: 18px;
+    }
+    label { color: #e9f3fb; font-weight: 750; display: block; margin-bottom: 7px; }
+    input, select, button {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #070b11;
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 13px;
+      font: inherit;
+    }
+    button {
+      cursor: pointer;
+      font-weight: 850;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #02111a;
+      border: none;
+    }
+    button:hover { filter: brightness(1.08); }
+    .results {
+      margin-top: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.25);
+      padding: 16px;
+    }
+
+    ul, ol { color: var(--muted); padding-left: 22px; }
+    li { margin-bottom: 8px; }
+
+    .small { font-size: .92rem; color: #99a8ba; }
+    .divider { height: 1px; background: var(--line); margin: 24px 0; }
+
+    .checklist li::marker { color: var(--accent); }
+
+    .footer {
+      margin-top: 34px;
+      padding: 26px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(3,7,18,.5);
+    }
+
+    @media print {
+      body { background: white; color: #111; }
+      .hero, section, .footer { box-shadow: none; background: white; color: #111; border-color: #ccc; }
+      p, li, td { color: #222; }
+      h1, h2, h3, strong { color: #000; }
+      .toc, .calculator, button { display: none; }
+      a { color: #000; text-decoration: underline; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <span class="kicker">Guia de leitura • Sono, ciclos e ritmo circadiano</span>
+      <h1>Ciência do Sono: dormir por arquitetura, não só por horas</h1>
+      <p class="subtitle">
+        Um guia prático e científico para entender sono profundo, REM, ciclos de 90 minutos, luz, zeitgebers, despertares noturnos, desempenho cognitivo e uso inteligente de monitores de sono.
+      </p>
+      <div class="quote">
+        <strong>Frase-base:</strong> eu não vou perseguir “8 horas perfeitas”. Eu vou buscar regularidade, ciclos completos, luz certa, menos fragmentação e acordar em uma fase mais leve do sono.
+      </div>
+    </header>
+
+    <nav class="toc" aria-label="Sumário">
+      <a href="#resumo">1. Resumo honesto</a>
+      <a href="#modelo">2. O modelo dos dois processos</a>
+      <a href="#arquitetura">3. Arquitetura do sono</a>
+      <a href="#ciclos">4. Ciclos de 90 minutos</a>
+      <a href="#circadiano">5. Ritmo circadiano e zeitgebers</a>
+      <a href="#despertares">6. Despertares noturnos</a>
+      <a href="#cognicao">7. Cognição, Alzheimer e limpeza cerebral</a>
+      <a href="#monitores">8. Monitores e alarmes inteligentes</a>
+      <a href="#calculadora">9. Calculadora de ciclos</a>
+      <a href="#protocolo">10. Protocolo de 14 dias</a>
+      <a href="#turnos">11. Sono para rotina em turnos</a>
+      <a href="#fontes">12. Fontes</a>
+    </nav>
+
+    <section id="resumo">
+      <h2>1. Resumo honesto: o que é verdade e o que é exagero</h2>
+      <p>
+        A ideia de que todo mundo precisa dormir exatamente <strong>8 horas cravadas</strong> é simplificada demais. O corpo não trabalha como relógio de ponto. Ele trabalha com <strong>pressão de sono</strong>, <strong>ritmo circadiano</strong>, <strong>arquitetura do sono</strong> e <strong>qualidade da recuperação</strong>.
+      </p>
+      <p>
+        Mas também existe uma armadilha: transformar “8 horas não é regra absoluta” em “posso dormir pouco todo dia”. A ciência atual ainda recomenda que adultos durmam, em geral, <strong>7 horas ou mais por noite</strong> para promover saúde. Algumas pessoas vão melhor com 7h30, outras com 8h30 ou 9h. O alvo inteligente não é dormir pouco; é dormir melhor e com consistência.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <span class="tag good">Boa ciência</span>
+          <h3>Sono tem arquitetura</h3>
+          <p>Você passa por estágios: sono leve, sono profundo e REM. Eles não aparecem em partes iguais durante a noite.</p>
+        </div>
+        <div class="card">
+          <span class="tag good">Boa ciência</span>
+          <h3>Luz manda muito</h3>
+          <p>A luz é um dos sinais mais fortes para sincronizar o relógio biológico. Luz de manhã ajuda; luz forte à noite atrapalha.</p>
+        </div>
+        <div class="card">
+          <span class="tag warn">Meia verdade</span>
+          <h3>“8h é invenção industrial”</h3>
+          <p>A rigidez cultural pode ter influência social, mas a necessidade biológica de sono suficiente é real.</p>
+        </div>
+        <div class="card">
+          <span class="tag danger">Cuidado</span>
+          <h3>Biohacking ruim</h3>
+          <p>Reduzir sono cronicamente e chamar isso de otimização costuma cobrar caro em foco, humor, metabolismo e saúde.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Regra do guia:</strong> usar ciclos de sono como ferramenta, mas não como religião. Acordar em sono leve ajuda, porém dormir pouco e acordar “no ciclo certo” ainda pode deixar você em débito de sono.
+      </div>
+    </section>
+
+    <section id="modelo">
+      <h2>2. O modelo dos dois processos: por que você sente sono</h2>
+      <p>
+        Uma forma simples e forte de entender sono é o <strong>modelo dos dois processos</strong>. Ele diz que o sono é regulado principalmente por dois mecanismos trabalhando juntos: <strong>Processo S</strong> e <strong>Processo C</strong>.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <span class="tag info">Processo S</span>
+          <h3>Pressão homeostática do sono</h3>
+          <p>Quanto mais tempo você fica acordado, maior fica a pressão para dormir. É como uma “dívida biológica” acumulando ao longo do dia.</p>
+          <p><strong>Tradução prática:</strong> se você acordou 6h e chega 22h, seu corpo provavelmente já acumulou bastante pressão de sono.</p>
+        </div>
+        <div class="card">
+          <span class="tag info">Processo C</span>
+          <h3>Relógio circadiano</h3>
+          <p>É o ritmo interno de aproximadamente 24 horas que organiza alerta, temperatura corporal, melatonina, cortisol e tendência de dormir/acordar.</p>
+          <p><strong>Tradução prática:</strong> se você toma luz forte à noite, joga no celular e muda horário todo dia, seu relógio começa a perder alinhamento.</p>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <strong>O pulo do gato:</strong> você pode estar cansado pelo Processo S, mas ainda sem sono pelo Processo C. Exemplo: corpo exausto, mas mente acesa à noite por luz, tela, estresse ou rotina bagunçada.
+      </div>
+    </section>
+
+    <section id="arquitetura">
+      <h2>3. Arquitetura do sono: não é só apagar e acordar</h2>
+      <p>
+        Sono bom não é apenas “ficar inconsciente”. Sono bom é passar por uma sequência organizada de estágios. Essa sequência é chamada de <strong>arquitetura do sono</strong>.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Estágio</th>
+            <th>O que é</th>
+            <th>Importância prática</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>N1</strong></td>
+            <td>Transição entre vigília e sono. Sono bem leve.</td>
+            <td>Você pode acordar fácil e achar que nem dormiu.</td>
+          </tr>
+          <tr>
+            <td><strong>N2</strong></td>
+            <td>Sono leve mais estável. É uma parte grande da noite.</td>
+            <td>Ajuda o corpo a “entrar no modo sono” e estabiliza a noite.</td>
+          </tr>
+          <tr>
+            <td><strong>N3</strong></td>
+            <td>Sono profundo, também chamado de sono de ondas lentas.</td>
+            <td>Recuperação física, restauração, sensação de descanso pesado. Acordar aqui costuma dar muita grogueira.</td>
+          </tr>
+          <tr>
+            <td><strong>REM</strong></td>
+            <td>Fase com alta atividade cerebral, sonhos vívidos e atonia muscular.</td>
+            <td>Memória, aprendizado, regulação emocional e processamento mental.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        No começo da noite, normalmente há mais <strong>N3/sono profundo</strong>. Perto da manhã, normalmente aumenta a presença de <strong>REM</strong>. Por isso cortar o final da noite pode prejudicar bastante a parte de sonho, memória e emoção.
+      </p>
+
+      <div class="formula">
+        Início da noite → mais sono profundo<br>
+        Final da noite → mais REM<br>
+        Sono quebrado demais → arquitetura bagunçada
+      </div>
+    </section>
+
+    <section id="ciclos">
+      <h2>4. Ciclos de 90 minutos: ferramenta boa, mas não perfeita</h2>
+      <p>
+        Um ciclo completo de sono costuma ser descrito como algo perto de <strong>90 minutos</strong>, mas isso varia. Em algumas pessoas e em algumas noites, pode ser mais curto ou mais longo. Por isso a regra de 90 minutos é um <strong>mapa inicial</strong>, não uma lei matemática.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Ciclos</th>
+            <th>Sono aproximado</th>
+            <th>Leitura prática</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>3 ciclos</strong></td>
+            <td>4h30</td>
+            <td>Emergência. Não usar como rotina.</td>
+          </tr>
+          <tr>
+            <td><strong>4 ciclos</strong></td>
+            <td>6h</td>
+            <td>Pode salvar um dia, mas pode acumular débito.</td>
+          </tr>
+          <tr>
+            <td><strong>5 ciclos</strong></td>
+            <td>7h30</td>
+            <td>Alvo muito bom para muita gente.</td>
+          </tr>
+          <tr>
+            <td><strong>6 ciclos</strong></td>
+            <td>9h</td>
+            <td>Recuperação forte, especialmente após semana pesada.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <strong>Fórmula prática:</strong><br>
+        Horário de deitar = horário de acordar − ciclos de 90 min − tempo para pegar no sono.
+      </div>
+
+      <h3>Exemplo: acordar às 07:00</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Meta</th>
+            <th>Dormir por volta de</th>
+            <th>Deitar com 15 min de margem</th>
+            <th>Acordar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>6 ciclos</td>
+            <td>22:00</td>
+            <td>21:45</td>
+            <td>07:00</td>
+          </tr>
+          <tr>
+            <td>5 ciclos</td>
+            <td>23:30</td>
+            <td>23:15</td>
+            <td>07:00</td>
+          </tr>
+          <tr>
+            <td>4 ciclos</td>
+            <td>01:00</td>
+            <td>00:45</td>
+            <td>07:00</td>
+          </tr>
+          <tr>
+            <td>3 ciclos</td>
+            <td>02:30</td>
+            <td>02:15</td>
+            <td>07:00</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="circadiano">
+      <h2>5. Ritmo circadiano e zeitgebers: os sinais que mandam no relógio</h2>
+      <p>
+        <strong>Zeitgeber</strong> significa algo como “doador de tempo”. É qualquer sinal externo que ajuda o corpo a ajustar o relógio interno. O mais forte deles é a <strong>luz</strong>, principalmente luz pela manhã e redução de luz à noite.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <span class="tag good">Manhã</span>
+          <h3>Luz natural cedo</h3>
+          <p>Pegar luz natural nos primeiros 30 a 60 minutos após acordar ajuda a sinalizar “começou o dia”.</p>
+        </div>
+        <div class="card">
+          <span class="tag warn">Noite</span>
+          <h3>Reduzir luz e tela</h3>
+          <p>Luz forte e tela perto de dormir podem atrasar o cérebro, especialmente se vier junto de estímulo mental.</p>
+        </div>
+        <div class="card">
+          <span class="tag info">Refeição</span>
+          <h3>Horário de comer</h3>
+          <p>Comer muito tarde, pesado ou irregular pode bagunçar o corpo e dificultar sono profundo.</p>
+        </div>
+        <div class="card">
+          <span class="tag info">Rotina</span>
+          <h3>Horário consistente</h3>
+          <p>Mesmo que sua rotina seja difícil, ter uma âncora de sono e luz ajuda o corpo a se orientar.</p>
+        </div>
+      </div>
+
+      <div class="callout warning">
+        <strong>Dessincronização circadiana:</strong> acontece quando seu corpo recebe sinais conflitantes. Exemplo: pouca luz de manhã, muita luz à noite, horário de dormir mudando todo dia, café tarde, tela na cama e refeição pesada antes de dormir.
+      </div>
+    </section>
+
+    <section id="despertares">
+      <h2>6. Acordar à noite pode ser normal</h2>
+      <p>
+        Nem todo despertar noturno é problema. O erro é transformar um despertar normal em uma crise: olhar hora, pegar celular, acender luz forte, entrar em rede social, ficar bravo por ter acordado e ativar o cérebro.
+      </p>
+
+      <h3>Protocolo quando acordar no meio da noite</h3>
+      <ol class="checklist">
+        <li><strong>Não olhe a hora.</strong> Isso reduz ansiedade e cálculo mental.</li>
+        <li><strong>Não pegue celular.</strong> Tela + conteúdo = cérebro acordado.</li>
+        <li><strong>Fique quieto de 10 a 20 minutos.</strong> Respiração lenta, corpo solto.</li>
+        <li><strong>Se passar muito tempo acordado, levante.</strong> Luz baixa, atividade chata e calma.</li>
+        <li><strong>Volte para a cama quando o sono retornar.</strong> A cama precisa continuar sendo lugar de dormir, não de lutar contra a mente.</li>
+      </ol>
+
+      <div class="callout">
+        <strong>Regra mental:</strong> acordar à noite não é fracasso. Fracasso é transformar o despertar em sessão de celular, ansiedade e dopamina.
+      </div>
+    </section>
+
+    <section id="cognicao">
+      <h2>7. Cognição, Alzheimer e limpeza cerebral</h2>
+      <p>
+        Sono afeta diretamente atenção, memória, tempo de reação, humor, tomada de decisão e controle emocional. Dormir mal não te deixa apenas “com sono”; ele muda a qualidade do seu pensamento.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <span class="tag info">Sono profundo</span>
+          <h3>Recuperação e limpeza</h3>
+          <p>O sono de ondas lentas é estudado por seu papel em recuperação e em processos ligados à remoção de metabólitos cerebrais.</p>
+        </div>
+        <div class="card">
+          <span class="tag info">REM</span>
+          <h3>Memória e emoção</h3>
+          <p>REM ajuda no processamento emocional, aprendizado e integração de memória.</p>
+        </div>
+        <div class="card">
+          <span class="tag warn">Fragmentação</span>
+          <h3>Quebrar ciclos cobra preço</h3>
+          <p>Despertares repetidos podem bagunçar a arquitetura e reduzir a sensação de recuperação.</p>
+        </div>
+      </div>
+
+      <div class="callout danger">
+        <strong>Precisão importante:</strong> uma noite ruim não “causa Alzheimer”. O que existe é um conjunto crescente de estudos associando sono insuficiente, privação, fragmentação e alterações em proteínas como beta-amiloide e tau. Isso sugere risco e mecanismo possível, mas não significa destino automático.
+      </div>
+    </section>
+
+    <section id="monitores">
+      <h2>8. Monitores de sono e alarmes inteligentes: use como ferramenta, não como dono</h2>
+      <p>
+        Apps e wearables podem ser úteis para enxergar padrões: horário que dormiu, consistência, despertares, duração aproximada e relação entre hábitos e energia. Mas eles não substituem um exame de sono com sensores cerebrais, como a polissonografia.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Uso bom</th>
+            <th>Uso ruim</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ver tendência de horário, duração e regularidade.</td>
+            <td>Entrar em pânico porque o app estimou pouco REM.</td>
+          </tr>
+          <tr>
+            <td>Comparar “dormi 23:30” vs “dormi 01:00” e energia no dia seguinte.</td>
+            <td>Acreditar que o app sabe seus estágios com precisão clínica.</td>
+          </tr>
+          <tr>
+            <td>Usar alarme inteligente com janela de 20–30 min para tentar acordar em sono mais leve.</td>
+            <td>Deixar o score mandar no seu humor do dia.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout warning">
+        <strong>Risco real:</strong> algumas pessoas desenvolvem ansiedade por dados de sono. Isso é chamado informalmente de “orthosomnia”: a pessoa tenta dormir perfeito, fica obcecada pelo app e acaba dormindo pior.
+      </div>
+    </section>
+
+    <section id="calculadora">
+      <h2>9. Calculadora simples de ciclos</h2>
+      <p>
+        Use esta calculadora como ponto de partida. Depois, valide com seu corpo: energia, foco, humor, sonolência e qualidade do dia.
+      </p>
+
+      <div class="calculator">
+        <div>
+          <label for="wakeTime">Quero acordar às</label>
+          <input id="wakeTime" type="time" value="07:00" />
+        </div>
+        <div>
+          <label for="fallAsleep">Tempo para pegar no sono</label>
+          <select id="fallAsleep">
+            <option value="10">10 min</option>
+            <option value="15" selected>15 min</option>
+            <option value="20">20 min</option>
+            <option value="30">30 min</option>
+          </select>
+        </div>
+        <div>
+          <button onclick="calculateBedtimes()">Calcular horários de deitar</button>
+        </div>
+      </div>
+      <div id="bedtimeResults" class="results"></div>
+
+      <div class="divider"></div>
+
+      <div class="calculator">
+        <div>
+          <label for="sleepTime">Vou dormir por volta de</label>
+          <input id="sleepTime" type="time" value="23:30" />
+        </div>
+        <div>
+          <label for="cyclesForward">Quantidade de ciclos</label>
+          <select id="cyclesForward">
+            <option value="3">3 ciclos</option>
+            <option value="4">4 ciclos</option>
+            <option value="5" selected>5 ciclos</option>
+            <option value="6">6 ciclos</option>
+          </select>
+        </div>
+        <div>
+          <button onclick="calculateWakeTime()">Calcular horário de acordar</button>
+        </div>
+      </div>
+      <div id="wakeResults" class="results"></div>
+    </section>
+
+    <section id="protocolo">
+      <h2>10. Protocolo de 14 dias: descobrir seu ciclo real</h2>
+      <p>
+        O objetivo não é provar uma teoria. O objetivo é descobrir como seu corpo funciona na vida real, com trabalho, família, cansaço e rotina.
+      </p>
+
+      <h3>Durante 14 dias, anote:</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Dado</th>
+            <th>Como anotar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Hora que deitou</td>
+            <td>Ex.: 23:15</td>
+          </tr>
+          <tr>
+            <td>Hora aproximada que dormiu</td>
+            <td>Ex.: 23:35</td>
+          </tr>
+          <tr>
+            <td>Hora que acordou</td>
+            <td>Ex.: 07:00</td>
+          </tr>
+          <tr>
+            <td>Despertares</td>
+            <td>0, 1, 2, 3+ vezes</td>
+          </tr>
+          <tr>
+            <td>Celular na cama?</td>
+            <td>Sim ou não</td>
+          </tr>
+          <tr>
+            <td>Luz de manhã?</td>
+            <td>Sim ou não</td>
+          </tr>
+          <tr>
+            <td>Café depois das 15h?</td>
+            <td>Sim ou não</td>
+          </tr>
+          <tr>
+            <td>Energia ao acordar</td>
+            <td>Nota de 0 a 10</td>
+          </tr>
+          <tr>
+            <td>Foco no dia</td>
+            <td>Nota de 0 a 10</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <strong>Após 14 dias, procure padrões:</strong> em qual horário você acorda com menos peso? Qual horário te dá melhor foco? Café tarde te derruba? Tela na cama piora? 5 ciclos funcionam ou você precisa de 6?
+      </div>
+    </section>
+
+    <section id="turnos">
+      <h2>11. Sono para rotina em turnos</h2>
+      <p>
+        Para quem trabalha em horários alternados, o objetivo é reduzir o dano da mudança de rotina. Nem sempre dá para ter uma rotina perfeita. Então você usa âncoras.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <span class="tag info">Semana cedo</span>
+          <h3>Âncora de acordar</h3>
+          <p>Se precisa sair cedo, priorize dormir mais cedo. Meta prática: 5 ciclos sempre que possível.</p>
+          <p><strong>Exemplo:</strong> acordar 06:00 → dormir 22:30 → deitar 22:15.</p>
+        </div>
+        <div class="card">
+          <span class="tag info">Semana tarde</span>
+          <h3>Desligamento pós-trabalho</h3>
+          <p>Chegou tarde? Evite luz forte, tela agressiva, discussão, jogo competitivo e comida pesada.</p>
+          <p><strong>Exemplo:</strong> banho, luz baixa, refeição leve, dormir entre 23:45 e 00:30 se possível.</p>
+        </div>
+      </div>
+
+      <h3>Regras de proteção para turnos</h3>
+      <ul class="checklist">
+        <li>Use luz forte de manhã quando quiser adiantar o corpo.</li>
+        <li>Use luz baixa à noite quando quiser permitir melatonina e sonolência.</li>
+        <li>Mantenha cafeína longe do fim do dia.</li>
+        <li>Use cochilo curto com estratégia, não cochilo longo bagunçado.</li>
+        <li>Em dia pesado, priorize 6 ciclos quando possível.</li>
+      </ul>
+    </section>
+
+    <section id="alertas">
+      <h2>12. Quando procurar avaliação médica</h2>
+      <p>
+        Otimização de sono é útil, mas alguns sinais não são caso de “hack”. São caso de avaliação profissional.
+      </p>
+      <ul class="checklist">
+        <li>Ronco alto frequente.</li>
+        <li>Pausas na respiração, engasgos ou sensação de sufoco dormindo.</li>
+        <li>Sonolência forte durante o dia.</li>
+        <li>Acordar com dor de cabeça, boca seca ou sensação de não respirar bem.</li>
+        <li>Insônia frequente por semanas ou meses.</li>
+        <li>Quase dormir dirigindo ou trabalhando.</li>
+        <li>Perda importante de memória, humor muito alterado ou queda cognitiva persistente.</li>
+      </ul>
+      <div class="callout danger">
+        <strong>Importante:</strong> este guia é educativo. Não substitui médico, psicólogo, neurologista, pneumologista ou especialista em sono.
+      </div>
+    </section>
+
+    <section id="fontes">
+      <h2>13. Fontes e leitura científica</h2>
+      <p>Referências usadas para construir este guia:</p>
+      <ol>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4513271/" target="_blank" rel="noopener">American Academy of Sleep Medicine / Sleep Research Society — recomendação de duração de sono para adultos</a></li>
+        <li><a href="https://www.ncbi.nlm.nih.gov/books/NBK526132/" target="_blank" rel="noopener">NCBI Bookshelf — Physiology, Sleep Stages</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4755451/" target="_blank" rel="noopener">Physiology of Sleep — revisão sobre NREM, REM e ciclos</a></li>
+        <li><a href="https://www.cdc.gov/sleep/about/index.html" target="_blank" rel="noopener">CDC — hábitos de sono e higiene do sono</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9540767/" target="_blank" rel="noopener">Two-process model of sleep regulation — revisão histórica e científica</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6584681/" target="_blank" rel="noopener">Sleep homeostasis and circadian clock</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6751071/" target="_blank" rel="noopener">Effects of light on human circadian rhythms, sleep and mood</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4020279/" target="_blank" rel="noopener">Entrainment of the human circadian clock to natural light-dark cycle</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6710480/" target="_blank" rel="noopener">Sleep inertia: current insights</a></li>
+        <li><a href="https://www.nih.gov/news-events/nih-research-matters/sleep-deprivation-increases-alzheimers-protein" target="_blank" rel="noopener">NIH — Sleep deprivation increases Alzheimer’s protein</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10654909/" target="_blank" rel="noopener">Accuracy of consumer sleep trackers compared with polysomnography</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8120339/" target="_blank" rel="noopener">Performance of consumer sleep-tracking devices compared with polysomnography</a></li>
+      </ol>
+    </section>
+
+    <footer class="footer">
+      <p><strong>Resumo final:</strong> o objetivo não é virar escravo do relógio, do app ou da regra das 8 horas. O objetivo é dormir com arquitetura melhor: ciclos suficientes, menos fragmentação, luz certa, cafeína controlada, rotina mais estável e acordar com o cérebro mais limpo.</p>
+      <p class="small">Versão 1.0 — Guia pessoal de estudo e aplicação prática. Criado para leitura offline em HTML.</p>
+    </footer>
+  </main>
+
+  <script>
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function minutesToTime(total) {
+      total = ((total % 1440) + 1440) % 1440;
+      const h = Math.floor(total / 60);
+      const m = total % 60;
+      return `${pad(h)}:${pad(m)}`;
+    }
+
+    function timeToMinutes(time) {
+      const [h, m] = time.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function calculateBedtimes() {
+      const wake = document.getElementById('wakeTime').value || '07:00';
+      const delay = Number(document.getElementById('fallAsleep').value || 15);
+      const wakeMin = timeToMinutes(wake);
+      const cycles = [6,5,4,3];
+      let html = '<h3>Horários sugeridos para deitar</h3><table><thead><tr><th>Ciclos</th><th>Sono real</th><th>Deitar</th><th>Dormir aprox.</th></tr></thead><tbody>';
+      cycles.forEach(c => {
+        const sleepDuration = c * 90;
+        const sleepAt = wakeMin - sleepDuration;
+        const bedAt = sleepAt - delay;
+        html += `<tr><td><strong>${c}</strong></td><td>${Math.floor(sleepDuration/60)}h${sleepDuration%60 ? '30' : ''}</td><td>${minutesToTime(bedAt)}</td><td>${minutesToTime(sleepAt)}</td></tr>`;
+      });
+      html += '</tbody></table><p class="small">Use como mapa. Ajuste depois com energia real, foco e dados do seu monitor.</p>';
+      document.getElementById('bedtimeResults').innerHTML = html;
+    }
+
+    function calculateWakeTime() {
+      const sleep = document.getElementById('sleepTime').value || '23:30';
+      const cycles = Number(document.getElementById('cyclesForward').value || 5);
+      const sleepMin = timeToMinutes(sleep);
+      const wake = sleepMin + cycles * 90;
+      const duration = cycles * 90;
+      document.getElementById('wakeResults').innerHTML = `
+        <h3>Resultado</h3>
+        <p>Se você dormir por volta de <strong>${sleep}</strong> e completar <strong>${cycles} ciclos</strong>, o horário estimado para acordar é:</p>
+        <div class="formula">${minutesToTime(wake)}</div>
+        <p class="small">Sono total aproximado: ${Math.floor(duration/60)}h${duration%60 ? '30' : ''}. Ajuste com sua realidade.</p>
+      `;
+    }
+
+    calculateBedtimes();
+    calculateWakeTime();
+  </script>
+</body>
+</html>
