@@ -61,6 +61,10 @@ O projeto inclui:
 - `sitemap.xml`
 - `robots.txt`
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8ff7d208f9b20419294e0c82a41d09e840d98f7d
 
 Antes de publicar, rode:
 
@@ -69,4 +73,3 @@ git status --short
 git ls-files
 ```
 
-Confirme que nenhum manuscrito aparece na lista de arquivos versionados.
