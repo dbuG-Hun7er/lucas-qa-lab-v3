@@ -2,7 +2,7 @@
 
 Site estático multipage de Lucas F. de Lima, também assinado como dbuG-Hun7er.
 
-O projeto funciona como portfólio profissional em Quality Assurance, automação de testes, estudos de cybersecurity, projetos autorais e materiais públicos de apoio. A proposta é manter uma base simples, publicável em GitHub Pages, com HTML, CSS e JavaScript puro.
+O projeto funciona como portfólio profissional em Quality Assurance, automação de testes, estudos de cybersecurity, projetos, livros e materiais públicos de apoio. A proposta é manter uma base simples, publicável em GitHub Pages, com HTML, CSS e JavaScript puro.
 
 ## Páginas
 
@@ -11,13 +11,11 @@ O projeto funciona como portfólio profissional em Quality Assurance, automaçã
 - `qa.html`: mapa de estudos e prática em Quality Assurance
 - `projetos.html`: projetos técnicos e repositórios
 - `cyber.html`: segurança aplicada ao olhar de QA
-- `taverna.html`: conceito autoral da Taverna QA
-- `games.html`: jogos analisados como sistemas
-- `aion2.html`: guia autoral de Aion 2
-- `livros.html`: curadoria de livros
-- `meu-livro.html`: apresentação pública de O QA Lendário
+- `livros.html`: curadoria de livros e apresentação de O QA Lendário
 - `downloads.html`: currículo, storytelling e leituras HTML
 - `contato.html`: links profissionais
+
+As páginas legadas `taverna.html`, `games.html` e `aion2.html` permanecem no repositório, mas não fazem parte da navegação nem do sitemap principal. `meu-livro.html` redireciona para a seção correspondente em `livros.html`.
 
 ## Estrutura
 
@@ -60,11 +58,6 @@ O projeto inclui:
 - Favicon
 - `sitemap.xml`
 - `robots.txt`
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 8ff7d208f9b20419294e0c82a41d09e840d98f7d
 
 Antes de publicar, rode:
 
